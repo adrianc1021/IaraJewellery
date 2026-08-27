@@ -423,3 +423,22 @@ model SiteLayoutSetting {
   updatedBy              String?
   updatedAt              DateTime @updatedAt
 }
+
+model PopupAnnouncement {
+  id          String   @id @default(cuid())
+  eyebrow     String?
+  title       String
+  body        String
+  ctaLabel    String?
+  ctaHref     String?
+  imageUrl    String?
+  startsAt    DateTime
+  endsAt      DateTime
+  active      Boolean  @default(true)
+  showOnce    Boolean  @default(true)
+  updatedBy   String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([active, startsAt, endsAt])
+}

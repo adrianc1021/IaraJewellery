@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Heart, LayoutDashboard, Menu, Search, ShoppingBag, UserRound, X } from "lucide-react";
 import { useSession } from "@/lib/auth-client";
@@ -8,12 +9,15 @@ import { useSession } from "@/lib/auth-client";
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
   const [cartCount, setCartCount] = useState(0);
+  const [scrolled, setScrolled] = useState(false);
+  const pathname = usePathname();
   const { data: session } = useSession();
   const staff = session && session.user.role !== "CUSTOMER";
   useEffect(() => { fetch("/api/cart").then((response) => response.ok ? response.json() : null).then((data) => data && setCartCount(data.itemCount)).catch(() => undefined); }, []);
   useEffect(() => { document.body.classList.toggle("no-scroll", open); return () => document.body.classList.remove("no-scroll"); }, [open]);
+  useEffect(() => { const update = () => setScrolled(window.scrollY > 18); update(); window.addEventListener("scroll", update, { passive: true }); return () => window.removeEventListener("scroll", update); }, []);
   const links = [["新品", "/shop?sort=newest"], ["珠寶", "/shop"], ["系列", "/shop?view=collections"], ["婚嫁", "/shop?collection=ARIA+BRIDAL"], ["品牌故事", "/#story"], ["門市", "/appointment"]];
-  return <header className="site-header"><div className="header-inner container">
+  return <header className={`site-header ${scrolled ? "scrolled" : ""} ${pathname === "/" ? "home-header" : ""}`}><div className="header-inner container">
     <button className="icon-button menu-button" aria-label={open ? "關閉選單" : "開啟選單"} aria-expanded={open} onClick={() => setOpen((value) => !value)}>{open ? <X size={19} /> : <Menu size={18} />}</button>
     <Link className="brand" href="/"><strong>IARA</strong><small>JEWELLERY</small></Link>
     <nav className="desktop-nav" aria-label="主要導覽">{links.map(([label, href]) => <Link key={label} href={href}>{label}</Link>)}</nav>

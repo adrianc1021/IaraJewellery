@@ -38,3 +38,25 @@ export const siteLayoutSchema = z.object({
   editorialHeight: z.number().int().min(460).max(820),
   curationTileHeight: z.number().int().min(300).max(620)
 });
+
+const optionalUrl = z.union([z.literal(""), z.url().refine((value) => value.startsWith("https://"), "只接受 HTTPS 網址。")]).optional();
+
+const popupAnnouncementFields = z.object({
+  eyebrow: z.string().trim().max(60).optional(),
+  title: z.string().trim().min(2).max(80),
+  body: z.string().trim().min(2).max(500),
+  ctaLabel: z.string().trim().max(40).optional(),
+  ctaHref: z.union([z.literal(""), z.string().trim().regex(/^\/(?!\/)/, "連結必須是網站內的路徑。")]).optional(),
+  imageUrl: optionalUrl,
+  startsAt: z.coerce.date(),
+  endsAt: z.coerce.date(),
+  active: z.boolean().default(true),
+  showOnce: z.boolean().default(true)
+});
+
+export const popupAnnouncementSchema = popupAnnouncementFields.superRefine((value, ctx) => {
+  if (value.endsAt <= value.startsAt) ctx.addIssue({ code: "custom", path: ["endsAt"], message: "結束時間必須遲於開始時間。" });
+  if (Boolean(value.ctaLabel) !== Boolean(value.ctaHref)) ctx.addIssue({ code: "custom", path: ["ctaHref"], message: "按鈕文字與連結必須同時填寫。" });
+});
+
+export const popupAnnouncementUpdateSchema = popupAnnouncementFields.partial();
