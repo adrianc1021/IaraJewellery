@@ -9,8 +9,8 @@ services:
     name: iara-jewellery-web
     runtime: node
     plan: starter
-    buildCommand: corepack enable && pnpm install --frozen-lockfile && pnpm db:setup && pnpm build
-    startCommand: pnpm start
+    buildCommand: corepack enable && pnpm install --frozen-lockfile && pnpm build
+    startCommand: pnpm db:setup && pnpm start
     healthCheckPath: /api/health
     envVars:
       - key: NODE_VERSION
