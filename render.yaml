@@ -9,7 +9,7 @@ services:
     name: iara-jewellery-web
     runtime: node
     plan: starter
-    buildCommand: corepack enable && pnpm install --frozen-lockfile && pnpm build
+    buildCommand: corepack enable && pnpm install --frozen-lockfile && DATABASE_URL=file:/tmp/iara-build.db pnpm db:setup && DATABASE_URL=file:/tmp/iara-build.db pnpm build
     startCommand: pnpm db:setup && pnpm start
     healthCheckPath: /api/health
     envVars:
