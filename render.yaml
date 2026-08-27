@@ -1,3 +1,9 @@
+envVarGroups:
+  - name: iara-shared-secrets
+    envVars:
+      - key: CRON_SECRET
+        generateValue: true
+
 services:
   - type: web
     name: iara-jewellery-web
@@ -27,8 +33,7 @@ services:
         sync: false
       - key: STRIPE_WEBHOOK_SECRET
         sync: false
-      - key: CRON_SECRET
-        generateValue: true
+      - fromGroup: iara-shared-secrets
     disk:
       name: iara-data
       mountPath: /var/data
@@ -42,5 +47,4 @@ services:
     envVars:
       - key: APP_URL
         sync: false
-      - key: CRON_SECRET
-        sync: false
+      - fromGroup: iara-shared-secrets
