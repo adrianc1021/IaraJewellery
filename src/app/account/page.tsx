@@ -1,0 +1,23 @@
+import Link from "next/link";
+import { db } from "@/lib/db";
+import { requireUser } from "@/lib/access";
+import { formatDate, formatMoney } from "@/lib/format";
+import { StatusPill } from "@/components/status-pill";
+import { ProductCard } from "@/components/product-card";
+import { SignOutButton } from "@/components/sign-out-button";
+import { AddressForm } from "@/components/address-form";
+import { AccountSecurity } from "@/components/account-security";
+
+export default async function AccountPage() {
+  const session = await requireUser();
+  const [user, orders, appointments, wishlist, pointRows] = await Promise.all([
+    db.user.findUniqueOrThrow({ where: { id: session.user.id }, include: { addresses: { orderBy: { isDefault: "desc" } } } }),
+    db.order.findMany({ where: { userId: session.user.id }, orderBy: { createdAt: "desc" }, include: { items: true } }),
+    db.appointment.findMany({ where: { userId: session.user.id }, orderBy: { appointmentDate: "desc" }, include: { store: true } }),
+    db.wishlistItem.findMany({ where: { userId: session.user.id }, include: { product: { include: { variants: { orderBy: { priceMinor: "asc" } } } } } }),
+    db.pointsTransaction.findMany({ where: { userId: session.user.id } })
+  ]);
+  const points = pointRows.reduce((sum, row) => sum + row.points, 0);
+  const totalSpent = orders.filter((order) => order.paymentStatus === "PAID").reduce((sum, order) => sum + order.totalMinor, 0);
+  return <main id="main" className="page-shell"><div className="account-layout container"><nav className="account-nav" aria-label="會員中心"><a href="#overview">總覽</a><a href="#orders">訂單</a><a href="#wishlist">願望清單</a><a href="#appointments">預約</a><a href="#addresses">地址簿</a><a href="#privacy">私隱及安全</a></nav><div className="account-main"><section id="overview"><p className="eyebrow">IARA MEMBERSHIP</p><h1>你好，{user.name}</h1><p className="muted">{user.membershipTier} 會員 · {user.email}</p><div className="kpi-grid"><div className="kpi-card"><span>會員級別</span><strong>{user.membershipTier}</strong></div><div className="kpi-card"><span>可用積分</span><strong>{points.toLocaleString("zh-HK")}</strong></div><div className="kpi-card"><span>訂單</span><strong>{orders.length}</strong></div><div className="kpi-card"><span>累計消費</span><strong>{formatMoney(totalSpent)}</strong></div></div></section><section className="content-section" id="orders"><div className="content-section-head"><h2>訂單紀錄</h2><Link className="text-link" href="/shop">繼續選購</Link></div>{orders.length ? <div className="data-table-wrap"><table className="data-table"><thead><tr><th>訂單</th><th>日期</th><th>狀態</th><th>商品</th><th>總額</th></tr></thead><tbody>{orders.map((order) => <tr key={order.id}><td>{order.orderNumber}</td><td>{formatDate(order.createdAt)}</td><td><StatusPill value={order.orderStatus} /></td><td>{order.items.length}</td><td>{formatMoney(order.totalMinor)}</td></tr>)}</tbody></table></div> : <div className="empty-state"><h2>尚未有訂單</h2><p>你的 Iara 選購紀錄會顯示在這裡。</p></div>}</section><section className="content-section" id="wishlist"><div className="content-section-head"><h2>願望清單</h2><span>{wishlist.length} 件作品</span></div>{wishlist.length ? <div className="product-grid">{wishlist.map(({ product }) => <ProductCard key={product.id} product={product} />)}</div> : <div className="empty-state"><h2>尚未收藏作品</h2><p>點選作品上的心形圖示即可收藏。</p></div>}</section><section className="content-section" id="appointments"><div className="content-section-head"><h2>預約紀錄</h2><Link className="text-link" href="/appointment">新增預約</Link></div>{appointments.length ? <div className="data-table-wrap"><table className="data-table"><thead><tr><th>日期</th><th>時段</th><th>門市</th><th>系列</th><th>狀態</th></tr></thead><tbody>{appointments.map((item) => <tr key={item.id}><td>{formatDate(item.appointmentDate)}</td><td>{item.timeSlot}</td><td>{item.store.name}</td><td>{item.interest}</td><td><StatusPill value={item.status} /></td></tr>)}</tbody></table></div> : <div className="empty-state"><h2>尚未有預約</h2></div>}</section><section className="content-section" id="addresses"><div className="content-section-head"><h2>地址簿</h2></div>{user.addresses.map((address) => <p key={address.id}><strong>{address.label}</strong><br />{address.recipient} · {address.phone}<br />{address.region}{address.district}{address.line1}</p>)}<details><summary className="button button-secondary">新增地址</summary><div style={{marginTop:20}}><AddressForm /></div></details></section><section className="content-section" id="privacy"><div className="content-section-head"><h2>私隱及安全</h2></div><AccountSecurity twoFactorEnabled={user.twoFactorEnabled} deletionRequested={user.status === "DELETION_REQUESTED"} /><div className="account-signout"><SignOutButton /></div></section></div></div></main>;
+}

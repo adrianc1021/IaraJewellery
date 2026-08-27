@@ -1,0 +1,1 @@
+export default function JournalPage() { return <main id="main" className="page-shell"><header className="page-heading container"><p className="eyebrow">IARA JOURNAL</p><h1>珠寶誌</h1><p>工藝、寶石知識與佩戴靈感。Editorial CMS 內容會在 Sanity 憑證設定後由編輯團隊管理。</p></header></main>; }

@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="zh-HK">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" id="page-description" content="探索 Iara Jewellery 珠寶作品。" />
+    <title>珠寶作品 | Iara Jewellery</title>
+    <link rel="preconnect" href="https://images.unsplash.com" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="catalogue.css" />
+    <link rel="stylesheet" href="product.css" />
+  </head>
+  <body class="shop-page product-page">
+    <a class="skip-link" href="#product-main">跳至商品資料</a>
+    <div class="announcement"><p>香港地區免費配送及退換</p><a class="text-button" href="index.html#bridal">預約私人鑑賞</a></div>
+    <header class="site-header inner-header">
+      <div class="header-main">
+        <a class="icon-button menu-trigger product-back" href="catalogue.html" aria-label="返回所有珠寶">←</a>
+        <a class="brand" href="index.html" aria-label="Iara Jewellery 首頁"><span>IARA</span><small>JEWELLERY</small></a>
+        <nav class="primary-nav" aria-label="主要導覽">
+          <a href="catalogue.html?sort=newest">新品</a><a class="active" href="catalogue.html">珠寶</a><a href="index.html#collections">系列</a><a href="index.html#bridal">婚嫁</a><a href="index.html#story">品牌故事</a><a href="index.html#boutiques">門市</a>
+        </nav>
+        <div class="header-tools">
+          <button class="language-button" aria-label="切換語言">EN</button><a class="icon-button" href="catalogue.html" aria-label="搜尋">⌕</a><a class="icon-button desktop-tool" href="index.html#bridal" aria-label="預約鑑賞">◇</a><a class="icon-button desktop-tool" href="catalogue.html" aria-label="願望清單">♡<span class="tool-count" id="wishlist-count">0</span></a><button class="icon-button" id="cart-trigger" aria-label="購物袋">Bag<span class="tool-count" id="cart-count">0</span></button>
+        </div>
+      </div>
+    </header>
+
+    <main id="product-main">
+      <div class="breadcrumb product-breadcrumb"><a href="index.html">首頁</a><span>/</span><a href="catalogue.html">珠寶</a><span>/</span><span id="breadcrumb-name">作品</span></div>
+      <section class="product-view">
+        <div class="product-gallery">
+          <div class="thumbnail-list" id="thumbnail-list"></div>
+          <button class="main-product-image" id="main-image-button" aria-label="放大商品圖片"><img id="main-product-image" alt="" /><span class="zoom-hint">＋ 放大</span></button>
+        </div>
+        <div class="product-details">
+          <p class="eyebrow dark" id="product-collection"></p>
+          <h1 id="product-name"></h1>
+          <p class="product-detail-price" id="product-price"></p>
+          <p class="payment-note">可享 3 期免息付款 · 香港免費配送</p>
+          <div class="product-facts"><span id="product-material"></span><span id="product-gemstone"></span></div>
+          <p class="product-description" id="product-description"></p>
+          <div class="option-heading"><label for="size-select">選擇尺寸</label><button id="size-guide">尺寸指南</button></div>
+          <div class="size-options" id="size-options" role="radiogroup" aria-label="尺寸"></div>
+          <p class="size-error" id="size-error" aria-live="polite"></p>
+          <p class="stock-note"><span></span><strong id="product-availability"></strong> · 預計 2–3 個工作天送達</p>
+          <div class="product-actions"><button class="button button-dark" id="product-add">加入購物袋</button><button class="product-wish" id="product-wish" aria-pressed="false" aria-label="加入願望清單">♡</button></div>
+          <a class="appointment-link" href="index.html#bridal"><span>◇</span><span><strong>到店鑑賞此作品</strong><small>由私人珠寶顧問為你預備</small></span><b>→</b></a>
+          <div class="product-accordions">
+            <details open><summary>作品細節</summary><p id="product-details-copy"></p></details>
+            <details><summary>工藝與保養</summary><p>每件作品均於香港工房完成鑲嵌與拋光。建議避免接觸香水及化學品，佩戴後以柔軟乾布輕拭並獨立存放。</p></details>
+            <details><summary>配送及退換</summary><p>香港地區免費配送，現貨作品一般於 2–3 個工作天送達。未經刻字或訂製的作品可於收貨後 14 天內申請退換。</p></details>
+          </div>
+        </div>
+      </section>
+
+      <section class="product-story">
+        <div class="story-copy"><p class="eyebrow dark">THE STORY</p><h2>光線與肌膚，恰好相遇</h2><p id="story-description"></p><a href="index.html#story">探索 Iara 工藝 →</a></div>
+        <div class="story-image"><img id="story-image" alt="珠寶佩戴細節" loading="lazy" /></div>
+      </section>
+
+      <section class="related-section">
+        <div class="section-heading"><div><p class="eyebrow dark">YOU MAY ALSO LIKE</p><h2>相襯作品</h2></div><a class="inline-link" href="catalogue.html">探索所有珠寶 →</a></div>
+        <div class="related-grid" id="related-grid"></div>
+      </section>
+    </main>
+
+    <footer class="site-footer compact-footer"><div class="footer-brand"><a class="brand footer-logo" href="index.html"><span>IARA</span><small>JEWELLERY</small></a><p>Jewels shaped by light.</p></div><div class="footer-column"><h3>探索</h3><a href="catalogue.html?sort=newest">新品</a><a href="catalogue.html">珠寶</a><a href="index.html#collections">系列</a></div><div class="footer-column"><h3>服務</h3><a href="index.html#bridal">預約鑑賞</a><a href="index.html#boutiques">門市</a><a href="#">配送及退換</a></div><div class="footer-column"><h3>關於 Iara</h3><a href="index.html#story">品牌故事</a><a href="index.html#journal">珠寶誌</a><a href="#">聯絡我們</a></div><div class="footer-bottom"><span>© 2026 Iara Jewellery</span><div><a href="#">私隱政策</a><a href="#">條款及細則</a></div><span>Hong Kong · HKD</span></div></footer>
+
+    <div class="overlay" id="overlay"></div>
+    <aside class="drawer cart-drawer" id="cart-drawer" aria-hidden="true" aria-label="購物袋"><div class="drawer-head"><h2>購物袋 <span id="cart-title-count">(0)</span></h2><button class="close-button" data-close-cart aria-label="關閉">×</button></div><div class="cart-content" id="cart-content"></div></aside>
+    <div class="image-lightbox" id="image-lightbox" aria-hidden="true" role="dialog" aria-label="商品圖片放大檢視"><button id="lightbox-close" aria-label="關閉圖片">×</button><img id="lightbox-image" alt="" /></div>
+    <div class="size-modal" id="size-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="size-modal-title"><button class="close-button" id="size-modal-close" aria-label="關閉">×</button><p class="eyebrow dark">IARA SIZE GUIDE</p><h2 id="size-modal-title">尺寸指南</h2><p id="size-modal-copy"></p><table id="ring-size-table"><thead><tr><th>香港尺寸</th><th>內圈周長</th><th>內直徑</th></tr></thead><tbody><tr><td>HK 8</td><td>47.1 mm</td><td>15.0 mm</td></tr><tr><td>HK 10</td><td>49.3 mm</td><td>15.7 mm</td></tr><tr><td>HK 12</td><td>51.2 mm</td><td>16.3 mm</td></tr><tr><td>HK 14</td><td>53.4 mm</td><td>17.0 mm</td></tr><tr><td>HK 16</td><td>55.3 mm</td><td>17.6 mm</td></tr></tbody></table><a class="button button-dark" href="index.html#bridal">預約專人量度</a></div>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="products.js"></script><script src="shop-common.js"></script><script src="product.js"></script>
+  </body>
+</html>

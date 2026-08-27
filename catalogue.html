@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="zh-HK">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="探索 Iara Jewellery 全部珠寶作品，按分類、材質、寶石及價格篩選。" />
+    <title>所有珠寶 | Iara Jewellery</title>
+    <link rel="preconnect" href="https://images.unsplash.com" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="catalogue.css" />
+  </head>
+  <body class="shop-page">
+    <a class="skip-link" href="#catalogue-main">跳至商品列表</a>
+    <div class="announcement"><p>香港地區免費配送及退換</p><a class="text-button" href="index.html#bridal">預約私人鑑賞</a></div>
+    <header class="site-header inner-header">
+      <div class="header-main">
+        <button class="icon-button menu-trigger" id="shop-menu-trigger" aria-label="開啟選單" aria-expanded="false">☰</button>
+        <a class="brand" href="index.html" aria-label="Iara Jewellery 首頁"><span>IARA</span><small>JEWELLERY</small></a>
+        <nav class="primary-nav" aria-label="主要導覽">
+          <a href="catalogue.html?sort=newest">新品</a><a class="active" href="catalogue.html">珠寶</a><a href="index.html#collections">系列</a><a href="index.html#bridal">婚嫁</a><a href="index.html#story">品牌故事</a><a href="index.html#boutiques">門市</a>
+        </nav>
+        <div class="header-tools">
+          <button class="language-button" aria-label="切換語言">EN</button>
+          <button class="icon-button" id="catalogue-search-trigger" aria-label="搜尋">⌕</button>
+          <a class="icon-button desktop-tool" href="index.html#bridal" aria-label="預約鑑賞">◇</a>
+          <button class="icon-button desktop-tool" id="wishlist-jump" aria-label="願望清單">♡<span class="tool-count" id="wishlist-count">0</span></button>
+          <button class="icon-button" id="cart-trigger" aria-label="購物袋">Bag<span class="tool-count" id="cart-count">0</span></button>
+        </div>
+      </div>
+      <nav class="shop-mobile-nav" id="shop-mobile-nav" aria-hidden="true"><a href="catalogue.html?sort=newest">新品</a><a href="catalogue.html">所有珠寶</a><a href="index.html#collections">系列</a><a href="index.html#bridal">婚嫁</a><a href="index.html#story">品牌故事</a><a href="index.html#boutiques">門市</a></nav>
+    </header>
+
+    <main id="catalogue-main">
+      <div class="breadcrumb"><a href="index.html">首頁</a><span>/</span><span>所有珠寶</span></div>
+      <section class="catalogue-intro">
+        <p class="eyebrow dark">THE IARA COLLECTION</p>
+        <h1>所有珠寶</h1>
+        <p>由日常微光到珍貴時刻，探索 Iara 以寶石與手工線條雕琢的完整系列。</p>
+      </section>
+
+      <div class="catalogue-toolbar">
+        <div class="result-summary"><strong id="result-count">12</strong> 件作品</div>
+        <button class="mobile-filter-trigger" id="mobile-filter-trigger">篩選 <span id="active-filter-count"></span></button>
+        <label class="sort-control">排序
+          <select id="sort-select" aria-label="商品排序">
+            <option value="featured">精選推薦</option><option value="newest">最新上架</option><option value="price-asc">價格由低至高</option><option value="price-desc">價格由高至低</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="catalogue-layout">
+        <aside class="filter-panel" id="filter-panel" aria-label="商品篩選">
+          <div class="filter-mobile-head"><h2>篩選</h2><button id="filter-close" aria-label="關閉篩選">×</button></div>
+          <div class="filter-search"><label for="product-search">搜尋作品</label><input id="product-search" type="search" placeholder="名稱或系列" /></div>
+          <div class="filter-groups" id="filter-groups"></div>
+          <div class="filter-actions"><button class="clear-filters" id="clear-filters">清除全部</button><button class="button button-dark" id="apply-filters">查看結果</button></div>
+        </aside>
+        <section class="catalogue-results" aria-live="polite">
+          <div class="active-filters" id="active-filters"></div>
+          <div class="catalogue-grid" id="catalogue-grid"></div>
+          <div class="no-results" id="no-results" hidden><span>◇</span><h2>未找到相符作品</h2><p>調整篩選條件，或探索全部珠寶。</p><button class="button button-dark" data-clear-all>查看所有珠寶</button></div>
+        </section>
+      </div>
+    </main>
+
+    <section class="catalogue-service">
+      <div><span>◇</span><h2>私人珠寶顧問</h2><p>需要選石、尺寸或送禮建議？讓我們為你準備合適作品。</p><a href="index.html#bridal">預約鑑賞 →</a></div>
+      <div><span>⌂</span><h2>中環工作室</h2><p>親身感受寶石光澤與佩戴比例，享受一對一鑑賞體驗。</p><a href="index.html#boutiques">查看門市 →</a></div>
+      <div><span>↺</span><h2>安心選購</h2><p>香港免費配送，網上訂單享 14 天退換保障。</p><a href="#footer">配送及退換 →</a></div>
+    </section>
+
+    <footer class="site-footer compact-footer" id="footer">
+      <div class="footer-brand"><a class="brand footer-logo" href="index.html"><span>IARA</span><small>JEWELLERY</small></a><p>Jewels shaped by light.</p></div>
+      <div class="footer-column"><h3>探索</h3><a href="catalogue.html?sort=newest">新品</a><a href="catalogue.html">珠寶</a><a href="index.html#collections">系列</a></div>
+      <div class="footer-column"><h3>服務</h3><a href="index.html#bridal">預約鑑賞</a><a href="index.html#boutiques">門市</a><a href="#footer">配送及退換</a></div>
+      <div class="footer-column"><h3>關於 Iara</h3><a href="index.html#story">品牌故事</a><a href="index.html#journal">珠寶誌</a><a href="#footer">聯絡我們</a></div>
+      <div class="footer-bottom"><span>© 2026 Iara Jewellery</span><div><a href="#footer">私隱政策</a><a href="#footer">條款及細則</a></div><span>Hong Kong · HKD</span></div>
+    </footer>
+
+    <div class="overlay" id="overlay"></div>
+    <aside class="drawer cart-drawer" id="cart-drawer" aria-hidden="true" aria-label="購物袋"><div class="drawer-head"><h2>購物袋 <span id="cart-title-count">(0)</span></h2><button class="close-button" data-close-cart aria-label="關閉">×</button></div><div class="cart-content" id="cart-content"></div></aside>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="products.js"></script>
+    <script src="shop-common.js"></script>
+    <script src="catalogue.js"></script>
+  </body>
+</html>

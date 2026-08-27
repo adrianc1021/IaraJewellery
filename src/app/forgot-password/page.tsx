@@ -1,0 +1,2 @@
+import Link from "next/link";
+export default function ForgotPasswordPage() { return <main id="main" className="form-shell"><p className="eyebrow">ACCOUNT ACCESS</p><h1>重設密碼</h1><p>輸入會員電郵。當電郵服務完成設定後，系統會發送安全重設連結。</p><form className="form-grid"><div className="field full"><label htmlFor="email">電郵</label><input id="email" type="email" required /></div><p className="form-error field full">本機環境未設定郵件供應商，重設郵件不會發送。</p><button className="button button-primary field full" disabled>發送重設連結</button></form><div className="auth-links"><Link href="/login">← 返回登入</Link></div></main>; }

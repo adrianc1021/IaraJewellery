@@ -1,0 +1,7 @@
+"use client";
+import { FormEvent, useState } from "react";
+export function AddressForm() {
+  const [message, setMessage] = useState("");
+  async function submit(event: FormEvent<HTMLFormElement>) { event.preventDefault(); const form = new FormData(event.currentTarget); const response = await fetch("/api/account/addresses", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(Object.fromEntries(form)) }); const data = await response.json(); setMessage(response.ok ? "地址已儲存。" : data.error); if (response.ok) location.reload(); }
+  return <form className="form-grid" onSubmit={submit}><div className="field"><label htmlFor="recipient">收件人</label><input id="recipient" name="recipient" required /></div><div className="field"><label htmlFor="address-phone">電話</label><input id="address-phone" name="phone" required /></div><div className="field full"><label htmlFor="line1">地址</label><input id="line1" name="line1" required /></div><div className="field"><label htmlFor="district">地區</label><input id="district" name="district" required /></div><div className="field"><label htmlFor="label">標籤</label><input id="label" name="label" defaultValue="主要地址" /></div><label className="checkbox-field field full"><input name="isDefault" type="checkbox" />設為預設地址</label>{message && <p className={message.includes("已儲存") ? "form-success field full" : "form-error field full"}>{message}</p>}<button className="button button-primary field full">儲存地址</button></form>;
+}

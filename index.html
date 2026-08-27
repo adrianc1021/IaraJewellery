@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="zh-HK">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Iara Jewellery 香港高級珠寶，以當代設計承載珍稀寶石與細緻工藝。" />
+    <title>Iara Jewellery | 香港高級珠寶</title>
+    <link rel="preconnect" href="https://images.unsplash.com" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">跳至主要內容</a>
+    <div class="announcement">
+      <p>香港地區免費配送及退換</p>
+      <button class="text-button" data-open-appointment>預約私人鑑賞</button>
+    </div>
+
+    <header class="site-header" id="site-header">
+      <div class="header-main">
+        <button class="icon-button menu-trigger" id="menu-trigger" aria-label="開啟選單" aria-expanded="false">☰</button>
+        <a class="brand" href="#top" aria-label="Iara Jewellery 首頁">
+          <span>IARA</span>
+          <small>JEWELLERY</small>
+        </a>
+        <nav class="primary-nav" aria-label="主要導覽">
+          <a href="catalogue.html?sort=newest">新品</a>
+          <a href="catalogue.html">珠寶</a>
+          <a href="#collections">系列</a>
+          <a href="#bridal">婚嫁</a>
+          <a href="#story">品牌故事</a>
+          <a href="#boutiques">門市</a>
+        </nav>
+        <div class="header-tools">
+          <button class="language-button" id="language-button" aria-label="切換語言">EN</button>
+          <button class="icon-button" id="search-trigger" aria-label="搜尋">⌕</button>
+          <button class="icon-button desktop-tool" data-open-appointment aria-label="預約鑑賞">◇</button>
+          <button class="icon-button desktop-tool" id="wishlist-trigger" aria-label="願望清單">♡<span class="tool-count" id="wishlist-count">0</span></button>
+          <button class="icon-button" id="cart-trigger" aria-label="購物袋">Bag<span class="tool-count" id="cart-count">0</span></button>
+        </div>
+      </div>
+      <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+        <nav aria-label="手機導覽">
+          <a href="catalogue.html?sort=newest">新品 <span>→</span></a>
+          <a href="catalogue.html">珠寶 <span>→</span></a>
+          <a href="#collections">系列 <span>→</span></a>
+          <a href="#bridal">婚嫁 <span>→</span></a>
+          <a href="#story">品牌故事 <span>→</span></a>
+          <a href="#boutiques">門市 <span>→</span></a>
+        </nav>
+        <div class="mobile-menu-footer">
+          <button data-open-appointment>預約私人鑑賞</button>
+          <p>客戶服務　+852 2180 8208</p>
+        </div>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="hero" id="top" aria-labelledby="hero-title">
+        <img src="https://images.unsplash.com/photo-1611085583191-a3b181a88401?auto=format&fit=crop&w=2200&q=88" alt="佩戴精緻鑽石耳環的女性側影" />
+        <div class="hero-shade"></div>
+        <div class="hero-content">
+          <p class="eyebrow">THE TIDE OF LIGHT · 2026</p>
+          <h1 id="hero-title">光，在此停留</h1>
+          <p>以海的流動姿態，凝住每一道屬於你的光。</p>
+          <div class="hero-actions">
+            <a class="button button-light" href="catalogue.html?collection=LUMEA">探索全新系列</a>
+            <button class="button button-ghost" data-open-appointment>預約鑑賞</button>
+          </div>
+        </div>
+        <a class="scroll-cue" href="#collections" aria-label="向下探索"><span></span>探索</a>
+      </section>
+
+      <section class="intro-section" id="collections">
+        <p class="eyebrow dark">IARA SIGNATURE</p>
+        <h2>為日常，收藏一束光</h2>
+        <p class="section-lede">Iara 源自對水與光的想像。每件作品以細膩曲線承托寶石，讓珍貴不只留在重要時刻，也自然融入每一天。</p>
+        <div class="collection-grid">
+          <a class="collection-tile collection-large" href="catalogue.html?collection=LUMEA">
+            <img src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=1400&q=88" alt="金色吊墜項鏈特寫" loading="lazy" />
+            <span class="tile-content"><small>標誌系列</small><strong>LUMEA</strong><em>探索系列 →</em></span>
+          </a>
+          <a class="collection-tile" href="catalogue.html?collection=ARIA">
+            <img src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=1200&q=88" alt="鑽石戒指特寫" loading="lazy" />
+            <span class="tile-content"><small>愛的形狀</small><strong>ARIA</strong><em>探索系列 →</em></span>
+          </a>
+          <a class="collection-tile" href="catalogue.html?collection=MAREA">
+            <img src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=1200&q=88" alt="金色手鏈與珠寶" loading="lazy" />
+            <span class="tile-content"><small>自由流動</small><strong>MAREA</strong><em>探索系列 →</em></span>
+          </a>
+        </div>
+      </section>
+
+      <section class="product-section" id="new">
+        <div class="section-heading">
+          <div><p class="eyebrow dark">NEW ARRIVALS</p><h2>本季新作</h2></div>
+          <a class="inline-link" href="catalogue.html?sort=newest">選購所有新品 →</a>
+        </div>
+        <div class="product-grid" id="product-grid"></div>
+      </section>
+
+      <section class="category-section" id="jewellery" aria-labelledby="category-title">
+        <div class="category-copy">
+          <p class="eyebrow">FIND YOUR PIECE</p>
+          <h2 id="category-title">循光，遇見你的珠寶</h2>
+          <p>從低調細節到閃耀主角，挑選貼近你當下心情的作品。</p>
+          <div class="category-links">
+            <a href="catalogue.html?category=戒指">戒指 <span>Rings</span><b>→</b></a>
+            <a href="catalogue.html?category=項鏈">項鏈 <span>Necklaces</span><b>→</b></a>
+            <a href="catalogue.html?category=耳環">耳環 <span>Earrings</span><b>→</b></a>
+            <a href="catalogue.html?category=手鏈">手鏈 <span>Bracelets</span><b>→</b></a>
+          </div>
+        </div>
+        <div class="category-image">
+          <img src="https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?auto=format&fit=crop&w=1600&q=88" alt="佩戴金色耳環的女性" loading="lazy" />
+        </div>
+      </section>
+
+      <section class="craft-section" id="story">
+        <div class="craft-image">
+          <img src="https://images.unsplash.com/photo-1573408301185-9146fe634ad0?auto=format&fit=crop&w=1400&q=88" alt="工匠製作珠寶的細節" loading="lazy" />
+          <span class="image-note">香港工房 · 每件作品經歷逾 40 道工序</span>
+        </div>
+        <div class="craft-copy">
+          <p class="eyebrow dark">THE ART OF IARA</p>
+          <h2>讓工藝，成為可感受的溫度</h2>
+          <p>我們相信真正的奢華，不只在寶石的稀有，更在一雙手願意花多少時間，讓光線、弧度與肌膚恰好相遇。</p>
+          <p>從寶石甄選、手工鑲嵌到最後拋光，每道工序都在香港工房細緻完成。</p>
+          <a class="button button-dark" href="#journal">閱讀我們的工藝</a>
+        </div>
+      </section>
+
+      <section class="bridal-section" id="bridal">
+        <img src="https://images.unsplash.com/photo-1523438885200-e635ba2c371e?auto=format&fit=crop&w=2200&q=88" alt="婚禮上的新人與鑽戒" loading="lazy" />
+        <div class="bridal-overlay"></div>
+        <div class="bridal-copy">
+          <p class="eyebrow">IARA BRIDAL</p>
+          <h2>一生的答案，由你們共同寫下</h2>
+          <p>由選石、比例到細節刻字，與私人珠寶顧問一起完成只屬於你們的信物。</p>
+          <button class="button button-light" data-open-appointment>預約婚嫁諮詢</button>
+        </div>
+      </section>
+
+      <section class="journal-section" id="journal">
+        <div class="section-heading">
+          <div><p class="eyebrow dark">IARA JOURNAL</p><h2>珠寶誌</h2></div>
+          <a class="inline-link" href="#journal">閱讀所有文章 →</a>
+        </div>
+        <div class="journal-grid">
+          <article>
+            <a href="#journal"><img src="https://images.unsplash.com/photo-1596944924616-7b38e7cfac36?auto=format&fit=crop&w=1200&q=86" alt="日常佩戴珠寶的女性" loading="lazy" /></a>
+            <p class="article-meta">STYLE · 6 分鐘閱讀</p>
+            <h3>一件珠寶，三種日常光景</h3>
+            <a href="#journal">閱讀文章 →</a>
+          </article>
+          <article>
+            <a href="#journal"><img src="https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=1200&q=86" alt="色彩寶石耳環" loading="lazy" /></a>
+            <p class="article-meta">GEM GUIDE · 8 分鐘閱讀</p>
+            <h3>如何找到與你最相襯的寶石</h3>
+            <a href="#journal">閱讀文章 →</a>
+          </article>
+          <article>
+            <a href="#journal"><img src="https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?auto=format&fit=crop&w=1200&q=86" alt="珍珠與金色珠寶組合" loading="lazy" /></a>
+            <p class="article-meta">CARE · 5 分鐘閱讀</p>
+            <h3>讓珠寶長久閃耀的保養方式</h3>
+            <a href="#journal">閱讀文章 →</a>
+          </article>
+        </div>
+      </section>
+
+      <section class="boutique-section" id="boutiques">
+        <div class="boutique-copy">
+          <p class="eyebrow">IARA CENTRAL ATELIER</p>
+          <h2>在城市中心，與光相遇</h2>
+          <p>香港中環皇后大道中 80 號<br />星期一至日　11:00 – 20:00</p>
+          <div class="boutique-actions">
+            <button class="button button-light" data-open-appointment>預約到店</button>
+            <a class="inline-link light" href="https://maps.google.com" target="_blank" rel="noreferrer">查看地圖 →</a>
+          </div>
+        </div>
+        <div class="boutique-image">
+          <img src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=1600&q=86" alt="Iara 中環珠寶工作室的優雅室內空間" loading="lazy" />
+        </div>
+      </section>
+
+      <section class="newsletter-section">
+        <div><p class="eyebrow dark">PRIVATE NOTES FROM IARA</p><h2>讓下一束光，先抵達你</h2><p>訂閱 Iara 私人通訊，優先預覽新作、品牌活動與珠寶故事。</p></div>
+        <form class="newsletter-form" id="newsletter-form">
+          <label class="sr-only" for="newsletter-email">電郵地址</label>
+          <input id="newsletter-email" type="email" placeholder="你的電郵地址" required />
+          <button type="submit" aria-label="訂閱電子報">→</button>
+          <p class="form-note" id="newsletter-note">訂閱即表示你同意接收 Iara Jewellery 的品牌通訊。</p>
+        </form>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-brand"><a class="brand footer-logo" href="#top"><span>IARA</span><small>JEWELLERY</small></a><p>Jewels shaped by light.</p></div>
+      <div class="footer-column"><h3>探索</h3><a href="catalogue.html?sort=newest">新品</a><a href="catalogue.html">珠寶</a><a href="#collections">系列</a><a href="#bridal">婚嫁</a></div>
+      <div class="footer-column"><h3>服務</h3><button data-open-appointment>預約鑑賞</button><a href="#boutiques">門市</a><a href="#footer">配送及退換</a><a href="#footer">珠寶保養</a></div>
+      <div class="footer-column"><h3>關於 Iara</h3><a href="#story">品牌故事</a><a href="#journal">珠寶誌</a><a href="#footer">聯絡我們</a><a href="#footer">常見問題</a></div>
+      <div class="footer-bottom" id="footer"><span>© 2026 Iara Jewellery</span><div><a href="#footer">私隱政策</a><a href="#footer">條款及細則</a><button id="cookie-button">Cookie 設定</button></div><span>Hong Kong · HKD</span></div>
+    </footer>
+
+    <div class="overlay" id="overlay"></div>
+    <aside class="drawer search-drawer" id="search-drawer" aria-hidden="true" aria-label="搜尋珠寶">
+      <div class="drawer-head"><h2>搜尋</h2><button class="close-button" data-close aria-label="關閉">×</button></div>
+      <label class="search-field"><span class="sr-only">搜尋</span><input id="search-input" type="search" placeholder="搜尋珠寶、系列或文章" /><b>⌕</b></label>
+      <div id="search-results"><p class="drawer-label">熱門搜尋</p><div class="search-tags"><button>鑽石戒指</button><button>Lumea</button><button>結婚對戒</button><button>送禮</button></div></div>
+    </aside>
+    <aside class="drawer cart-drawer" id="cart-drawer" aria-hidden="true" aria-label="購物袋">
+      <div class="drawer-head"><h2>購物袋 <span id="cart-title-count">(0)</span></h2><button class="close-button" data-close aria-label="關閉">×</button></div>
+      <div class="cart-content" id="cart-content"><div class="empty-state"><span>◇</span><h3>你的購物袋仍是空的</h3><p>讓一件閃耀新作陪你回家。</p><button class="button button-dark" data-close>探索新品</button></div></div>
+    </aside>
+
+    <div class="modal" id="appointment-modal" role="dialog" aria-modal="true" aria-labelledby="appointment-title" aria-hidden="true">
+      <button class="close-button modal-close" data-close aria-label="關閉">×</button>
+      <div class="modal-copy">
+        <p class="eyebrow dark">PRIVATE APPOINTMENT</p>
+        <h2 id="appointment-title">預約私人鑑賞</h2>
+        <p>告訴我們你的喜好，Iara 珠寶顧問將於一個工作天內與你聯絡，為你安排專屬時段。</p>
+      </div>
+      <form class="appointment-form" id="appointment-form">
+        <label>姓名<input name="name" autocomplete="name" required /></label>
+        <label>電話<input name="phone" type="tel" autocomplete="tel" required /></label>
+        <label>電郵<input name="email" type="email" autocomplete="email" required /></label>
+        <label>感興趣的系列<select name="interest"><option>全新系列 Lumea</option><option>婚嫁珠寶</option><option>鑽石珠寶</option><option>高級珠寶</option></select></label>
+        <label>理想日期<input name="date" type="date" required /></label>
+        <label>聯絡方式<select name="contact"><option>WhatsApp</option><option>電話</option><option>電郵</option></select></label>
+        <label class="consent"><input type="checkbox" required /> 我同意 Iara Jewellery 就是次預約聯絡本人。</label>
+        <button class="button button-dark" type="submit">提交預約</button>
+      </form>
+      <div class="success-state" id="appointment-success"><span>✓</span><h2>預約申請已收到</h2><p>我們會於一個工作天內與你聯絡。</p><button class="button button-dark" data-close>完成</button></div>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="products.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>

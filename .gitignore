@@ -1,0 +1,16 @@
+node_modules/
+.pnpm-store/
+.next/
+out/
+coverage/
+*.tsbuildinfo
+*.log
+.DS_Store
+.env
+.env.local
+.env.*.local
+prisma/dev.db
+prisma/dev.db-journal
+prisma/dev.db-shm
+prisma/dev.db-wal
+data/

@@ -1,0 +1,1 @@
+export default function FaqPage() { return <main id="main" className="form-shell wide"><p className="eyebrow">CLIENT CARE</p><h1>常見問題</h1>{[["配送需要多久？","香港現貨作品一般於 2–3 個工作天送達。"],["可以退換嗎？","未經刻字或訂製的作品可於收貨後 14 天內申請退換。"],["如何預約到店？","可使用網站預約表格選擇日期、時段與感興趣系列。"]].map(([q,a]) => <details className="detail-accordions" key={q}><summary>{q}</summary><p>{a}</p></details>)}</main>; }
