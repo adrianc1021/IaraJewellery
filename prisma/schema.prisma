@@ -410,3 +410,16 @@ model IdempotencyKey {
 
   @@unique([scope, id])
 }
+
+model SiteLayoutSetting {
+  id                     String   @id @default("homepage")
+  heroHeight             Int      @default(760)
+  categoryTileHeight     Int      @default(320)
+  sectionSpacing         Int      @default(96)
+  newArrivalsColumns     Int      @default(4)
+  productImageRatio      String   @default("4 / 5")
+  editorialHeight        Int      @default(660)
+  curationTileHeight     Int      @default(460)
+  updatedBy              String?
+  updatedAt              DateTime @updatedAt
+}

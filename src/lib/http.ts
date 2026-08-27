@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { ZodError } from "zod";
+import { getTrustedOrigins } from "@/lib/origins";
 
 const buckets = new Map<string, { count: number; resetAt: number }>();
 
@@ -22,8 +23,7 @@ export function enforceRateLimit(request: Request, scope: string, limit = 30, wi
 export function enforceSameOrigin(request: Request) {
   const origin = request.headers.get("origin");
   if (!origin) return;
-  const expected = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-  if (new URL(origin).origin !== new URL(expected).origin) throw new HttpError(403, "無效的請求來源。" );
+  if (!getTrustedOrigins().includes(new URL(origin).origin)) throw new HttpError(403, "無效的請求來源。" );
 }
 
 export class HttpError extends Error {

@@ -14,12 +14,17 @@ export async function requireUser() {
   return session;
 }
 
-export async function requireStaff(allowed: readonly string[] = STAFF_ROLES) {
+export async function requireStaffIdentity(allowed: readonly string[] = STAFF_ROLES) {
   const session = await getSession();
   const role = session?.user.role ?? "CUSTOMER";
   if (!session || !allowed.includes(role)) redirect("/login?next=/ops");
+  return session;
+}
+
+export async function requireStaff(allowed: readonly string[] = STAFF_ROLES) {
+  const session = await requireStaffIdentity(allowed);
   if (process.env.NODE_ENV === "production" && !session.user.twoFactorEnabled) {
-    redirect("/account?mfa=required#privacy");
+    redirect("/ops/security?next=/ops");
   }
   return session;
 }

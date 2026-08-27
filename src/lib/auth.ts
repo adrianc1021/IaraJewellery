@@ -2,6 +2,7 @@ import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { twoFactor } from "better-auth/plugins";
 import { db } from "@/lib/db";
+import { getTrustedOrigins } from "@/lib/origins";
 
 export const auth = betterAuth({
   appName: "Iara Jewellery",
@@ -26,7 +27,7 @@ export const auth = betterAuth({
     cookiePrefix: "iara",
     useSecureCookies: process.env.NODE_ENV === "production"
   },
-  trustedOrigins: [process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"],
+  trustedOrigins: getTrustedOrigins(),
   plugins: [twoFactor({ issuer: "Iara Jewellery" })]
 });
 

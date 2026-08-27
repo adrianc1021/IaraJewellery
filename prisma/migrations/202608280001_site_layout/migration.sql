@@ -1,0 +1,12 @@
+CREATE TABLE IF NOT EXISTS "SiteLayoutSetting" (
+  "id" TEXT NOT NULL PRIMARY KEY DEFAULT 'homepage',
+  "heroHeight" INTEGER NOT NULL DEFAULT 760,
+  "categoryTileHeight" INTEGER NOT NULL DEFAULT 320,
+  "sectionSpacing" INTEGER NOT NULL DEFAULT 96,
+  "newArrivalsColumns" INTEGER NOT NULL DEFAULT 4,
+  "productImageRatio" TEXT NOT NULL DEFAULT '4 / 5',
+  "editorialHeight" INTEGER NOT NULL DEFAULT 660,
+  "curationTileHeight" INTEGER NOT NULL DEFAULT 460,
+  "updatedBy" TEXT,
+  "updatedAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
