@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { checkoutSchema, inventorySchema, popupAnnouncementSchema, siteLayoutSchema } from "@/lib/validation";
+import { catalogGroupSchema, checkoutSchema, inventorySchema, paymentMethodsSchema, popupAnnouncementSchema, productCreateSchema, siteLayoutSchema } from "@/lib/validation";
 describe("checkout validation",()=>{it("requires a delivery address",()=>{expect(()=>checkoutSchema.parse({email:"a@example.com",customerName:"Ada",phone:"91234567",deliveryMethod:"DELIVERY"})).toThrow();});it("allows store pickup without an address",()=>{expect(checkoutSchema.parse({email:"a@example.com",customerName:"Ada",phone:"91234567",deliveryMethod:"PICKUP"}).deliveryMethod).toBe("PICKUP");});});
 describe("inventory validation",()=>{it("rejects negative stock",()=>{expect(()=>inventorySchema.parse({stockOnHand:-1,reason:"count"})).toThrow();});});
 describe("site layout validation",()=>{
@@ -13,4 +13,11 @@ describe("popup announcement validation",()=>{
   it("accepts a scheduled popup",()=>expect(popupAnnouncementSchema.parse(valid).title).toBe("私人鑑賞會"));
   it("rejects an end before its start",()=>expect(()=>popupAnnouncementSchema.parse({...valid,endsAt:"2026-08-01T10:00:00.000Z"})).toThrow());
   it("requires CTA text and link together",()=>expect(()=>popupAnnouncementSchema.parse({...valid,ctaHref:""})).toThrow());
+});
+describe("catalogue validation",()=>{
+  it("accepts a complete pet product",()=>expect(productCreateSchema.parse({slug:"luna-pet-tag",nameZh:"Luna 寵物名牌",nameEn:"Luna Pet Tag",descriptionZh:"舒適圓潤。",descriptionEn:"Softly finished.",category:"寵物吊牌",collection:"IARA PETS",audience:"PET",material:"18K 黃金",gemstone:"鑽石",imageUrl:"https://example.com/tag.jpg",featured:true,sku:"IARA-PET-01",optionName:"小型",priceMinor:880000,stockOnHand:5}).audience).toBe("PET"));
+  it("rejects unsafe catalogue slugs",()=>expect(()=>catalogGroupSchema.parse({kind:"CATEGORY",slug:"../../rings",nameZh:"戒指",nameEn:"Rings",active:true,featured:false,sortOrder:1})).toThrow());
+});
+describe("payment settings validation",()=>{
+  it("accepts enabled payment controls",()=>expect(paymentMethodsSchema.parse({methods:[{code:"FPS",enabled:true}]}).methods[0].enabled).toBe(true));
 });

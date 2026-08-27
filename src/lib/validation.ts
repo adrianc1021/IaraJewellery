@@ -20,7 +20,8 @@ export const appointmentSchema = z.object({
 export const checkoutSchema = z.object({
   email: z.email(), customerName: z.string().min(2).max(80), phone: z.string().min(8).max(24),
   deliveryMethod: z.enum(["DELIVERY", "PICKUP"]), shippingAddress: z.string().max(500).optional(),
-  giftMessage: z.string().max(300).optional(), promotionCode: z.string().max(30).optional()
+  giftMessage: z.string().max(300).optional(), promotionCode: z.string().max(30).optional(),
+  paymentMethod: z.string().trim().min(2).max(40).default("CREDIT_CARD")
 }).superRefine((value, ctx) => {
   if (value.deliveryMethod === "DELIVERY" && !value.shippingAddress?.trim()) ctx.addIssue({ code: "custom", path: ["shippingAddress"], message: "請填寫配送地址。" });
 });
@@ -60,3 +61,55 @@ export const popupAnnouncementSchema = popupAnnouncementFields.superRefine((valu
 });
 
 export const popupAnnouncementUpdateSchema = popupAnnouncementFields.partial();
+
+export const catalogGroupSchema = z.object({
+  kind: z.enum(["CATEGORY", "COLLECTION"]),
+  slug: z.string().trim().min(2).max(60).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
+  nameZh: z.string().trim().min(1).max(80),
+  nameEn: z.string().trim().min(1).max(80),
+  imageUrl: optionalUrl,
+  active: z.boolean().default(true),
+  featured: z.boolean().default(false),
+  sortOrder: z.number().int().min(0).max(1000).default(0)
+});
+
+export const catalogGroupUpdateSchema = catalogGroupSchema.omit({ kind: true, slug: true }).partial();
+
+export const productCreateSchema = z.object({
+  slug: z.string().trim().min(3).max(100).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
+  nameZh: z.string().trim().min(2).max(120),
+  nameEn: z.string().trim().min(2).max(120),
+  descriptionZh: z.string().trim().min(2).max(1200),
+  descriptionEn: z.string().trim().min(2).max(1200),
+  category: z.string().trim().min(1).max(80),
+  collection: z.string().trim().min(1).max(80),
+  audience: z.enum(["PEOPLE", "PET"]),
+  material: z.string().trim().min(1).max(100),
+  gemstone: z.string().trim().min(1).max(100),
+  badge: z.string().trim().max(40).optional(),
+  imageUrl: z.url().refine((value) => value.startsWith("https://"), "只接受 HTTPS 網址。"),
+  featured: z.boolean().default(false),
+  sku: z.string().trim().min(3).max(80),
+  optionName: z.string().trim().min(1).max(80),
+  priceMinor: z.number().int().min(100).max(100_000_000),
+  stockOnHand: z.number().int().min(0).max(100000)
+});
+
+export const productUpdateSchema = z.object({
+  status: z.enum(["ACTIVE", "ARCHIVED"]).optional(),
+  featured: z.boolean().optional(),
+  category: z.string().trim().min(1).max(80).optional(),
+  collection: z.string().trim().min(1).max(80).optional(),
+  audience: z.enum(["PEOPLE", "PET"]).optional()
+});
+
+export const paymentMethodsSchema = z.object({
+  methods: z.array(z.object({ code: z.string().min(2).max(40), enabled: z.boolean() })).min(1).max(20)
+});
+
+export const memberProfileSchema = z.object({
+  name: z.string().trim().min(2).max(80),
+  phone: z.string().trim().max(24).optional(),
+  locale: z.enum(["zh-HK", "en"]),
+  marketingConsent: z.boolean()
+});

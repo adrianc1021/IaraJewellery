@@ -5,6 +5,7 @@ import { apiError, enforceSameOrigin, requestIp } from "@/lib/http";
 import { writeAudit } from "@/lib/audit";
 import { SITE_LAYOUT_ID } from "@/lib/site-layout";
 import { siteLayoutSchema } from "@/lib/validation";
+import { revalidatePath } from "next/cache";
 
 export async function PATCH(request: Request) {
   try {
@@ -27,6 +28,7 @@ export async function PATCH(request: Request) {
       reason: "後台調整首頁版面",
       ipAddress: requestIp(request)
     });
+    revalidatePath("/");
     return NextResponse.json({ settings });
   } catch (error) {
     return apiError(error);

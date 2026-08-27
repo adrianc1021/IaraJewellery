@@ -3,16 +3,18 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
-import { BarChart3, Boxes, CalendarDays, ClipboardList, ContactRound, FileClock, LayoutTemplate, Megaphone, Store, X } from "lucide-react";
+import { BarChart3, Boxes, CalendarDays, ClipboardList, ContactRound, CreditCard, FileClock, Gem, LayoutTemplate, Megaphone, Store, X } from "lucide-react";
 
 const items = [
   { href: "/ops", label: "營運總覽", icon: BarChart3, exact: true },
   { href: "/ops/layout", label: "首頁版面", icon: LayoutTemplate },
+  { href: "/ops/catalog", label: "商品目錄", icon: Gem },
   { href: "/ops/orders", label: "訂單", icon: ClipboardList },
   { href: "/ops/inventory", label: "庫存", icon: Boxes },
   { href: "/ops/members", label: "會員", icon: ContactRound },
   { href: "/ops/appointments", label: "預約", icon: CalendarDays },
   { href: "/ops/marketing", label: "推廣及通告", icon: Megaphone },
+  { href: "/ops/payments", label: "付款設定", icon: CreditCard },
   { href: "/ops/audit", label: "審計紀錄", icon: FileClock }
 ];
 

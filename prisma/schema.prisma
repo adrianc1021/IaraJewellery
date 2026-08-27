@@ -121,6 +121,7 @@ model Product {
   storyZh          String
   category         String
   collection       String
+  audience         String          @default("PEOPLE")
   material         String
   gemstone         String
   badge            String?
@@ -135,6 +136,7 @@ model Product {
 
   @@index([category, status])
   @@index([collection, status])
+  @@index([audience, status])
 }
 
 model ProductVariant {
@@ -232,6 +234,7 @@ model Order {
   customerName      String
   phone             String
   paymentStatus     String                 @default("PENDING")
+  paymentMethod     String                 @default("CREDIT_CARD")
   fulfillmentStatus String                 @default("UNFULFILLED")
   orderStatus       String                 @default("PENDING_PAYMENT")
   currency          String                 @default("HKD")
@@ -255,6 +258,36 @@ model Order {
 
   @@index([createdAt, orderStatus])
   @@index([userId, createdAt])
+}
+
+model CatalogGroup {
+  id        String   @id @default(cuid())
+  kind      String
+  slug      String
+  nameZh    String
+  nameEn    String
+  imageUrl  String?
+  active    Boolean  @default(true)
+  featured  Boolean  @default(false)
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([kind, slug])
+  @@index([kind, active, sortOrder])
+}
+
+model PaymentMethodSetting {
+  code           String   @id
+  nameZh         String
+  nameEn         String
+  enabled        Boolean  @default(false)
+  checkoutMode   String   @default("MANUAL")
+  instructionsZh String?
+  instructionsEn String?
+  sortOrder      Int      @default(0)
+  updatedBy      String?
+  updatedAt      DateTime @updatedAt
 }
 
 model OrderItem {
