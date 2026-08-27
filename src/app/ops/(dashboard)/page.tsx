@@ -3,8 +3,10 @@ import { ArrowUpRight, Boxes, CalendarDays, ClipboardList, ContactRound } from "
 import { db } from "@/lib/db";
 import { formatDate, formatMoney } from "@/lib/format";
 import { OpsPageHeader } from "@/components/ops-shell";
+import { requireStaff } from "@/lib/access";
 
 export default async function OpsOverviewPage() {
+  await requireStaff();
   const [orders, variants, members, appointments] = await Promise.all([
     db.order.findMany({ orderBy: { createdAt: "desc" }, include: { items: true }, take: 50 }),
     db.productVariant.findMany({ include: { product: true }, orderBy: { stockOnHand: "asc" } }),

@@ -4,8 +4,10 @@ import { OpsPageHeader } from "@/components/ops-shell";
 import { PromotionForm } from "@/components/promotion-form";
 import { AnnouncementManager } from "@/components/announcement-manager";
 import { StatusPill } from "@/components/status-pill";
+import { requireStaff } from "@/lib/access";
 
 export default async function OpsMarketingPage() {
+  await requireStaff();
   const [promotions, announcements] = await Promise.all([
     db.promotion.findMany({ orderBy: { createdAt: "desc" } }),
     db.popupAnnouncement.findMany({ orderBy: { createdAt: "desc" }, take: 50 })

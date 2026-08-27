@@ -2,8 +2,10 @@ import { db } from "@/lib/db";
 import { parseImages } from "@/lib/format";
 import { OpsPageHeader } from "@/components/ops-shell";
 import { CatalogManager } from "@/components/catalog-manager";
+import { requireStaff } from "@/lib/access";
 
 export default async function OpsCatalogPage() {
+  await requireStaff();
   const [products, groups] = await Promise.all([
     db.product.findMany({ include: { variants: { orderBy: { priceMinor: "asc" } } }, orderBy: { createdAt: "desc" } }),
     db.catalogGroup.findMany({ orderBy: [{ kind: "asc" }, { sortOrder: "asc" }] })
