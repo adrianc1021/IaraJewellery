@@ -38,7 +38,7 @@ services:
     runtime: node
     schedule: "*/5 * * * *"
     buildCommand: echo ready
-    startCommand: curl -fsS -X POST -H "Authorization: Bearer $CRON_SECRET" "$APP_URL/api/cron/release-reservations"
+    startCommand: 'curl -fsS -X POST -H "Authorization: Bearer $CRON_SECRET" "$APP_URL/api/cron/release-reservations"'
     envVars:
       - key: APP_URL
         sync: false
