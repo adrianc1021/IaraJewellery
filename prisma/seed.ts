@@ -17,12 +17,11 @@ const products = [
 
 async function seedUser(email: string, name: string, password: string, role: string, membershipTier: string) {
   const user = await prisma.user.upsert({ where: { email }, update: { name, role, membershipTier }, create: { id: `seed-${role.toLowerCase()}`, email, name, role, membershipTier, emailVerified: true } });
-  const hashed = await hashPassword(password);
-  await prisma.account.upsert({
-    where: { issuer_accountId: { issuer: "local:credential", accountId: user.id } },
-    update: { password: hashed, providerId: "credential" },
-    create: { id: `account-${user.id}`, providerId: "credential", issuer: "local:credential", accountId: user.id, userId: user.id, password: hashed }
-  });
+  const account = await prisma.account.findUnique({ where: { issuer_accountId: { issuer: "local:credential", accountId: user.id } } });
+  if (!account) {
+    const hashed = await hashPassword(password);
+    await prisma.account.create({ data: { id: `account-${user.id}`, providerId: "credential", issuer: "local:credential", accountId: user.id, userId: user.id, password: hashed } });
+  }
   return user;
 }
 

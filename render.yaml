@@ -10,7 +10,7 @@ services:
     runtime: node
     plan: starter
     buildCommand: corepack enable && pnpm install --frozen-lockfile && DATABASE_URL=file:/tmp/iara-build.db pnpm db:setup && DATABASE_URL=file:/tmp/iara-build.db pnpm build
-    startCommand: pnpm db:setup && pnpm start
+    startCommand: NODE_OPTIONS=--max-old-space-size=256 node scripts/apply-sqlite-migration.mjs && NODE_OPTIONS=--max-old-space-size=256 node --import tsx prisma/seed.ts && exec env NODE_OPTIONS=--max-old-space-size=256 node node_modules/next/dist/bin/next start
     healthCheckPath: /api/health
     envVars:
       - key: NODE_VERSION
