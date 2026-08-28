@@ -598,6 +598,13 @@ body.filter-drawer-open { overflow: hidden; }
 .catalog-drawer footer { position: sticky; bottom: 0; display: flex; justify-content: flex-end; gap: 10px; padding-top: 16px; border-top: 1px solid var(--line); background: linear-gradient(transparent, var(--paper) 22%); }
 @keyframes catalog-drawer-in { from { transform: translateX(100%); opacity: .4; } to { transform: translateX(0); opacity: 1; } }
 .payment-method-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+.integration-status-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.integration-status-grid article { min-height: 120px; padding: 18px; border: 1px solid var(--line); background: var(--paper); }
+.integration-status-grid article.ready { border-top: 3px solid var(--success); }
+.integration-status-grid article.pending { border-top: 3px solid var(--warning); }
+.integration-status-grid span { display: block; margin-bottom: 12px; color: var(--muted); font-size: 8px; }
+.integration-status-grid strong { font-size: 14px; color: var(--brand); }
+.integration-status-grid p { margin: 5px 0 0; color: var(--muted); font-size: 9px; line-height: 1.6; }
 .payment-method-list > label { min-height: 112px; padding: 18px; display: grid; grid-template-columns: 40px 1fr auto; gap: 12px; border: 1px solid var(--line); cursor: pointer; }
 .payment-method-list > label.enabled { border-color: #95a8b9; background: #f1f5f8; }
 .payment-method-icon { width: 38px; height: 38px; display: grid; place-items: center; background: var(--paper); }
@@ -842,6 +849,9 @@ body.ops-mode { background: #f2f5f8; }
 .ops-sidebar nav a:hover, .ops-sidebar nav a[aria-current="page"] { border: 0; background: rgba(255,255,255,.09); color: white; }
 .ops-sidebar nav a[aria-current="page"] { box-shadow: inset 2px 0 0 #c0a96f; }
 .ops-sidebar-footer { margin-top: auto; padding-top: 16px; border-top: 1px solid rgba(255,255,255,.14); }
+.ops-sidebar-tools { margin-top: 18px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,.14); display: grid; gap: 4px; }
+.ops-sidebar-tools a { min-height: 36px; padding: 0 11px; display: flex; align-items: center; gap: 11px; color: rgba(255,255,255,.58); font-size: 9px; }
+.ops-sidebar-tools a:hover { color: white; background: rgba(255,255,255,.07); }
 .ops-content { min-width: 0; padding: 46px clamp(24px, 4vw, 66px) 90px; }
 .ops-page-header { min-height: 104px; margin-bottom: 28px; padding-bottom: 24px; display: flex; align-items: flex-end; justify-content: space-between; gap: 30px; border-bottom: 1px solid var(--line); }
 .ops-page-header .eyebrow { margin-bottom: 8px; }
@@ -849,6 +859,11 @@ body.ops-mode { background: #f2f5f8; }
 .ops-page-header > div > p:last-child { margin: 0; color: var(--muted); font-size: 10px; }
 .ops-page-count { padding: 8px 11px; border: 1px solid var(--line); background: white; color: var(--muted); font-size: 9px; white-space: nowrap; }
 .ops-page-count.warning { border-color: #d6bd88; background: #f8f1e4; color: #73541e; }
+.ops-header-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.ops-search { min-height: 38px; display: flex; align-items: center; gap: 8px; padding: 0 8px 0 11px; border: 1px solid var(--line); background: white; }
+.ops-search > input { width: min(250px, 42vw); min-height: 32px; border: 0; outline: 0; background: transparent; font-size: 10px; }
+.ops-search > button:not(.button) { width: 24px; height: 24px; display: grid; place-items: center; border: 0; background: transparent; color: var(--muted); cursor: pointer; }
+.ops-search .button { min-height: 30px; padding: 5px 10px; font-size: 8px; }
 .ops-kpi-links .ops-kpi { color: inherit; transition: transform .2s ease, box-shadow .2s ease; }
 .ops-kpi-links .ops-kpi:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(20,30,26,.07); }
 .ops-kpi > span { display: flex; align-items: center; gap: 7px; }
@@ -1244,6 +1259,7 @@ body.ops-mode { background: #f2f5f8; }
   .drawer-grid { grid-template-columns: 1fr; }
   .drawer-grid .full { grid-column: auto; }
   .payment-method-list { grid-template-columns: 1fr; }
+  .integration-status-grid { grid-template-columns: 1fr; }
   .layout-controls, .layout-choice-grid { grid-template-columns: 1fr; }
   .layout-actions { align-items: stretch; flex-direction: column; }
   .layout-actions .button { width: 100%; }

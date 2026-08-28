@@ -44,7 +44,7 @@ const emptyAddress: AddressState = { region: "", district: "", addressLine: "", 
 export function CheckoutForm({ methods, locale = "zh-HK" }: { methods: PaymentMethod[]; locale?: Locale }) {
   const [message, setMessage] = useState("");
   const [busy, setBusy] = useState(false);
-  const [order, setOrder] = useState<{ orderNumber: string; orderId: string } | null>(null);
+  const [order, setOrder] = useState<{ orderNumber: string; orderId: string; checkoutUrl?: string } | null>(null);
   const [deliveryMethod, setDeliveryMethod] = useState<DeliveryMethod>("DELIVERY");
   const [address, setAddress] = useState<AddressState>(emptyAddress);
   const en = locale === "en";
@@ -65,7 +65,8 @@ export function CheckoutForm({ methods, locale = "zh-HK" }: { methods: PaymentMe
     const data = await response.json();
     if (response.ok) {
       setOrder(data);
-      setMessage(data.message || (en ? "Complete payment in the secure payment form." : "請在安全付款元件完成付款。"));
+      if (data.checkoutUrl) { window.location.assign(data.checkoutUrl); return; }
+      setMessage(data.message || (en ? "Your order has been created." : "訂單已建立。"));
     } else {
       setMessage(en ? "We could not create your order. Check the delivery and payment details, then try again." : data.error);
     }

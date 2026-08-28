@@ -35,6 +35,16 @@ services:
         sync: false
       - key: STRIPE_WEBHOOK_SECRET
         sync: false
+      - key: RESEND_API_KEY
+        sync: false
+      - key: EMAIL_FROM
+        sync: false
+      - key: SANITY_PROJECT_ID
+        sync: false
+      - key: SANITY_DATASET
+        value: production
+      - key: SANITY_WEBHOOK_SECRET
+        sync: false
       - fromGroup: iara-shared-secrets
     disk:
       name: iara-data
