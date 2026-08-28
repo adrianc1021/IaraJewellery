@@ -112,10 +112,8 @@ export function ProductImageUploader({ value, onChange, disabled = false, onBusy
     onChange(next);
   }
 
-  async function remove(index: number) {
-    const image = value[index];
+  function remove(index: number) {
     onChange(value.filter((_, itemIndex) => itemIndex !== index));
-    await fetch("/api/ops/media", { method: "DELETE", headers: { "content-type": "application/json" }, body: JSON.stringify({ url: image.url }) }).catch(() => undefined);
   }
 
   return <section className="product-image-uploader full" aria-labelledby="product-images-title">
@@ -129,10 +127,10 @@ export function ProductImageUploader({ value, onChange, disabled = false, onBusy
     </div>
     {error && <p className="form-error" role="alert">{error}</p>}
     {value.length > 0 && <div className="product-image-list">{value.map((image, index) => {
-      const saving = Math.max(0, Math.round((1 - image.optimizedBytes / image.originalBytes) * 100));
+      const saving = image.originalBytes > 0 ? Math.max(0, Math.round((1 - image.optimizedBytes / image.originalBytes) * 100)) : 0;
       return <article key={image.url}>
         <div className="product-image-preview"><Image src={image.url} alt={`商品圖片 ${index + 1}`} fill sizes="140px" />{index === 0 && <span>封面</span>}</div>
-        <div className="product-image-meta"><strong>{image.name}</strong><span>{formatBytes(image.originalBytes)} → {formatBytes(image.optimizedBytes)}</span><small>節省 {saving}%</small></div>
+        <div className="product-image-meta"><strong>{image.name}</strong><span>{image.originalBytes > 0 ? `${formatBytes(image.originalBytes)} → ${formatBytes(image.optimizedBytes)}` : "已儲存圖片"}</span>{image.originalBytes > 0 && <small>節省 {saving}%</small>}</div>
         <div className="product-image-actions">
           <button className="icon-button" type="button" disabled={index === 0} onClick={() => move(index, -1)} title="向前移" aria-label={`將圖片 ${index + 1} 向前移`}><ArrowLeft size={15} /></button>
           <button className="icon-button" type="button" disabled={index === value.length - 1} onClick={() => move(index, 1)} title="向後移" aria-label={`將圖片 ${index + 1} 向後移`}><ArrowRight size={15} /></button>

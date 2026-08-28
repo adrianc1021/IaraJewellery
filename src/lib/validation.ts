@@ -117,6 +117,19 @@ export const productCreateSchema = z.object({
 });
 
 export const productUpdateSchema = z.object({
+  nameZh: z.string().trim().min(2).max(120).optional(),
+  nameEn: z.string().trim().min(2).max(120).optional(),
+  descriptionZh: z.string().trim().min(2).max(1200).optional(),
+  descriptionEn: z.string().trim().min(2).max(1200).optional(),
+  material: z.string().trim().min(1).max(100).optional(),
+  gemstone: z.string().trim().min(1).max(100).optional(),
+  badge: z.string().trim().max(40).optional(),
+  imageUrl: productImageReference.optional(),
+  imageUrls: z.array(productImageReference).min(1).max(6).optional(),
+  sku: z.string().trim().min(3).max(80).optional(),
+  optionName: z.string().trim().min(1).max(80).optional(),
+  priceMinor: z.number().int().min(100).max(100_000_000).optional(),
+  stockOnHand: z.number().int().min(0).max(100000).optional(),
   status: z.enum(["ACTIVE", "ARCHIVED"]).optional(),
   featured: z.boolean().optional(),
   category: z.string().trim().min(1).max(80).optional(),

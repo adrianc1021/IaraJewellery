@@ -1,117 +1,32 @@
 "use client";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import Image from "next/image";
 import { FormEvent, useState } from "react";
-import { Archive, Eye, PackagePlus, Plus, Save } from "lucide-react";
+import { Archive, Check, Eye, PackagePlus, Plus, Save, X } from "lucide-react";
 import { formatMoney } from "@/lib/format";
 import { ProductImageUploader, type UploadedProductImage } from "@/components/product-image-uploader";
 
-type GroupRow = { id: string; kind: string; slug: string; nameZh: string; nameEn: string; imageUrl: string | null; active: boolean; featured: boolean; sortOrder: number };
-type ProductRow = { id: string; slug: string; nameZh: string; nameEn: string; category: string; collection: string; audience: string; status: string; featured: boolean; imageUrl: string; priceMinor: number; stock: number };
+type GroupRow = { id:string; kind:string; slug:string; nameZh:string; nameEn:string; imageUrl:string|null; active:boolean; featured:boolean; sortOrder:number };
+type VariantRow = { id:string; sku:string; optionName:string; priceMinor:number; stockOnHand:number }|null;
+type ProductRow = { id:string; slug:string; nameZh:string; nameEn:string; descriptionZh:string; descriptionEn:string; category:string; collection:string; audience:string; status:string; featured:boolean; imageUrl:string; images:string[]; material:string; gemstone:string; diamondWeight:string|null; diamondColorClarity:string|null; pendantDimensions:string|null; chainLength:string|null; productWeight:string|null; claspType:string|null; origin:string|null; hasCertificate:boolean; isNaturalDiamond:boolean; engravingAvailable:boolean; chainLengthAdjustable:boolean; warrantyYears:number; careRepair:string|null; badge:string|null; priceMinor:number; stock:number; variant:VariantRow };
+const fields = ["diamondWeight","diamondColorClarity","pendantDimensions","chainLength","productWeight","claspType","origin"] as const;
+function img(url:string,i:number):UploadedProductImage{return {url,name:`商品圖片 ${i+1}`,originalBytes:0,optimizedBytes:0};}
 
-export function CatalogManager({ products, groups }: { products: ProductRow[]; groups: GroupRow[] }) {
-  const [busy, setBusy] = useState(false);
-  const [imageBusy, setImageBusy] = useState(false);
-  const [productImages, setProductImages] = useState<UploadedProductImage[]>([]);
-  const [message, setMessage] = useState("");
-  const categories = groups.filter((group) => group.kind === "CATEGORY" && group.active);
-  const collections = groups.filter((group) => group.kind === "COLLECTION" && group.active);
-
-  async function request(url: string, method: "POST" | "PATCH", body: unknown, success: string) {
-    setBusy(true); setMessage("");
-    const response = await fetch(url, { method, headers: { "content-type": "application/json" }, body: JSON.stringify(body) });
-    const data = await response.json();
-    setBusy(false); setMessage(response.ok ? success : data.error || "未能完成操作。");
-    if (response.ok) setTimeout(() => location.reload(), 650);
-  }
-
-  async function createProduct(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const raw = Object.fromEntries(new FormData(event.currentTarget));
-    const fallbackImage = String(raw.imageUrl || "").trim();
-    if (!productImages.length && !fallbackImage) { setMessage("未能建立商品：請先上載至少一張商品圖片。"); return; }
-    await request("/api/ops/products", "POST", {
-      ...raw,
-      imageUrl: fallbackImage || productImages[0]?.url,
-      imageUrls: productImages.length ? productImages.map((image) => image.url) : undefined,
-      priceMinor: Math.round(Number(raw.priceHkd) * 100),
-      stockOnHand: Number(raw.stockOnHand),
-      warrantyYears: Number(raw.warrantyYears || 1),
-      featured: raw.featured === "on",
-      hasCertificate: raw.hasCertificate === "on",
-      isNaturalDiamond: raw.isNaturalDiamond === "on",
-      engravingAvailable: raw.engravingAvailable === "on",
-      chainLengthAdjustable: raw.chainLengthAdjustable === "on"
-    }, "商品已建立並上架。");
-  }
-
-  async function createGroup(event: FormEvent<HTMLFormElement>, kind: "CATEGORY" | "COLLECTION") {
-    event.preventDefault();
-    const raw = Object.fromEntries(new FormData(event.currentTarget));
-    await request("/api/ops/catalog-groups", "POST", { ...raw, kind, active: true, featured: raw.featured === "on", sortOrder: Number(raw.sortOrder || 0) }, `${kind === "CATEGORY" ? "分類" : "系列"}已建立。`);
-  }
-
-  async function updateGroup(event: FormEvent<HTMLFormElement>, group: GroupRow) {
-    event.preventDefault();
-    const raw = Object.fromEntries(new FormData(event.currentTarget));
-    await request(`/api/ops/catalog-groups/${group.id}`, "PATCH", { nameZh: raw.nameZh, nameEn: raw.nameEn, imageUrl: raw.imageUrl, active: raw.active === "on", featured: raw.featured === "on", sortOrder: Number(raw.sortOrder) }, "分類資料已更新，相關商品亦已同步。");
-  }
-
-  return <div className="catalog-manager">
-    {message && <p className={message.includes("未能") ? "form-error" : "form-success"} role="status">{message}</p>}
-    <section className="ops-panel"><div className="ops-panel-head"><div><h2>新增商品</h2><p>建立中英文商品資料、首個 SKU、價格與庫存。</p></div><PackagePlus size={20} /></div>
-      <form className="catalog-product-form" onSubmit={createProduct}>
-        <div className="field"><label htmlFor="product-name-zh">中文名稱</label><input id="product-name-zh" name="nameZh" required /></div>
-        <div className="field"><label htmlFor="product-name-en">英文名稱</label><input id="product-name-en" name="nameEn" required /></div>
-        <div className="field"><label htmlFor="product-slug">網址代號</label><input id="product-slug" name="slug" required placeholder="lumea-diamond-necklace" pattern="[a-z0-9]+(?:-[a-z0-9]+)*" /></div>
-        <div className="field"><label htmlFor="product-audience">專區</label><select id="product-audience" name="audience"><option value="PEOPLE">珠寶</option><option value="PET">寵物飾品</option></select></div>
-        <div className="field"><label htmlFor="product-category">分類</label><select id="product-category" name="category" required>{categories.map((group) => <option key={group.id}>{group.nameZh}</option>)}</select></div>
-        <div className="field"><label htmlFor="product-collection">系列</label><select id="product-collection" name="collection" required>{collections.map((group) => <option key={group.id}>{group.nameZh}</option>)}</select></div>
-        <div className="field"><label htmlFor="product-material">材質</label><input id="product-material" name="material" required placeholder="18K 黃金" /></div>
-        <div className="field"><label htmlFor="product-gemstone">寶石</label><input id="product-gemstone" name="gemstone" required placeholder="鑽石" /></div>
-        <div className="field"><label htmlFor="product-sku">首個 SKU</label><input id="product-sku" name="sku" required placeholder="IARA-011-01" /></div>
-        <div className="field"><label htmlFor="product-option">尺寸／款式</label><input id="product-option" name="optionName" required placeholder="單一尺寸" /></div>
-        <div className="field"><label htmlFor="product-price">價格 HK$</label><input id="product-price" name="priceHkd" type="number" min="1" step="0.01" required /></div>
-        <div className="field"><label htmlFor="product-stock">現貨</label><input id="product-stock" name="stockOnHand" type="number" min="0" required /></div>
-        <div className="field"><label htmlFor="product-badge">標籤</label><input id="product-badge" name="badge" placeholder="NEW" /></div>
-        <ProductImageUploader value={productImages} onChange={setProductImages} disabled={busy} onBusyChange={setImageBusy} />
-        <details className="product-image-url-fallback full"><summary>改用現有 HTTPS 圖片網址</summary><div className="field"><label htmlFor="product-image">商品圖片網址</label><input id="product-image" name="imageUrl" type="url" placeholder="https://..." /></div></details>
-        <div className="field full"><label htmlFor="product-description-zh">中文描述</label><textarea id="product-description-zh" name="descriptionZh" required /></div>
-        <div className="field full"><label htmlFor="product-description-en">英文描述</label><textarea id="product-description-en" name="descriptionEn" required /></div>
-        <fieldset className="catalog-spec-group full"><legend>產品規格及售後資料</legend><div className="catalog-spec-grid">
-          <div className="field"><label htmlFor="diamond-weight">鑽石總重量</label><input id="diamond-weight" name="diamondWeight" placeholder="例如 0.35 ct" /></div>
-          <div className="field"><label htmlFor="diamond-colour">鑽石顏色及淨度</label><input id="diamond-colour" name="diamondColorClarity" placeholder="例如 F / VS1" /></div>
-          <div className="field"><label htmlFor="pendant-dimensions">吊墜實際尺寸</label><input id="pendant-dimensions" name="pendantDimensions" placeholder="例如 12 × 8 mm" /></div>
-          <div className="field"><label htmlFor="chain-length">鏈長及可調節長度</label><input id="chain-length" name="chainLength" placeholder="例如 40–45 cm" /></div>
-          <div className="field"><label htmlFor="product-weight">產品重量</label><input id="product-weight" name="productWeight" placeholder="例如 2.8 g" /></div>
-          <div className="field"><label htmlFor="clasp-type">扣件類型</label><input id="clasp-type" name="claspType" placeholder="例如 Spring ring" /></div>
-          <div className="field"><label htmlFor="origin">產地／製作地</label><input id="origin" name="origin" placeholder="例如 香港工房" /></div>
-          <div className="field"><label htmlFor="warranty-years">保養及維修年期</label><input id="warranty-years" name="warrantyYears" type="number" min="0" max="99" defaultValue="1" /> <small className="field-hint">年</small></div>
-          <div className="field full"><label htmlFor="care-repair">保養及維修說明</label><textarea id="care-repair" name="careRepair" placeholder="例如 終身免費清潔檢查；保養期內享基本維修服務。" /></div>
-          <div className="catalog-checks full">
-            <label className="checkbox-field"><input name="hasCertificate" type="checkbox" />有證書</label>
-            <label className="checkbox-field"><input name="isNaturalDiamond" type="checkbox" />天然鑽石</label>
-            <label className="checkbox-field"><input name="engravingAvailable" type="checkbox" />可刻字</label>
-            <label className="checkbox-field"><input name="chainLengthAdjustable" type="checkbox" />可改鏈長</label>
-          </div>
-        </div></fieldset>
-        <label className="checkbox-field"><input name="featured" type="checkbox" />於首頁精選</label>
-        <button className="button button-primary full" disabled={busy || imageBusy}><Plus size={15} />{busy ? "正在建立…" : imageBusy ? "正在處理圖片…" : "建立商品"}</button>
-      </form>
-    </section>
-
-    <section className="ops-section"><div className="ops-section-head"><div><h2>商品目錄</h2><p className="muted">{products.length} 件商品</p></div></div><div className="catalog-product-list">{products.map((product) => <article key={product.id}>
-      <Image src={product.imageUrl} alt="" width={68} height={82} />
-      <div><small>{product.audience === "PET" ? "PET ATELIER" : product.collection}</small><h3>{product.nameZh}</h3><p>{product.category} · {formatMoney(product.priceMinor)} · 現貨 {product.stock}</p><div className="catalog-assign"><select aria-label={`${product.nameZh} 分類`} value={product.category} onChange={(event) => request(`/api/ops/products/${product.id}`, "PATCH", { category: event.target.value }, "商品分類已更新。")}>{categories.map((group) => <option key={group.id}>{group.nameZh}</option>)}</select><select aria-label={`${product.nameZh} 系列`} value={product.collection} onChange={(event) => request(`/api/ops/products/${product.id}`, "PATCH", { collection: event.target.value }, "商品系列已更新。")}>{collections.map((group) => <option key={group.id}>{group.nameZh}</option>)}</select><label><input type="checkbox" checked={product.featured} onChange={(event) => request(`/api/ops/products/${product.id}`, "PATCH", { featured: event.target.checked }, "首頁精選狀態已更新。")}/>首頁精選</label></div></div>
-      <span className={`catalog-status ${product.status === "ACTIVE" ? "active" : ""}`}>{product.status === "ACTIVE" ? "已上架" : "已封存"}</span>
-      <button className="icon-button catalog-toggle" type="button" title={product.status === "ACTIVE" ? "封存商品" : "重新上架"} aria-label={product.status === "ACTIVE" ? `封存 ${product.nameZh}` : `重新上架 ${product.nameZh}`} disabled={busy} onClick={() => request(`/api/ops/products/${product.id}`, "PATCH", { status: product.status === "ACTIVE" ? "ARCHIVED" : "ACTIVE" }, product.status === "ACTIVE" ? "商品已封存。" : "商品已重新上架。")}>
-        {product.status === "ACTIVE" ? <Archive size={17} /> : <Eye size={17} />}
-      </button>
-    </article>)}</div></section>
-
-    <div className="catalog-group-columns">{(["CATEGORY", "COLLECTION"] as const).map((kind) => <section className="ops-panel" key={kind}><div className="ops-panel-head"><div><h2>{kind === "CATEGORY" ? "珠寶分類" : "品牌系列"}</h2><p>改名時會同步更新現有商品。</p></div></div>
-      <form className="catalog-group-create" onSubmit={(event) => createGroup(event, kind)}><input name="nameZh" required placeholder={kind === "CATEGORY" ? "中文分類" : "系列名稱"} aria-label="中文名稱" /><input name="nameEn" required placeholder="English name" aria-label="英文名稱" /><input name="slug" required placeholder="url-slug" aria-label="網址代號" /><input name="sortOrder" type="number" defaultValue="100" aria-label="排序" /><input name="imageUrl" type="url" placeholder="圖片網址（可選）" aria-label="圖片網址" /><label className="checkbox-field"><input name="featured" type="checkbox" />精選</label><button className="button button-primary" disabled={busy}><Plus size={14} />新增</button></form>
-      <div className="catalog-group-list">{groups.filter((group) => group.kind === kind).map((group) => <form key={group.id} onSubmit={(event) => updateGroup(event, group)}><div><strong>{group.slug}</strong><small>{group.active ? "顯示中" : "已隱藏"}</small></div><input name="nameZh" defaultValue={group.nameZh} aria-label={`${group.nameZh} 中文名稱`} /><input name="nameEn" defaultValue={group.nameEn} aria-label={`${group.nameZh} 英文名稱`} /><input name="imageUrl" defaultValue={group.imageUrl || ""} placeholder="圖片網址" aria-label={`${group.nameZh} 圖片網址`} /><input name="sortOrder" type="number" defaultValue={group.sortOrder} aria-label={`${group.nameZh} 排序`} /><label title="顯示"><input name="active" type="checkbox" defaultChecked={group.active} />顯示</label><label title="精選"><input name="featured" type="checkbox" defaultChecked={group.featured} />精選</label><button className="icon-button" disabled={busy} title="儲存" aria-label={`儲存 ${group.nameZh}`}><Save size={16} /></button></form>)}</div>
-    </section>)}</div>
-  </div>;
+export function CatalogManager({products,groups}:{products:ProductRow[];groups:GroupRow[]}){
+ const [busy,setBusy]=useState(false),[imageBusy,setImageBusy]=useState(false),[message,setMessage]=useState(""),[images,setImages]=useState<UploadedProductImage[]>([]),[editing,setEditing]=useState<ProductRow|null>(null),[tab,setTab]=useState<"CATEGORY"|"COLLECTION">("CATEGORY");
+ const cats=groups.filter(g=>g.kind==="CATEGORY"&&g.active), cols=groups.filter(g=>g.kind==="COLLECTION"&&g.active);
+ async function request(url:string,method:"POST"|"PATCH",body:unknown,success:string){setBusy(true);setMessage("");try{const r=await fetch(url,{method,headers:{"content-type":"application/json"},body:JSON.stringify(body)}),d=await r.json();setMessage(r.ok?success:d.error||"未能完成操作。");if(r.ok)setTimeout(()=>location.reload(),650)}catch{setMessage("網絡連線失敗，請稍後再試。")}finally{setBusy(false)}}
+ async function createProduct(e:FormEvent<HTMLFormElement>){e.preventDefault();const r=Object.fromEntries(new FormData(e.currentTarget));const imageUrl=String(r.imageUrl||"").trim();if(!images.length&&!imageUrl){setMessage("請先上載至少一張商品圖片。");return}await request("/api/ops/products","POST",{...r,imageUrl:imageUrl||images[0]?.url,imageUrls:images.length?images.map(i=>i.url):undefined,priceMinor:Math.round(Number(r.priceHkd)*100),stockOnHand:Number(r.stockOnHand),warrantyYears:Number(r.warrantyYears||1),featured:r.featured==="on",hasCertificate:r.hasCertificate==="on",isNaturalDiamond:r.isNaturalDiamond==="on",engravingAvailable:r.engravingAvailable==="on",chainLengthAdjustable:r.chainLengthAdjustable==="on"},"商品已建立並上架。")}
+ async function createGroup(e:FormEvent<HTMLFormElement>){e.preventDefault();const r=Object.fromEntries(new FormData(e.currentTarget));await request("/api/ops/catalog-groups","POST",{...r,kind:tab,active:true,featured:r.featured==="on",sortOrder:Number(r.sortOrder||0)},`${tab==="CATEGORY"?"分類":"系列"}已建立。`)}
+ async function updateGroup(e:FormEvent<HTMLFormElement>,g:GroupRow){e.preventDefault();const r=Object.fromEntries(new FormData(e.currentTarget));await request(`/api/ops/catalog-groups/${g.id}`,"PATCH",{nameZh:r.nameZh,nameEn:r.nameEn,imageUrl:r.imageUrl,active:r.active==="on",featured:r.featured==="on",sortOrder:Number(r.sortOrder)},"資料已更新，相關商品亦已同步。")}
+ function openEdit(p:ProductRow){setEditing(p);setImages(p.images.map(img));setMessage("")}
+ async function saveProduct(e:FormEvent<HTMLFormElement>){e.preventDefault();if(!editing)return;const r=Object.fromEntries(new FormData(e.currentTarget));if(!images.length){setMessage("商品最少需要一張圖片。");return}const payload:Record<string, unknown>={...r,imageUrls:images.map(i=>i.url),priceMinor:Math.round(Number(r.priceHkd)*100),stockOnHand:Number(r.stockOnHand),warrantyYears:Number(r.warrantyYears||0)};for(const k of ["featured","hasCertificate","isNaturalDiamond","engravingAvailable","chainLengthAdjustable"])payload[k]=r[k]==="on";delete payload.priceHkd;await request(`/api/ops/products/${editing.id}`,"PATCH",payload,"商品資料已更新。")}
+ const basic=(p:ProductRow)=><><div className="field"><label>中文名稱</label><input name="nameZh" defaultValue={p.nameZh} required/></div><div className="field"><label>英文名稱</label><input name="nameEn" defaultValue={p.nameEn} required/></div><div className="field"><label>專區</label><select name="audience" defaultValue={p.audience}><option value="PEOPLE">珠寶</option><option value="PET">寵物飾品</option></select></div><div className="field"><label>狀態</label><select name="status" defaultValue={p.status}><option value="ACTIVE">已上架</option><option value="ARCHIVED">已封存</option></select></div><div className="field"><label>分類</label><select name="category" defaultValue={p.category}>{cats.map(g=><option key={g.id}>{g.nameZh}</option>)}</select></div><div className="field"><label>系列</label><select name="collection" defaultValue={p.collection}>{cols.map(g=><option key={g.id}>{g.nameZh}</option>)}</select></div><div className="field"><label>材質</label><input name="material" defaultValue={p.material} required/></div><div className="field"><label>寶石</label><input name="gemstone" defaultValue={p.gemstone} required/></div><div className="field"><label>標籤</label><input name="badge" defaultValue={p.badge||""}/></div></>;
+ return <div className="catalog-manager">{message&&<p className={message.includes("失敗")||message.includes("請")?"form-error":"form-success"} role="status">{message}</p>}
+ <section className="ops-panel"><div className="ops-panel-head"><div><h2>新增商品</h2><p>建立中英文商品資料、首個 SKU、價格與庫存。</p></div><PackagePlus size={20}/></div><form className="catalog-product-form" onSubmit={createProduct}><div className="field"><label>中文名稱</label><input name="nameZh" required/></div><div className="field"><label>英文名稱</label><input name="nameEn" required/></div><div className="field"><label>網址代號</label><input name="slug" required pattern="[a-z0-9]+(?:-[a-z0-9]+)*"/></div><div className="field"><label>專區</label><select name="audience"><option value="PEOPLE">珠寶</option><option value="PET">寵物飾品</option></select></div><div className="field"><label>分類</label><select name="category" required>{cats.map(g=><option key={g.id}>{g.nameZh}</option>)}</select></div><div className="field"><label>系列</label><select name="collection" required>{cols.map(g=><option key={g.id}>{g.nameZh}</option>)}</select></div><div className="field"><label>材質</label><input name="material" required/></div><div className="field"><label>寶石</label><input name="gemstone" required/></div><div className="field"><label>SKU</label><input name="sku" required/></div><div className="field"><label>尺寸／款式</label><input name="optionName" required/></div><div className="field"><label>價格 HK$</label><input name="priceHkd" type="number" min="1" step="0.01" required/></div><div className="field"><label>現貨</label><input name="stockOnHand" type="number" min="0" required/></div><div className="field"><label>標籤</label><input name="badge"/></div><ProductImageUploader value={images} onChange={setImages} disabled={busy} onBusyChange={setImageBusy}/><div className="field full"><label>中文描述</label><textarea name="descriptionZh" required/></div><div className="field full"><label>英文描述</label><textarea name="descriptionEn" required/></div><fieldset className="catalog-spec-group full"><legend>產品規格及售後資料</legend><div className="catalog-spec-grid">{fields.map(k=><div className="field" key={k}><label>{({diamondWeight:"鑽石總重量",diamondColorClarity:"鑽石顏色及淨度",pendantDimensions:"吊墜實際尺寸",chainLength:"鏈長及可調節長度",productWeight:"產品重量",claspType:"扣件類型",origin:"產地／製作地"} as any)[k]}</label><input name={k}/></div>)}<div className="field"><label>保養年期</label><input name="warrantyYears" type="number" defaultValue="1"/></div><div className="field full"><label>保養及維修說明</label><textarea name="careRepair"/></div><div className="catalog-checks full">{[["hasCertificate","有證書"],["isNaturalDiamond","天然鑽石"],["engravingAvailable","可刻字"],["chainLengthAdjustable","可改鏈長"]].map(([n,l])=><label className="checkbox-field" key={n}><input name={n} type="checkbox"/>{l}</label>)}</div></div></fieldset><label className="checkbox-field"><input name="featured" type="checkbox"/>於首頁精選</label><button className="button button-primary full" disabled={busy||imageBusy}><Plus size={15}/>建立商品</button></form></section>
+ <section className="ops-section"><div className="ops-section-head"><div><h2>商品目錄</h2><p className="muted">{products.length} 件商品 · 點擊編輯即可修改完整資料</p></div></div><div className="catalog-product-list">{products.map(p=><article key={p.id}><Image src={p.imageUrl} alt="" width={68} height={82}/><div><small>{p.audience==="PET"?"PET ATELIER":p.collection}</small><h3>{p.nameZh}</h3><p>{p.category} · {formatMoney(p.priceMinor)} · 現貨 {p.stock}</p><div className="catalog-assign"><button className="button button-secondary catalog-edit-button" type="button" onClick={()=>openEdit(p)}>編輯商品</button><select value={p.category} onChange={e=>request(`/api/ops/products/${p.id}`,"PATCH",{category:e.target.value},"商品分類已更新。")}>{cats.map(g=><option key={g.id}>{g.nameZh}</option>)}</select><select value={p.collection} onChange={e=>request(`/api/ops/products/${p.id}`,"PATCH",{collection:e.target.value},"商品系列已更新。")}>{cols.map(g=><option key={g.id}>{g.nameZh}</option>)}</select><label><input type="checkbox" checked={p.featured} onChange={e=>request(`/api/ops/products/${p.id}`,"PATCH",{featured:e.target.checked},"首頁精選狀態已更新。")}/>精選</label></div></div><span className={`catalog-status ${p.status==="ACTIVE"?"active":""}`}>{p.status==="ACTIVE"?"已上架":"已封存"}</span><button className="icon-button" type="button" onClick={()=>request(`/api/ops/products/${p.id}`,"PATCH",{status:p.status==="ACTIVE"?"ARCHIVED":"ACTIVE"},p.status==="ACTIVE"?"商品已封存。":"商品已重新上架。")} >{p.status==="ACTIVE"?<Archive size={17}/>:<Eye size={17}/>}</button></article>)}</div></section>
+ <section className="ops-panel catalog-groups-panel"><div className="ops-panel-head"><div><h2>分類與系列</h2><p>集中管理網站導覽，改名時會同步更新現有商品。</p></div></div><div className="catalog-group-tabs">{(["CATEGORY","COLLECTION"] as const).map(k=><button key={k} type="button" className={tab===k?"active":""} onClick={()=>setTab(k)}>{k==="CATEGORY"?"珠寶分類":"品牌系列"}<span>{groups.filter(g=>g.kind===k).length}</span></button>)}</div><form className="catalog-group-create" onSubmit={createGroup}><input name="nameZh" required placeholder="中文名稱"/><input name="nameEn" required placeholder="English name"/><input name="slug" required placeholder="url-slug"/><input name="sortOrder" type="number" defaultValue="100"/><input name="imageUrl" type="url" placeholder="圖片網址（可選）"/><label className="checkbox-field"><input name="featured" type="checkbox"/>精選</label><button className="button button-primary" disabled={busy}><Plus size={14}/>新增</button></form><div className="catalog-group-list">{groups.filter(g=>g.kind===tab).map(g=><form key={g.id} onSubmit={e=>updateGroup(e,g)}><div><strong>{g.nameZh}</strong><small>{g.slug} · {g.active?"顯示中":"已隱藏"}</small></div><input name="nameZh" defaultValue={g.nameZh}/><input name="nameEn" defaultValue={g.nameEn}/><input name="imageUrl" defaultValue={g.imageUrl||""} placeholder="圖片網址"/><input name="sortOrder" type="number" defaultValue={g.sortOrder}/><label><input name="active" type="checkbox" defaultChecked={g.active}/>顯示</label><label><input name="featured" type="checkbox" defaultChecked={g.featured}/>精選</label><button className="icon-button" disabled={busy} title="儲存"><Save size={16}/></button></form>)}</div></section>
+ {editing&&<div className="catalog-drawer-backdrop" onMouseDown={e=>{if(e.target===e.currentTarget)setEditing(null)}}><aside className="catalog-drawer"><header><div><span className="eyebrow">EDIT PRODUCT</span><h2>編輯商品</h2><p>{editing.nameZh} · {editing.slug}</p></div><button className="icon-button" type="button" onClick={()=>setEditing(null)}><X size={20}/></button></header><form onSubmit={saveProduct}><div className="drawer-section"><h3>基本資料</h3><div className="drawer-grid">{basic(editing)}</div></div><ProductImageUploader value={images} onChange={setImages} disabled={busy} onBusyChange={setImageBusy}/><div className="drawer-section"><h3>描述</h3><div className="field"><label>中文描述</label><textarea name="descriptionZh" defaultValue={editing.descriptionZh} required/></div><div className="field"><label>英文描述</label><textarea name="descriptionEn" defaultValue={editing.descriptionEn} required/></div></div><div className="drawer-section"><h3>價格與庫存</h3><div className="drawer-grid"><div className="field"><label>SKU</label><input name="sku" defaultValue={editing.variant?.sku||""} required/></div><div className="field"><label>尺寸／款式</label><input name="optionName" defaultValue={editing.variant?.optionName||"單一尺寸"} required/></div><div className="field"><label>價格 HK$</label><input name="priceHkd" type="number" step="0.01" defaultValue={(editing.variant?.priceMinor||0)/100} required/></div><div className="field"><label>現貨</label><input name="stockOnHand" type="number" defaultValue={editing.variant?.stockOnHand||0} required/></div></div></div><details className="drawer-details"><summary>規格及售後資料</summary><div className="drawer-grid">{fields.map(k=><div className="field" key={k}><label>{k}</label><input name={k} defaultValue={(editing as any)[k]||""}/></div>)}<div className="field"><label>保養年期</label><input name="warrantyYears" type="number" defaultValue={editing.warrantyYears}/></div><div className="field full"><label>保養及維修說明</label><textarea name="careRepair" defaultValue={editing.careRepair||""}/></div><div className="catalog-checks full">{[["hasCertificate","有證書"],["isNaturalDiamond","天然鑽石"],["engravingAvailable","可刻字"],["chainLengthAdjustable","可改鏈長"]].map(([n,l])=><label className="checkbox-field" key={n}><input name={n} type="checkbox" defaultChecked={(editing as any)[n]}/>{l}</label>)}</div></div></details><label className="checkbox-field"><input name="featured" type="checkbox" defaultChecked={editing.featured}/>首頁精選</label><footer><button type="button" className="button button-secondary" onClick={()=>setEditing(null)}>取消</button><button className="button button-primary" disabled={busy||imageBusy}>{busy?"儲存中…":<><Check size={15}/>儲存變更</>}</button></footer></form></aside></div>}
+ </div>;
 }
