@@ -4,8 +4,14 @@ import { Search } from "lucide-react";
 import { db } from "@/lib/db";
 import { getLocale } from "@/lib/i18n";
 import { ProductCard } from "@/components/product-card";
+import { localizeProductValue } from "@/lib/product-i18n";
 
-export const metadata: Metadata = { title: "所有珠寶", description: "探索 Iara Jewellery 全部珠寶作品。" };
+export async function generateMetadata(): Promise<Metadata> {
+  const en = await getLocale() === "en";
+  return en
+    ? { title: "All Jewellery", description: "Explore the complete Iara Jewellery collection." }
+    : { title: "所有珠寶", description: "探索 Iara Jewellery 全部珠寶作品。" };
+}
 export const dynamic = "force-dynamic";
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 const array = (value: string | string[] | undefined) => value ? (Array.isArray(value) ? value : [value]) : [];
@@ -26,7 +32,7 @@ export default async function ShopPage({ searchParams }: { searchParams: SearchP
   const chips = [...categories.map((value) => ["category", value]), ...collections.map((value) => ["collection", value]), ...materials.map((value) => ["material", value]), ...gemstones.map((value) => ["gemstone", value]), ...(priceMax ? [["priceMax", `HK$${priceMax.toLocaleString()}`]] : [])];
   const categoryOptions = catalogGroups.filter((group) => group.kind === "CATEGORY" && filterData.some((item) => item.category === group.nameZh));
   const collectionOptions = catalogGroups.filter((group) => group.kind === "COLLECTION" && filterData.some((item) => item.collection === group.nameZh));
-  const filters = [{ key: "category", label: en ? "Category" : "珠寶分類", options: categoryOptions.map((group) => ({ value: group.nameZh, label: en ? group.nameEn : group.nameZh })) }, { key: "collection", label: en ? "Collection" : "系列", options: collectionOptions.map((group) => ({ value: group.nameZh, label: en ? group.nameEn : group.nameZh })) }, { key: "material", label: en ? "Material" : "材質", options: unique("material").map((value) => ({ value, label: value })) }, { key: "gemstone", label: en ? "Gemstone" : "寶石", options: unique("gemstone").map((value) => ({ value, label: value })) }];
+  const filters = [{ key: "category", label: en ? "Category" : "珠寶分類", options: categoryOptions.map((group) => ({ value: group.nameZh, label: en ? group.nameEn : group.nameZh })) }, { key: "collection", label: en ? "Collection" : "系列", options: collectionOptions.map((group) => ({ value: group.nameZh, label: en ? group.nameEn : group.nameZh })) }, { key: "material", label: en ? "Material" : "材質", options: unique("material").map((value) => ({ value, label: localizeProductValue(value, locale) })) }, { key: "gemstone", label: en ? "Gemstone" : "寶石", options: unique("gemstone").map((value) => ({ value, label: localizeProductValue(value, locale) })) }];
   return <main id="main" className="page-shell">
     <div className="breadcrumb container"><Link href="/">{en ? "Home" : "首頁"}</Link><span>/</span><span>{en ? "Jewellery" : "所有珠寶"}</span></div>
     <header className="page-heading shop-heading container">
@@ -59,10 +65,10 @@ export default async function ShopPage({ searchParams }: { searchParams: SearchP
         {typeof query.sort === "string" && <input type="hidden" name="sort" value={query.sort} />}
         {audience === "PET" && <input type="hidden" name="audience" value="PET" />}
         {filters.map((filter) => <fieldset key={filter.key}><legend>{filter.label}</legend>{filter.options.map((option) => <label key={option.value}><input type="checkbox" name={filter.key} value={option.value} defaultChecked={array(query[filter.key]).includes(option.value)} />{option.label}</label>)}</fieldset>)}
-        <fieldset><legend>{en ? "Price" : "價格"}</legend><label><input type="radio" name="priceMax" value="10000" defaultChecked={priceMax === 10000} />HK$10,000 以下</label><label><input type="radio" name="priceMax" value="30000" defaultChecked={priceMax === 30000} />HK$30,000 以下</label><label><input type="radio" name="priceMax" value="60000" defaultChecked={priceMax === 60000} />HK$60,000 以下</label></fieldset>
+        <fieldset><legend>{en ? "Price" : "價格"}</legend><label><input type="radio" name="priceMax" value="10000" defaultChecked={priceMax === 10000} />{en ? "Under HK$10,000" : "HK$10,000 以下"}</label><label><input type="radio" name="priceMax" value="30000" defaultChecked={priceMax === 30000} />{en ? "Under HK$30,000" : "HK$30,000 以下"}</label><label><input type="radio" name="priceMax" value="60000" defaultChecked={priceMax === 60000} />{en ? "Under HK$60,000" : "HK$60,000 以下"}</label></fieldset>
         <div className="filter-actions"><button className="button button-primary">{en ? "Show matching pieces" : "顯示相符作品"}</button><Link className="text-link" href="/shop">{en ? "Clear all" : "清除全部"}</Link></div>
       </form>
-      <section className="shop-results"><div className="active-filter-row">{chips.map(([key,value]) => <span className="filter-chip" key={`${key}-${value}`}>{value}</span>)}</div>{visibleProducts.length ? <div className="product-grid">{visibleProducts.map((product) => <ProductCard key={product.id} product={product} locale={locale} />)}</div> : <div className="empty-state"><h2>{en ? "No matching pieces" : "未找到相符作品"}</h2><p>{en ? "Try another search or adjust your filters." : "請調整篩選條件或搜尋其他字詞。"}</p><Link className="button button-primary" href="/shop">{en ? "View all jewellery" : "查看所有珠寶"}</Link></div>}</section>
+      <section className="shop-results"><div className="active-filter-row">{chips.map(([key,value]) => <span className="filter-chip" key={`${key}-${value}`}>{key === "priceMax" ? value : localizeProductValue(value, locale)}</span>)}</div>{visibleProducts.length ? <div className="product-grid">{visibleProducts.map((product) => <ProductCard key={product.id} product={product} locale={locale} />)}</div> : <div className="empty-state"><h2>{en ? "No matching pieces" : "未找到相符作品"}</h2><p>{en ? "Try another search or adjust your filters." : "請調整篩選條件或搜尋其他字詞。"}</p><Link className="button button-primary" href="/shop">{en ? "View all jewellery" : "查看所有珠寶"}</Link></div>}</section>
     </div>
   </main>;
 }
