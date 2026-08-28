@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { ArrowUpDown, ChevronDown, SlidersHorizontal, X } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { ArrowUpDown, Check, ChevronDown, SlidersHorizontal, X } from "lucide-react";
 
 export type ShopFilterGroup = {
   key: string;
@@ -76,17 +76,42 @@ export function ShopFilterSidebar(props: SharedProps) {
 
 export function MobileShopFilters(props: SharedProps & { sort: string; sortFields: HiddenField[]; sortOptions: PriceOption[] }) {
   const [open, setOpen] = useState(false);
+  const [sortOpen, setSortOpen] = useState(false);
+  const sortControlRef = useRef<HTMLDivElement>(null);
   const activeCount = Object.values(props.selected).reduce((total, values) => total + values.length, 0) + (props.priceMax ? 1 : 0);
+  const currentSort = props.sortOptions.find((option) => option.value === props.sort) || props.sortOptions[0];
+
+  function sortHref(value: string) {
+    const params = new URLSearchParams();
+    props.sortFields.forEach((field) => params.append(field.name, field.value));
+    if (value !== "newest") params.set("sort", value);
+    return `/shop${params.size ? `?${params.toString()}` : ""}`;
+  }
+
+  function chooseSort(value: string) {
+    setSortOpen(false);
+    window.setTimeout(() => { window.location.href = sortHref(value); }, 210);
+  }
 
   useEffect(() => {
     document.body.classList.toggle("filter-drawer-open", open);
-    function closeOnEscape(event: KeyboardEvent) { if (event.key === "Escape") setOpen(false); }
+    function closeOnEscape(event: KeyboardEvent) {
+      if (event.key === "Escape") { setOpen(false); setSortOpen(false); }
+    }
     window.addEventListener("keydown", closeOnEscape);
     return () => {
       document.body.classList.remove("filter-drawer-open");
       window.removeEventListener("keydown", closeOnEscape);
     };
   }, [open]);
+
+  useEffect(() => {
+    function closeSort(event: PointerEvent) {
+      if (!sortControlRef.current?.contains(event.target as Node)) setSortOpen(false);
+    }
+    document.addEventListener("pointerdown", closeSort);
+    return () => document.removeEventListener("pointerdown", closeSort);
+  }, []);
 
   return <>
     <div className="mobile-shop-actions">
@@ -95,14 +120,20 @@ export function MobileShopFilters(props: SharedProps & { sort: string; sortField
         <span>{props.labels.filter}</span>
         {activeCount > 0 && <small aria-label={`${activeCount} ${props.labels.selected}`}>{activeCount}</small>}
       </button>
-      <form action="/shop">
-        <HiddenFields fields={props.sortFields} />
-        <ArrowUpDown size={15} aria-hidden="true" />
-        <label className="sr-only" htmlFor="mobile-shop-sort">{props.labels.sort}</label>
-        <select id="mobile-shop-sort" name="sort" defaultValue={props.sort} onChange={(event) => event.currentTarget.form?.requestSubmit()}>
-          {props.sortOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
-        </select>
-      </form>
+      <div className="mobile-sort-control" ref={sortControlRef}>
+        <button className="mobile-sort-trigger" type="button" onClick={() => setSortOpen((value) => !value)} aria-expanded={sortOpen} aria-controls="mobile-sort-menu">
+          <ArrowUpDown size={15} aria-hidden="true" />
+          <span>{currentSort.label}</span>
+          <ChevronDown size={13} aria-hidden="true" />
+        </button>
+        <div className={`mobile-sort-menu ${sortOpen ? "open" : ""}`} id="mobile-sort-menu" role="menu" aria-label={props.labels.sort}>
+          <p>{props.labels.sort}</p>
+          {props.sortOptions.map((option) => <button type="button" role="menuitemradio" aria-checked={props.sort === option.value} onClick={() => chooseSort(option.value)} key={option.value}>
+            <span>{option.label}</span>
+            {props.sort === option.value && <Check size={14} />}
+          </button>)}
+        </div>
+      </div>
     </div>
 
     <div className={`shop-filter-drawer ${open ? "open" : ""}`} aria-hidden={!open}>
