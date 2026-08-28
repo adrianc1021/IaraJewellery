@@ -9,7 +9,7 @@
   --gold: #9c8150;
   --line: #d8e0e7;
   --muted: #64717d;
-  --success: #3f7559;
+  --success: #3f6485;
   --warning: #a16e24;
   --danger: #a34646;
   --display: "Bodoni 72", Didot, "Iowan Old Style", "Songti TC", "Noto Serif TC", Georgia, serif;
@@ -174,7 +174,7 @@ h1, h2, h3 { font-family: var(--display); font-weight: 400; letter-spacing: 0; }
 .checkbox-field { display: flex; align-items: flex-start; gap: 9px; font-size: 10px; }
 .checkbox-field input { width: 16px; height: 16px; margin-top: 3px; accent-color: var(--brand); }
 .form-error { padding: 10px 12px; border-left: 3px solid var(--danger); background: #faeeee; color: #7b2f2f; font-size: 11px; }
-.form-success { padding: 10px 12px; border-left: 3px solid var(--success); background: #eef7f1; color: #25583e; font-size: 11px; }
+.form-success { padding: 10px 12px; border-left: 3px solid var(--success); background: #edf4fa; color: #294d6d; font-size: 11px; }
 .auth-links { margin-top: 24px; display: flex; justify-content: space-between; font-size: 10px; }
 .split-page { min-height: calc(100svh - 102px); display: grid; grid-template-columns: 1fr 1fr; }
 .split-image { position: relative; min-height: 600px; }
@@ -187,7 +187,7 @@ h1, h2, h3 { font-family: var(--display); font-weight: 400; letter-spacing: 0; }
 .data-table th { background: #f2f5f7; color: var(--muted); font-weight: 600; }
 .data-table tr:last-child td { border-bottom: 0; }
 .status { display: inline-flex; min-height: 24px; padding: 3px 8px; align-items: center; border-radius: 999px; background: #edf1f4; font-size: 9px; }
-.status.success { background: #e4f1e9; color: #2d6545; }
+.status.success { background: #e5eef6; color: #315d80; }
 .status.warning { background: #f5eddf; color: #7a571c; }
 .status.danger { background: #f7e6e6; color: #8b3737; }
 .empty-state { min-height: 290px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
@@ -355,7 +355,7 @@ h1, h2, h3 { font-family: var(--display); font-weight: 400; letter-spacing: 0; }
 .catalog-assign label { display: flex; align-items: center; gap: 4px; color: var(--muted); font-size: 8px; }
 .catalog-assign input { accent-color: var(--brand); }
 .catalog-status { padding: 5px 8px; background: #eee; color: var(--muted); font-size: 8px; }
-.catalog-status.active { background: #e4f1e9; color: var(--success); }
+.catalog-status.active { background: #e5eef6; color: var(--success); }
 .catalog-group-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: start; }
 .catalog-group-create { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
 .catalog-group-create input { min-height: 38px; padding: 6px 8px; border: 1px solid var(--line); font-size: 9px; }
