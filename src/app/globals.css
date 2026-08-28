@@ -168,10 +168,16 @@ html[lang="en"] p:not(.eyebrow) { font-family: var(--english-copy); }
 .home-product-showcase .section-heading { margin-bottom: 45px; }
 .home-product-showcase .section-heading .button { flex: 0 0 auto; }
 .home-product-rail { width: 100%; overflow: hidden; }
+.home-product-rail-wrap { position: relative; }
 .home-product-track { width: max-content; display: flex; animation: home-product-marquee 58s linear infinite; will-change: transform; }
+.home-product-rail.is-paused .home-product-track { animation-play-state: paused; }
 .home-product-group { display: flex; gap: 16px; padding-right: 16px; }
 .home-product-group .product-card { flex: 0 0 clamp(260px, 22.5vw, 340px); width: clamp(260px, 22.5vw, 340px); }
 @keyframes home-product-marquee { to { transform: translateX(-50%); } }
+.home-product-controls { margin-top: 24px; display: flex; align-items: center; justify-content: flex-end; gap: 7px; }
+.home-product-controls button { width: 34px; height: 34px; display: grid; place-items: center; border: 1px solid var(--line); background: white; color: var(--brand); transition: background .2s ease, color .2s ease; }
+.home-product-controls button:hover { background: var(--brand); color: white; }
+.home-product-controls span { margin-left: 8px; color: var(--muted); font-size: 9px; letter-spacing: .08em; }
 .pet-product-showcase { padding-top: 106px; padding-bottom: 118px; background: var(--paper); }
 .home-pet-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .signature-piece { min-height: 570px; padding-bottom: 112px; display: grid; grid-template-columns: 55% 45%; background: var(--white); }
@@ -192,9 +198,11 @@ html[lang="en"] p:not(.eyebrow) { font-family: var(--english-copy); }
 .category-strip a { min-width: 0; display: flex; flex-direction: column; }
 .category-image { position: relative; display: block; aspect-ratio: 4 / 5; overflow: hidden; background: #edf0f2; }
 .category-image img { object-fit: cover; transition: transform .5s ease; }
+.category-image i { position: absolute; z-index: 1; top: 13px; left: 14px; color: white; font: 12px var(--english-copy); font-style: normal; text-shadow: 0 1px 8px rgba(0,0,0,.3); }
 .category-strip a:hover .category-image img { transform: scale(1.025); }
 .category-label { padding: 16px 2px 0; display: flex; flex-direction: column; color: var(--ink); font: 22px var(--serif); }
 .category-label small { margin-bottom: 3px; color: var(--muted); font: 8px var(--sans); }
+.category-label em { margin-top: 10px; display: inline-flex; align-items: center; gap: 5px; color: var(--brand); font: 9px var(--sans); font-style: normal; opacity: .75; }
 .section { padding: 100px 4vw; }
 .homepage-layout .section { padding-block: var(--home-section-space, 100px); }
 .section-heading { max-width: var(--container); margin: 0 auto 38px; display: flex; align-items: flex-end; justify-content: space-between; gap: 30px; }
@@ -599,6 +607,7 @@ body.filter-drawer-open { overflow: hidden; }
 @keyframes catalog-drawer-in { from { transform: translateX(100%); opacity: .4; } to { transform: translateX(0); opacity: 1; } }
 .payment-method-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
 .integration-status-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.integration-help ol { margin: 0; padding-left: 20px; color: var(--muted); font-size: 11px; line-height: 2; }
 .integration-status-grid article { min-height: 120px; padding: 18px; border: 1px solid var(--line); background: var(--paper); }
 .integration-status-grid article.ready { border-top: 3px solid var(--success); }
 .integration-status-grid article.pending { border-top: 3px solid var(--warning); }
@@ -836,7 +845,7 @@ body.ops-mode > .announcement, body.ops-mode > .site-header, body.ops-mode > .si
 body:has(.ops-shell) > .announcement, body:has(.ops-shell) > .site-header, body:has(.ops-shell) > .site-footer { display: none; }
 body.ops-mode { background: #f2f5f8; }
 .ops-shell { min-height: 100svh; display: grid; grid-template-columns: 248px minmax(0, 1fr); background: #f2f5f8; }
-.ops-sidebar { height: 100svh; padding: 26px 18px 18px; display: flex; flex-direction: column; position: sticky; top: 0; border-right: 0; background: var(--brand); color: white; }
+.ops-sidebar { height: 100svh; padding: 26px 18px 18px; display: flex; flex-direction: column; position: sticky; top: 0; overflow-y: auto; overscroll-behavior: contain; border-right: 0; background: var(--brand); color: white; }
 .ops-sidebar-header { margin-bottom: 24px; padding: 0 10px 22px; border-bottom: 1px solid rgba(255,255,255,.14); }
 .ops-sidebar-header > a { display: flex; align-items: baseline; gap: 7px; }
 .ops-sidebar-header > a strong { font: 30px var(--display); font-weight: 400; }

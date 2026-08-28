@@ -15,6 +15,7 @@ const items = [
   { href: "/ops/appointments", label: "預約", icon: CalendarDays },
   { href: "/ops/marketing", label: "推廣及通告", icon: Megaphone },
   { href: "/ops/payments", label: "付款設定", icon: CreditCard },
+  { href: "/ops/integrations", label: "系統整合", icon: Settings2 },
   { href: "/ops/audit", label: "審計紀錄", icon: FileClock }
 ];
 
@@ -25,7 +26,7 @@ export function OpsShell({ user, children }: { user: { name: string; role: strin
     <aside className="ops-sidebar">
       <div className="ops-sidebar-header"><Link href="/ops"><strong>Iara</strong><span>OPERATIONS</span></Link><div><span>{user.name}</span><small>{user.role}</small></div></div>
       <nav aria-label="後台導覽">{items.map(({ href, label, icon: Icon, exact }) => { const active = exact ? pathname === href : pathname.startsWith(href); return <Link key={href} href={href} aria-current={active ? "page" : undefined}><Icon size={16} />{label}</Link>; })}</nav>
-      <div className="ops-sidebar-tools"><Link href="/ops/catalog"><Search size={15} />快速搜尋商品</Link><Link href="/ops/payments"><Settings2 size={15} />整合及設定</Link></div>
+      <div className="ops-sidebar-tools"><Link href="/ops/catalog?focus=search"><Search size={15} />快速搜尋商品</Link><Link href="/ops/integrations"><Settings2 size={15} />整合及設定</Link></div>
       <div className="ops-sidebar-footer"><Link href="/"><Store size={16} />查看前台</Link><Link href="/account"><X size={16} />離開後台</Link></div>
     </aside>
     <div className="ops-content">{children}</div>
