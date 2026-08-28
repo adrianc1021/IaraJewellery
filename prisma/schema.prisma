@@ -124,6 +124,19 @@ model Product {
   audience         String          @default("PEOPLE")
   material         String
   gemstone         String
+  diamondWeight    String?
+  diamondColorClarity String?
+  pendantDimensions String?
+  chainLength      String?
+  productWeight    String?
+  claspType        String?
+  origin           String?
+  hasCertificate   Boolean             @default(false)
+  isNaturalDiamond Boolean             @default(false)
+  engravingAvailable Boolean           @default(false)
+  chainLengthAdjustable Boolean        @default(false)
+  warrantyYears    Int                 @default(1)
+  careRepair       String?
   badge            String?
   imagesJson       String
   status           String          @default("ACTIVE")

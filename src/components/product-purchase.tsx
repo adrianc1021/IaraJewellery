@@ -1,6 +1,6 @@
 "use client";
 
-import { Heart, ShoppingBag } from "lucide-react";
+import { CalendarDays, Heart, ShoppingBag } from "lucide-react";
 import { useState } from "react";
 import type { Locale } from "@/lib/i18n";
 
@@ -11,6 +11,7 @@ export function ProductPurchase({ productId, slug, variants, locale = "zh-HK" }:
   const [message, setMessage] = useState("");
   const [busy, setBusy] = useState(false);
   const en = locale === "en";
+  const availableStock = variants.reduce((total, variant) => total + Math.max(0, variant.stockOnHand - variant.stockReserved), 0);
   async function add() {
     if (!selected) { setMessage(en ? "Please select a size." : "請先選擇尺寸。" ); return; }
     setBusy(true);
@@ -24,5 +25,5 @@ export function ProductPurchase({ productId, slug, variants, locale = "zh-HK" }:
     if (response.status === 401) { location.href = `/login?next=/product/${slug}`; return; }
     if (response.ok) setWished(!wished);
   }
-  return <><p className="variant-label">{en ? "Select size" : "選擇尺寸"}</p><div className="variant-grid" role="radiogroup" aria-label={en ? "Size" : "尺寸"}>{variants.map((variant) => { const available = variant.active && variant.stockOnHand - variant.stockReserved > 0; return <button key={variant.id} className={`variant-button ${selected === variant.id ? "selected" : ""}`} role="radio" aria-checked={selected === variant.id} disabled={!available} onClick={() => { setSelected(variant.id); setMessage(""); }}>{variant.optionName}</button>; })}</div><p className="availability">{en ? "In stock · Delivery in 2–3 business days" : "現貨 · 預計 2–3 個工作天送達"}</p>{message && <p className={message.includes("已加入") || message.includes("Added") ? "form-success" : "form-error"} role="status">{message}</p>}<div className="purchase-row"><button className="button button-primary" disabled={busy} onClick={add}><ShoppingBag size={16} />{busy ? (en ? "Adding…" : "加入中…") : (en ? "Add to bag" : "加入購物袋")}</button><button className={`purchase-wish ${wished ? "active" : ""}`} aria-label={en ? "Add to wishlist" : "加入願望清單"} aria-pressed={wished} onClick={wish}><Heart size={19} fill={wished ? "currentColor" : "none"} /></button></div></>;
+  return <div className="product-purchase"><p className="variant-label">{en ? "Select size / length" : "選擇尺寸／鏈長"}</p><div className="variant-grid" role="radiogroup" aria-label={en ? "Size or length" : "尺寸或鏈長"}>{variants.map((variant) => { const available = variant.active && variant.stockOnHand - variant.stockReserved > 0; return <button key={variant.id} className={`variant-button ${selected === variant.id ? "selected" : ""}`} role="radio" aria-checked={selected === variant.id} disabled={!available} onClick={() => { setSelected(variant.id); setMessage(""); }}>{variant.optionName}</button>; })}</div><p className="availability">{availableStock > 0 ? (en ? `In stock (${availableStock}) · Delivery in 2–3 business days` : `現貨（${availableStock} 件）· 預計 2–3 個工作天送達`) : (en ? "Made to order · Delivery date confirmed by our consultant" : "訂製製作 · 送達日期由珠寶顧問確認")}</p>{message && <p className={message.includes("已加入") || message.includes("Added") ? "form-success" : "form-error"} role="status">{message}</p>}<div className="purchase-row"><button className="button button-primary" disabled={busy} onClick={add}><ShoppingBag size={16} />{busy ? (en ? "Adding…" : "加入中…") : (en ? "Add to bag" : "加入購物袋")}</button><button className={`purchase-wish ${wished ? "active" : ""}`} aria-label={en ? "Add to wishlist" : "加入願望清單"} aria-pressed={wished} onClick={wish}><Heart size={19} fill={wished ? "currentColor" : "none"} /></button></div><div className="purchase-secondary-actions"><a className="text-link" href="/appointment"><CalendarDays size={14} />{en ? "Book a private viewing" : "預約私人鑑賞"}</a><a className="text-link" href={`https://wa.me/85221808208?text=${encodeURIComponent(en ? `Hello, I would like to ask about ${slug}.` : `你好，我想查詢 ${slug}。`)}`} target="_blank" rel="noreferrer">{en ? "WhatsApp a jewellery consultant" : "WhatsApp 珠寶顧問"}</a></div></div>;
 }

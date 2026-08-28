@@ -1,0 +1,13 @@
+ALTER TABLE "Product" ADD COLUMN "diamondWeight" TEXT;
+ALTER TABLE "Product" ADD COLUMN "diamondColorClarity" TEXT;
+ALTER TABLE "Product" ADD COLUMN "pendantDimensions" TEXT;
+ALTER TABLE "Product" ADD COLUMN "chainLength" TEXT;
+ALTER TABLE "Product" ADD COLUMN "productWeight" TEXT;
+ALTER TABLE "Product" ADD COLUMN "claspType" TEXT;
+ALTER TABLE "Product" ADD COLUMN "origin" TEXT;
+ALTER TABLE "Product" ADD COLUMN "hasCertificate" INTEGER NOT NULL DEFAULT 0;
+ALTER TABLE "Product" ADD COLUMN "isNaturalDiamond" INTEGER NOT NULL DEFAULT 0;
+ALTER TABLE "Product" ADD COLUMN "engravingAvailable" INTEGER NOT NULL DEFAULT 0;
+ALTER TABLE "Product" ADD COLUMN "chainLengthAdjustable" INTEGER NOT NULL DEFAULT 0;
+ALTER TABLE "Product" ADD COLUMN "warrantyYears" INTEGER NOT NULL DEFAULT 1;
+ALTER TABLE "Product" ADD COLUMN "careRepair" TEXT;

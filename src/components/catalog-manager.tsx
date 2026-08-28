@@ -25,7 +25,17 @@ export function CatalogManager({ products, groups }: { products: ProductRow[]; g
   async function createProduct(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const raw = Object.fromEntries(new FormData(event.currentTarget));
-    await request("/api/ops/products", "POST", { ...raw, priceMinor: Math.round(Number(raw.priceHkd) * 100), stockOnHand: Number(raw.stockOnHand), featured: raw.featured === "on" }, "商品已建立並上架。");
+    await request("/api/ops/products", "POST", {
+      ...raw,
+      priceMinor: Math.round(Number(raw.priceHkd) * 100),
+      stockOnHand: Number(raw.stockOnHand),
+      warrantyYears: Number(raw.warrantyYears || 1),
+      featured: raw.featured === "on",
+      hasCertificate: raw.hasCertificate === "on",
+      isNaturalDiamond: raw.isNaturalDiamond === "on",
+      engravingAvailable: raw.engravingAvailable === "on",
+      chainLengthAdjustable: raw.chainLengthAdjustable === "on"
+    }, "商品已建立並上架。");
   }
 
   async function createGroup(event: FormEvent<HTMLFormElement>, kind: "CATEGORY" | "COLLECTION") {
@@ -60,6 +70,23 @@ export function CatalogManager({ products, groups }: { products: ProductRow[]; g
         <div className="field full"><label htmlFor="product-image">商品圖片（HTTPS）</label><input id="product-image" name="imageUrl" type="url" required placeholder="https://images.unsplash.com/..." /></div>
         <div className="field full"><label htmlFor="product-description-zh">中文描述</label><textarea id="product-description-zh" name="descriptionZh" required /></div>
         <div className="field full"><label htmlFor="product-description-en">英文描述</label><textarea id="product-description-en" name="descriptionEn" required /></div>
+        <fieldset className="catalog-spec-group full"><legend>產品規格及售後資料</legend><div className="catalog-spec-grid">
+          <div className="field"><label htmlFor="diamond-weight">鑽石總重量</label><input id="diamond-weight" name="diamondWeight" placeholder="例如 0.35 ct" /></div>
+          <div className="field"><label htmlFor="diamond-colour">鑽石顏色及淨度</label><input id="diamond-colour" name="diamondColorClarity" placeholder="例如 F / VS1" /></div>
+          <div className="field"><label htmlFor="pendant-dimensions">吊墜實際尺寸</label><input id="pendant-dimensions" name="pendantDimensions" placeholder="例如 12 × 8 mm" /></div>
+          <div className="field"><label htmlFor="chain-length">鏈長及可調節長度</label><input id="chain-length" name="chainLength" placeholder="例如 40–45 cm" /></div>
+          <div className="field"><label htmlFor="product-weight">產品重量</label><input id="product-weight" name="productWeight" placeholder="例如 2.8 g" /></div>
+          <div className="field"><label htmlFor="clasp-type">扣件類型</label><input id="clasp-type" name="claspType" placeholder="例如 Spring ring" /></div>
+          <div className="field"><label htmlFor="origin">產地／製作地</label><input id="origin" name="origin" placeholder="例如 香港工房" /></div>
+          <div className="field"><label htmlFor="warranty-years">保養及維修年期</label><input id="warranty-years" name="warrantyYears" type="number" min="0" max="99" defaultValue="1" /> <small className="field-hint">年</small></div>
+          <div className="field full"><label htmlFor="care-repair">保養及維修說明</label><textarea id="care-repair" name="careRepair" placeholder="例如 終身免費清潔檢查；保養期內享基本維修服務。" /></div>
+          <div className="catalog-checks full">
+            <label className="checkbox-field"><input name="hasCertificate" type="checkbox" />有證書</label>
+            <label className="checkbox-field"><input name="isNaturalDiamond" type="checkbox" />天然鑽石</label>
+            <label className="checkbox-field"><input name="engravingAvailable" type="checkbox" />可刻字</label>
+            <label className="checkbox-field"><input name="chainLengthAdjustable" type="checkbox" />可改鏈長</label>
+          </div>
+        </div></fieldset>
         <label className="checkbox-field"><input name="featured" type="checkbox" />於首頁精選</label>
         <button className="button button-primary full" disabled={busy}><Plus size={15} />{busy ? "正在建立…" : "建立商品"}</button>
       </form>
