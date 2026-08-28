@@ -1321,13 +1321,15 @@ body.ops-mode { background: #f2f5f8; }
    manual controls. This prevents duplicated tracks from drifting on mobile. */
 .home-product-rail { overflow-x: auto; scrollbar-width: none; scroll-snap-type: x mandatory; scroll-behavior: smooth; }
 .home-product-rail::-webkit-scrollbar { display: none; }
-.home-product-track { animation: none; transform: none; }
-.home-product-group > .product-card { scroll-snap-align: start; }
+.home-product-rail { overflow: hidden; }
+.home-product-track-single { width: 100%; display: flex; transition: transform .65s cubic-bezier(.2,.75,.2,1); will-change: transform; }
+.home-product-slide { flex: 0 0 100%; min-width: 0; display: flex; justify-content: center; padding-inline: 24px; }
+.home-product-slide .product-card { width: min(100%, 360px); }
 
 @media (max-width: 680px) {
-  .home-product-rail { margin-inline: -18px; padding-inline: 18px; }
-  .home-product-group { gap: 12px; padding-right: 12px; }
-  .home-product-group .product-card { flex-basis: min(78vw, 318px); width: min(78vw, 318px); }
+  .home-product-rail { margin-inline: 0; padding-inline: 0; }
+  .home-product-slide { padding-inline: 28px; }
+  .home-product-slide .product-card { width: min(100%, 330px); }
   .home-rail-nav { top: 37%; width: 34px; height: 48px; border-color: rgba(44,62,80,.12); background: rgba(255,255,255,.62); opacity: .72; }
   .home-rail-nav-prev { left: -2px; }
   .home-rail-nav-next { right: -2px; }
