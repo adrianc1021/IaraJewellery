@@ -40,7 +40,7 @@
 
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
-body { margin: 0; background: var(--white); color: var(--ink); font-family: var(--sans); font-size: 15px; line-height: 1.6; letter-spacing: 0; }
+body { margin: 0; overflow-x: hidden; background: var(--white); color: var(--ink); font-family: var(--sans); font-size: 15px; line-height: 1.6; letter-spacing: 0; }
 body.no-scroll { overflow: hidden; }
 a { color: inherit; text-decoration: none; }
 button, input, select, textarea { color: inherit; font: inherit; letter-spacing: 0; }
@@ -1315,4 +1315,21 @@ body.ops-mode { background: #f2f5f8; }
   .home-rail-nav { top: 34%; width: 36px; height: 52px; }
   .home-rail-nav-prev { left: 4px; }
   .home-rail-nav-next { right: 4px; }
+}
+
+/* Product rail uses one source of truth (scroll position) for autoplay and
+   manual controls. This prevents duplicated tracks from drifting on mobile. */
+.home-product-rail { overflow-x: auto; scrollbar-width: none; scroll-snap-type: x mandatory; scroll-behavior: smooth; }
+.home-product-rail::-webkit-scrollbar { display: none; }
+.home-product-track { animation: none; transform: none; }
+.home-product-group > .product-card { scroll-snap-align: start; }
+
+@media (max-width: 680px) {
+  .home-product-rail { margin-inline: -18px; padding-inline: 18px; }
+  .home-product-group { gap: 12px; padding-right: 12px; }
+  .home-product-group .product-card { flex-basis: min(78vw, 318px); width: min(78vw, 318px); }
+  .home-rail-nav { top: 37%; width: 34px; height: 48px; border-color: rgba(44,62,80,.12); background: rgba(255,255,255,.62); opacity: .72; }
+  .home-rail-nav-prev { left: -2px; }
+  .home-rail-nav-next { right: -2px; }
+  .home-product-controls { margin-top: 17px; justify-content: center; }
 }
