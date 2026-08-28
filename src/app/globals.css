@@ -20,9 +20,9 @@
   --success: #3f6485;
   --warning: #a16e24;
   --danger: #a34646;
-  --display: "Beliau", "Songti TC", "Noto Serif TC", Georgia, serif;
-  --serif: "Beliau", "Songti TC", "Noto Serif TC", Georgia, serif;
-  --sans: "Beliau", -apple-system, BlinkMacSystemFont, "PingFang TC", "Noto Sans TC", "Helvetica Neue", sans-serif;
+  --display: "Beliau", "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+  --serif: "Beliau", "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+  --sans: "Beliau", "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
   --container: 1480px;
   --header: 72px;
   --radius: 4px;
@@ -40,6 +40,9 @@ button { cursor: pointer; }
 img { display: block; max-width: 100%; }
 h1, h2, h3, p { margin-top: 0; }
 h1, h2, h3 { font-family: var(--display); font-weight: 400; letter-spacing: 0; }
+html[lang="zh-HK"] h1, html[lang="zh-HK"] h2, html[lang="zh-HK"] h3 { font-weight: 600; }
+html[lang="zh-HK"] .brand strong, html[lang="zh-HK"] .category-label, html[lang="zh-HK"] .home-retail-nav strong, html[lang="zh-HK"] .service-list strong, html[lang="zh-HK"] .curation-grid strong { font-weight: 600; }
+html[lang="zh-HK"] .desktop-nav, html[lang="zh-HK"] .mobile-nav-primary, html[lang="zh-HK"] .button, html[lang="zh-HK"] .text-link, html[lang="zh-HK"] .eyebrow { font-weight: 500; }
 :focus-visible { outline: 2px solid var(--red); outline-offset: 3px; }
 .skip-link { position: fixed; z-index: 999; left: 12px; top: 10px; padding: 10px 16px; background: white; transform: translateY(-150%); }
 .skip-link:focus { transform: none; }
