@@ -6,6 +6,14 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: "Iara Bodoni 72";
+  src: local("Bodoni 72"), local("Bodoni 72 Book");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
 :root {
   --ink: #17212b;
   --brand: #2c3e50;
@@ -23,6 +31,7 @@
   --display: "Beliau", "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
   --serif: "Beliau", "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
   --sans: "Beliau", "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+  --english-copy: "Iara Bodoni 72", "Bodoni 72", "Bodoni MT", Didot, Georgia, serif;
   --container: 1480px;
   --header: 72px;
   --radius: 4px;
@@ -43,6 +52,8 @@ h1, h2, h3 { font-family: var(--display); font-weight: 400; letter-spacing: 0; }
 html[lang="zh-HK"] h1, html[lang="zh-HK"] h2, html[lang="zh-HK"] h3 { font-weight: 600; }
 html[lang="zh-HK"] .brand strong, html[lang="zh-HK"] .category-label, html[lang="zh-HK"] .home-retail-nav strong, html[lang="zh-HK"] .service-list strong, html[lang="zh-HK"] .curation-grid strong { font-weight: 600; }
 html[lang="zh-HK"] .desktop-nav, html[lang="zh-HK"] .mobile-nav-primary, html[lang="zh-HK"] .button, html[lang="zh-HK"] .text-link, html[lang="zh-HK"] .eyebrow { font-weight: 500; }
+html[lang="en"] { --serif: var(--english-copy); }
+html[lang="en"] p:not(.eyebrow) { font-family: var(--english-copy); }
 :focus-visible { outline: 2px solid var(--red); outline-offset: 3px; }
 .skip-link { position: fixed; z-index: 999; left: 12px; top: 10px; padding: 10px 16px; background: white; transform: translateY(-150%); }
 .skip-link:focus { transform: none; }
