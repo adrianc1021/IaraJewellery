@@ -19,6 +19,8 @@ services:
         value: production
       - key: DATABASE_URL
         value: file:/var/data/iara.db
+      - key: MEDIA_ROOT
+        value: /var/data/uploads
       - key: BETTER_AUTH_SECRET
         generateValue: true
       - key: BETTER_AUTH_URL

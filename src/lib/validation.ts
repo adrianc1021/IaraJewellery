@@ -75,6 +75,11 @@ export const catalogGroupSchema = z.object({
 
 export const catalogGroupUpdateSchema = catalogGroupSchema.omit({ kind: true, slug: true }).partial();
 
+const productImageReference = z.string().trim().refine((value) => {
+  if (/^\/api\/media\/products\/[0-9]{13}-[0-9a-f-]{36}\.webp$/i.test(value)) return true;
+  try { return new URL(value).protocol === "https:"; } catch { return false; }
+}, "圖片網址無效。" );
+
 export const productCreateSchema = z.object({
   slug: z.string().trim().min(3).max(100).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
   nameZh: z.string().trim().min(2).max(120),
@@ -100,12 +105,15 @@ export const productCreateSchema = z.object({
   warrantyYears: z.number().int().min(0).max(99).default(1),
   careRepair: z.string().trim().max(500).optional(),
   badge: z.string().trim().max(40).optional(),
-  imageUrl: z.url().refine((value) => value.startsWith("https://"), "只接受 HTTPS 網址。"),
+  imageUrl: productImageReference.optional(),
+  imageUrls: z.array(productImageReference).min(1).max(6).optional(),
   featured: z.boolean().default(false),
   sku: z.string().trim().min(3).max(80),
   optionName: z.string().trim().min(1).max(80),
   priceMinor: z.number().int().min(100).max(100_000_000),
   stockOnHand: z.number().int().min(0).max(100000)
+}).superRefine((value, ctx) => {
+  if (!value.imageUrl && !value.imageUrls?.length) ctx.addIssue({ code: "custom", path: ["imageUrls"], message: "請上載至少一張商品圖片。" });
 });
 
 export const productUpdateSchema = z.object({

@@ -11,6 +11,7 @@ export async function POST(request: Request) {
     enforceSameOrigin(request);
     const session = await requireApiStaff(request, ["MERCHANDISER", "ADMIN", "SUPER_ADMIN"]);
     const input = productCreateSchema.parse(await request.json());
+    const images = input.imageUrls?.length ? input.imageUrls : input.imageUrl ? [input.imageUrl] : [];
     const product = await db.product.create({ data: {
       sanityProductId: `ops-${input.slug}`,
       slug: input.slug,
@@ -38,7 +39,7 @@ export async function POST(request: Request) {
       warrantyYears: input.warrantyYears,
       careRepair: input.careRepair || null,
       badge: input.badge || null,
-      imagesJson: JSON.stringify([input.imageUrl]),
+      imagesJson: JSON.stringify(images),
       featured: input.featured,
       variants: { create: { sku: input.sku.toUpperCase(), optionName: input.optionName, priceMinor: input.priceMinor, stockOnHand: input.stockOnHand } }
     }, include: { variants: true } });

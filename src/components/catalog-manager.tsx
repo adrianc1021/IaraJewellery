@@ -4,12 +4,15 @@ import Image from "next/image";
 import { FormEvent, useState } from "react";
 import { Archive, Eye, PackagePlus, Plus, Save } from "lucide-react";
 import { formatMoney } from "@/lib/format";
+import { ProductImageUploader, type UploadedProductImage } from "@/components/product-image-uploader";
 
 type GroupRow = { id: string; kind: string; slug: string; nameZh: string; nameEn: string; imageUrl: string | null; active: boolean; featured: boolean; sortOrder: number };
 type ProductRow = { id: string; slug: string; nameZh: string; nameEn: string; category: string; collection: string; audience: string; status: string; featured: boolean; imageUrl: string; priceMinor: number; stock: number };
 
 export function CatalogManager({ products, groups }: { products: ProductRow[]; groups: GroupRow[] }) {
   const [busy, setBusy] = useState(false);
+  const [imageBusy, setImageBusy] = useState(false);
+  const [productImages, setProductImages] = useState<UploadedProductImage[]>([]);
   const [message, setMessage] = useState("");
   const categories = groups.filter((group) => group.kind === "CATEGORY" && group.active);
   const collections = groups.filter((group) => group.kind === "COLLECTION" && group.active);
@@ -25,8 +28,12 @@ export function CatalogManager({ products, groups }: { products: ProductRow[]; g
   async function createProduct(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const raw = Object.fromEntries(new FormData(event.currentTarget));
+    const fallbackImage = String(raw.imageUrl || "").trim();
+    if (!productImages.length && !fallbackImage) { setMessage("未能建立商品：請先上載至少一張商品圖片。"); return; }
     await request("/api/ops/products", "POST", {
       ...raw,
+      imageUrl: fallbackImage || productImages[0]?.url,
+      imageUrls: productImages.length ? productImages.map((image) => image.url) : undefined,
       priceMinor: Math.round(Number(raw.priceHkd) * 100),
       stockOnHand: Number(raw.stockOnHand),
       warrantyYears: Number(raw.warrantyYears || 1),
@@ -67,7 +74,8 @@ export function CatalogManager({ products, groups }: { products: ProductRow[]; g
         <div className="field"><label htmlFor="product-price">價格 HK$</label><input id="product-price" name="priceHkd" type="number" min="1" step="0.01" required /></div>
         <div className="field"><label htmlFor="product-stock">現貨</label><input id="product-stock" name="stockOnHand" type="number" min="0" required /></div>
         <div className="field"><label htmlFor="product-badge">標籤</label><input id="product-badge" name="badge" placeholder="NEW" /></div>
-        <div className="field full"><label htmlFor="product-image">商品圖片（HTTPS）</label><input id="product-image" name="imageUrl" type="url" required placeholder="https://images.unsplash.com/..." /></div>
+        <ProductImageUploader value={productImages} onChange={setProductImages} disabled={busy} onBusyChange={setImageBusy} />
+        <details className="product-image-url-fallback full"><summary>改用現有 HTTPS 圖片網址</summary><div className="field"><label htmlFor="product-image">商品圖片網址</label><input id="product-image" name="imageUrl" type="url" placeholder="https://..." /></div></details>
         <div className="field full"><label htmlFor="product-description-zh">中文描述</label><textarea id="product-description-zh" name="descriptionZh" required /></div>
         <div className="field full"><label htmlFor="product-description-en">英文描述</label><textarea id="product-description-en" name="descriptionEn" required /></div>
         <fieldset className="catalog-spec-group full"><legend>產品規格及售後資料</legend><div className="catalog-spec-grid">
@@ -88,7 +96,7 @@ export function CatalogManager({ products, groups }: { products: ProductRow[]; g
           </div>
         </div></fieldset>
         <label className="checkbox-field"><input name="featured" type="checkbox" />於首頁精選</label>
-        <button className="button button-primary full" disabled={busy}><Plus size={15} />{busy ? "正在建立…" : "建立商品"}</button>
+        <button className="button button-primary full" disabled={busy || imageBusy}><Plus size={15} />{busy ? "正在建立…" : imageBusy ? "正在處理圖片…" : "建立商品"}</button>
       </form>
     </section>
 
