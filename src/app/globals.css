@@ -1,3 +1,11 @@
+@font-face {
+  font-family: "Beliau";
+  src: url("/fonts/beliau.otf") format("opentype");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
 :root {
   --ink: #17212b;
   --brand: #2c3e50;
@@ -12,9 +20,9 @@
   --success: #3f6485;
   --warning: #a16e24;
   --danger: #a34646;
-  --display: "Bodoni 72", Didot, "Iowan Old Style", "Songti TC", "Noto Serif TC", Georgia, serif;
-  --serif: "Iowan Old Style", "Songti TC", "Noto Serif TC", Georgia, serif;
-  --sans: -apple-system, BlinkMacSystemFont, "PingFang TC", "Noto Sans TC", "Helvetica Neue", sans-serif;
+  --display: "Beliau", "Songti TC", "Noto Serif TC", Georgia, serif;
+  --serif: "Beliau", "Songti TC", "Noto Serif TC", Georgia, serif;
+  --sans: "Beliau", -apple-system, BlinkMacSystemFont, "PingFang TC", "Noto Sans TC", "Helvetica Neue", sans-serif;
   --container: 1480px;
   --header: 72px;
   --radius: 4px;
