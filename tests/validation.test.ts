@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { adminCreateSchema, catalogGroupSchema, checkoutSchema, inventorySchema, paymentMethodsSchema, popupAnnouncementSchema, productCreateSchema, siteLayoutSchema } from "@/lib/validation";
+import { adminCreateSchema, catalogGroupSchema, checkoutSchema, inventorySchema, paymentMethodsSchema, paymentSettingsSchema, popupAnnouncementSchema, productCreateSchema, siteLayoutSchema } from "@/lib/validation";
 describe("checkout validation",()=>{it("requires a delivery address",()=>{expect(()=>checkoutSchema.parse({email:"a@example.com",customerName:"Ada",phone:"91234567",deliveryMethod:"DELIVERY"})).toThrow();});it("allows store pickup without an address",()=>{expect(checkoutSchema.parse({email:"a@example.com",customerName:"Ada",phone:"91234567",deliveryMethod:"PICKUP"}).deliveryMethod).toBe("PICKUP");});});
 describe("inventory validation",()=>{it("rejects negative stock",()=>{expect(()=>inventorySchema.parse({stockOnHand:-1,reason:"count"})).toThrow();});});
 describe("site layout validation",()=>{
@@ -23,6 +23,8 @@ describe("catalogue validation",()=>{
 });
 describe("payment settings validation",()=>{
   it("accepts enabled payment controls",()=>expect(paymentMethodsSchema.parse({methods:[{code:"FPS",enabled:true}]}).methods[0].enabled).toBe(true));
+  it("accepts an uploaded payment QR and FPS number",()=>expect(paymentSettingsSchema.parse({methods:[{code:"FPS",enabled:true}],fpsNumber:"9123 4567",qrCodeUrl:"/api/media/payment/1756384400000-123e4567-e89b-12d3-a456-426614174000.webp"}).fpsNumber).toBe("9123 4567"));
+  it("rejects an insecure QR URL",()=>expect(()=>paymentSettingsSchema.parse({methods:[{code:"FPS",enabled:true}],qrCodeUrl:"http://example.com/qr.png"})).toThrow());
 });
 describe("admin creation validation",()=>{
   const valid={name:"Iara Admin",email:"admin@example.com",password:"SecureAdmin123",role:"ADMIN"};

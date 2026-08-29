@@ -2,6 +2,7 @@ import path from "node:path";
 
 export const MAX_PRODUCT_IMAGES = 6;
 export const MAX_PRODUCT_IMAGE_BYTES = 1_600_000;
+export const MAX_PAYMENT_QR_BYTES = 900_000;
 
 export function getMediaRoot() {
   return path.resolve(process.env.MEDIA_ROOT || path.join(process.cwd(), "data", "uploads"));
@@ -19,6 +20,20 @@ export function resolveProductMediaPath(filename: string) {
 export function productMediaUrl(filename: string) {
   if (!isSafeMediaFilename(filename)) throw new Error("Invalid media filename");
   return `/api/media/products/${filename}`;
+}
+
+export function isSafePaymentFilename(filename: string) {
+  return /^[0-9]{13}-[0-9a-f-]{36}\.webp$/i.test(filename);
+}
+
+export function resolvePaymentMediaPath(filename: string) {
+  if (!isSafePaymentFilename(filename)) throw new Error("Invalid payment media filename");
+  return path.join(getMediaRoot(), "payment", filename);
+}
+
+export function paymentMediaUrl(filename: string) {
+  if (!isSafePaymentFilename(filename)) throw new Error("Invalid payment media filename");
+  return `/api/media/payment/${filename}`;
 }
 
 export function isWebp(bytes: Uint8Array) {

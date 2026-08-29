@@ -150,9 +150,19 @@ export const productUpdateSchema = z.object({
   careRepair: z.string().trim().max(500).optional()
 });
 
-export const paymentMethodsSchema = z.object({
-  methods: z.array(z.object({ code: z.string().min(2).max(40), enabled: z.boolean() })).min(1).max(20)
+const paymentQrReference = z.union([
+  z.literal(""),
+  z.url().refine((value) => value.startsWith("https://"), "只接受 HTTPS 圖片網址。"),
+  z.string().regex(/^\/api\/media\/payment\/[0-9]{13}-[0-9a-f-]{36}\.webp$/i, "QR Code 圖片網址無效。")
+]).optional();
+
+export const paymentSettingsSchema = z.object({
+  methods: z.array(z.object({ code: z.string().min(2).max(40), enabled: z.boolean() })).min(1).max(20),
+  fpsNumber: z.string().trim().max(80).optional(),
+  qrCodeUrl: paymentQrReference
 });
+
+export const paymentMethodsSchema = paymentSettingsSchema.pick({ methods: true });
 
 export const memberProfileSchema = z.object({
   name: z.string().trim().min(2).max(80),

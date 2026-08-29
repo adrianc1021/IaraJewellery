@@ -59,7 +59,7 @@ export default async function ProductPage({ params }: { params: Params }) {
       </div>
       <div className="product-info-panel">
         <p className="eyebrow">{product.collection}</p><h1>{name}</h1><p className="product-price">{formatMoney(product.variants[0]?.priceMinor || 0)}</p>
-        <p className="muted">{en ? "3 interest-free instalments · Complimentary Hong Kong delivery" : "可享 3 期免息付款 · 香港免費配送"}</p>
+        <p className="muted">{en ? "PayMe, FPS or AlipayHK · Complimentary Hong Kong delivery" : "PayMe、FPS 或 AlipayHK · 香港免費配送"}</p>
         <div className="fact-row"><span>{localizeProductValue(product.material, locale)}</span><span>{localizeProductValue(product.gemstone, locale)}</span>{product.audience === "PET" && <span>{en ? "Pet Atelier" : "寵物專區"}</span>}</div>
         <p className="product-description">{description}</p>
         <ProductPurchase productId={product.id} slug={product.slug} variants={product.variants} locale={locale} />

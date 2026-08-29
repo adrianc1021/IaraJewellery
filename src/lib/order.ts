@@ -5,10 +5,13 @@ import { HttpError } from "@/lib/http";
 import { checkoutSchema } from "@/lib/validation";
 import { sessionFromRequest } from "@/lib/server-auth";
 
+const allowedPaymentCodes = new Set(["FPS", "PAYME", "ALIPAY"]);
+
 export async function createPendingOrder(request: Request, raw: unknown, idempotencyKey: string) {
   const input = checkoutSchema.parse(raw);
   const existing = await db.idempotencyKey.findUnique({ where: { id: idempotencyKey } });
   if (existing?.response) return JSON.parse(existing.response) as { orderId: string; orderNumber: string; totalMinor: number; paymentMethod: string };
+  if (!allowedPaymentCodes.has(input.paymentMethod)) throw new HttpError(400, "目前只接受 FPS、PayMe 及 AlipayHK 付款。" );
   const paymentMethod = await db.paymentMethodSetting.findUnique({ where: { code: input.paymentMethod } });
   if (!paymentMethod?.enabled) throw new HttpError(400, "所選付款方式目前未開放。");
   if (input.paymentMethod === "CASH" && input.deliveryMethod !== "PICKUP") throw new HttpError(400, "現金付款只適用於門市自取。");

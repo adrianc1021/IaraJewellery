@@ -298,6 +298,8 @@ model PaymentMethodSetting {
   checkoutMode   String   @default("MANUAL")
   instructionsZh String?
   instructionsEn String?
+  accountReference String?
+  qrCodeUrl      String?
   sortOrder      Int      @default(0)
   updatedBy      String?
   updatedAt      DateTime @updatedAt

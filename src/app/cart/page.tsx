@@ -5,7 +5,7 @@ export const dynamic = "force-dynamic";
 export default async function CartPage() {
   const [locale, paymentMethods] = await Promise.all([
     getLocale(),
-    db.paymentMethodSetting.findMany({ where: { enabled: true }, orderBy: { sortOrder: "asc" }, select: { code: true, nameZh: true, nameEn: true } })
+    db.paymentMethodSetting.findMany({ where: { enabled: true, code: { in: ["FPS", "PAYME", "ALIPAY"] } }, orderBy: { sortOrder: "asc" }, select: { code: true, nameZh: true, nameEn: true } })
   ]);
   return <main id="main" className="page-shell cart-page"><CartClient locale={locale} paymentMethods={paymentMethods} /></main>;
 }

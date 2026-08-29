@@ -57,12 +57,12 @@ async function main() {
     await prisma.catalogGroup.upsert({ where: { kind_slug: { kind, slug } }, update: {}, create: { kind, slug, nameZh, nameEn, imageUrl: photo ? image(photo) : null, sortOrder, featured: kind === "CATEGORY" && sortOrder <= 40 } });
   }
   const paymentMethods = [
-    ["CREDIT_CARD", "信用卡", "Credit card", true, "STRIPE", "透過 Stripe 安全付款。", "Secure payment via Stripe.", 10],
-    ["APPLE_PAY", "Apple Pay", "Apple Pay", true, "STRIPE", "在支援的裝置上使用 Apple Pay。", "Use Apple Pay on a supported device.", 20],
-    ["CASH", "現金", "Cash", true, "MANUAL", "只適用於門市自取，取貨時付款。", "Pay when collecting from our atelier.", 30],
-    ["PAYME", "PayMe", "PayMe", false, "MANUAL", "訂單建立後會顯示付款指示。", "Payment instructions appear after checkout.", 40],
-    ["FPS", "轉數快 FPS", "FPS", true, "MANUAL", "訂單建立後會顯示轉數快付款指示。", "FPS instructions appear after checkout.", 50],
-    ["ALIPAY", "AlipayHK", "AlipayHK", false, "MANUAL", "訂單建立後會顯示付款指示。", "Payment instructions appear after checkout.", 60],
+    ["CREDIT_CARD", "信用卡", "Credit card", false, "STRIPE", "暫時未開放。", "Currently unavailable.", 10],
+    ["APPLE_PAY", "Apple Pay", "Apple Pay", false, "STRIPE", "暫時未開放。", "Currently unavailable.", 20],
+    ["CASH", "現金", "Cash", false, "MANUAL", "暫時未開放。", "Currently unavailable.", 30],
+    ["PAYME", "PayMe", "PayMe", true, "MANUAL", "訂單建立後會顯示 PayMe 付款指示。", "PayMe instructions appear after checkout.", 40],
+    ["FPS", "轉數快 FPS", "FPS", true, "MANUAL", "訂單建立後會顯示 FPS 付款指示及 QR Code。", "FPS instructions and QR Code appear after checkout.", 50],
+    ["ALIPAY", "AlipayHK", "AlipayHK", true, "MANUAL", "訂單建立後會顯示 AlipayHK 付款指示。", "AlipayHK instructions appear after checkout.", 60],
     ["WECHAT_PAY", "WeChat Pay HK", "WeChat Pay HK", false, "MANUAL", "訂單建立後會顯示付款指示。", "Payment instructions appear after checkout.", 70]
   ] as const;
   for (const [code, nameZh, nameEn, enabled, checkoutMode, instructionsZh, instructionsEn, sortOrder] of paymentMethods) {
