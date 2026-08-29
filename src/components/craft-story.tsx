@@ -14,8 +14,8 @@ const craftSteps = [
     titleEn: "Stone selection",
     descriptionZh: "從色澤、淨度到比例，尋找最合適的光。",
     descriptionEn: "From colour and clarity to proportion, we seek the stone that holds light most beautifully.",
-    image: "https://images.unsplash.com/photo-1573408301185-9146fe634ad0?auto=format&fit=crop&w=1400&q=90",
-    position: "center"
+    image: "/images/craft/stone-selection.jpg",
+    position: "center 48%"
   },
   {
     number: "02",
@@ -24,8 +24,8 @@ const craftSteps = [
     titleEn: "Hand setting",
     descriptionZh: "逐石定位，讓每個切面準確承接光線。",
     descriptionEn: "Each stone is positioned by hand so every facet meets the light with precision.",
-    image: "https://images.unsplash.com/photo-1584302179602-e4c3d3fd629d?auto=format&fit=crop&w=1400&q=90",
-    position: "center"
+    image: "/images/craft/hand-setting.jpg",
+    position: "center 42%"
   },
   {
     number: "03",
@@ -34,8 +34,8 @@ const craftSteps = [
     titleEn: "Polish and inspection",
     descriptionZh: "反覆修整每一道弧度，直至觸感自然貼膚。",
     descriptionEn: "Every curve is refined and inspected until the finished piece rests naturally against the skin.",
-    image: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=1400&q=90",
-    position: "center"
+    image: "/images/craft/polish-inspection.jpg",
+    position: "center 48%"
   }
 ];
 
