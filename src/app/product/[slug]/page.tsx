@@ -6,15 +6,22 @@ import { db } from "@/lib/db";
 import { formatMoney, parseImages } from "@/lib/format";
 import { ProductPurchase } from "@/components/product-purchase";
 import { ProductCard } from "@/components/product-card";
+import { JsonLd } from "@/components/json-ld";
 import { getLocale } from "@/lib/i18n";
 import { localizeProductCopy, localizeProductValue } from "@/lib/product-i18n";
+import { absoluteUrl, organizationId, seoConfig } from "@/lib/seo";
 
 type Params = Promise<{ slug: string }>;
 
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
   const [{ slug }, locale] = await Promise.all([params, getLocale()]);
   const product = await db.product.findUnique({ where: { slug } });
-  return product ? { title: locale === "en" ? product.nameEn : product.nameZh, description: locale === "en" ? product.descriptionEn : product.descriptionZh } : { title: locale === "en" ? "Piece not found" : "找不到作品" };
+  if (!product || product.status !== "ACTIVE") return { title: locale === "en" ? "Piece not found" : "找不到作品", robots: { index: false, follow: false } };
+  const name = locale === "en" ? product.nameEn : product.nameZh;
+  const description = locale === "en" ? product.descriptionEn : product.descriptionZh;
+  const images = parseImages(product.imagesJson).map(absoluteUrl);
+  const canonical = `/product/${product.slug}`;
+  return { title: name, description, alternates: { canonical }, openGraph: { title: name, description, url: canonical, type: "website", images: images.slice(0, 4).map((url) => ({ url, alt: name })) }, twitter: { card: "summary_large_image", title: name, description, images: images.slice(0, 1) } };
 }
 
 export default async function ProductPage({ params }: { params: Params }) {
@@ -47,10 +54,13 @@ export default async function ProductPage({ params }: { params: Params }) {
     [en ? "Chain adjustment" : "鏈長調整", product.chainLengthAdjustable ? (en ? "Available" : "可改鏈長") : (en ? "Please enquire" : "請向珠寶顧問查詢")],
     [en ? "Warranty and repairs" : "保養及維修年期", product.warrantyYears > 0 ? (en ? `${product.warrantyYears}-year service` : `${product.warrantyYears} 年服務`) : (en ? "Please enquire" : "請向珠寶顧問查詢")]
   ];
-  const schema = { "@context": "https://schema.org", "@type": "Product", name, image: images, description, sku: product.variants[0]?.sku, offers: { "@type": "Offer", priceCurrency: "HKD", price: (product.variants[0]?.priceMinor || 0) / 100, availability: "https://schema.org/InStock" } };
+  const productUrl = absoluteUrl(`/product/${product.slug}`);
+  const activeVariants = product.variants.filter((variant) => variant.active);
+  const schema = { "@context": "https://schema.org", "@type": "Product", "@id": `${productUrl}#product`, url: productUrl, name, alternateName: en ? product.nameZh : product.nameEn, image: images.map(absoluteUrl), description, sku: activeVariants[0]?.sku, category: product.category, material: product.material, brand: { "@type": "Brand", name: seoConfig.name }, offers: activeVariants.map((variant) => ({ "@type": "Offer", url: productUrl, sku: variant.sku, name: variant.optionName, priceCurrency: variant.currency, price: variant.priceMinor / 100, availability: variant.stockOnHand - variant.stockReserved > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock", itemCondition: "https://schema.org/NewCondition", seller: { "@id": organizationId }, shippingDetails: { "@type": "OfferShippingDetails", shippingRate: { "@type": "MonetaryAmount", value: 0, currency: "HKD" }, shippingDestination: { "@type": "DefinedRegion", addressCountry: "HK" }, deliveryTime: { "@type": "ShippingDeliveryTime", transitTime: { "@type": "QuantitativeValue", minValue: 2, maxValue: 3, unitCode: "DAY" } } }, hasMerchantReturnPolicy: { "@type": "MerchantReturnPolicy", applicableCountry: "HK", returnPolicyCategory: "https://schema.org/MerchantReturnFiniteReturnWindow", merchantReturnDays: 14, returnMethod: "https://schema.org/ReturnByMail", returnFees: "https://schema.org/FreeReturn" } })), additionalProperty: [...specs, ...gemstones, ...services].map(([label, value]) => ({ "@type": "PropertyValue", name: label, value })) };
+  const breadcrumbSchema = { "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [{ "@type": "ListItem", position: 1, name: en ? "Home" : "首頁", item: absoluteUrl("/") }, { "@type": "ListItem", position: 2, name: en ? (product.audience === "PET" ? "Pet jewellery" : "Jewellery") : (product.audience === "PET" ? "寵物飾品" : "珠寶"), item: absoluteUrl(product.audience === "PET" ? "/pets" : "/shop") }, { "@type": "ListItem", position: 3, name, item: productUrl }] };
 
   return <main id="main" className="page-shell">
-    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
+    <JsonLd data={schema} /><JsonLd data={breadcrumbSchema} />
     <div className="breadcrumb container"><Link href="/">{en ? "Home" : "首頁"}</Link><span>/</span><Link href={product.audience === "PET" ? "/pets" : "/shop"}>{en ? (product.audience === "PET" ? "Pet jewellery" : "Jewellery") : (product.audience === "PET" ? "寵物飾品" : "珠寶")}</Link><span>/</span><span>{name}</span></div>
     <section className="product-detail container">
       <div className="product-gallery">

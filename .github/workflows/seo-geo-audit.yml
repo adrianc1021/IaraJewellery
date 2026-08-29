@@ -1,0 +1,44 @@
+name: SEO and GEO audit
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: file:/tmp/iara-seo-audit.db
+      NEXT_PUBLIC_APP_URL: http://127.0.0.1:3000
+      BETTER_AUTH_SECRET: seo-audit-secret-at-least-32-characters
+      BETTER_AUTH_URL: http://127.0.0.1:3000
+      SEED_ADMIN_EMAIL: admin@iara.local
+      SEED_ADMIN_PASSWORD: ChangeMe123!
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.19.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm db:setup
+      - run: pnpm build
+      - name: Start production server
+        run: |
+          pnpm start > /tmp/iara-next.log 2>&1 &
+          for attempt in {1..30}; do
+            curl -fsS http://127.0.0.1:3000/api/health && exit 0
+            sleep 2
+          done
+          cat /tmp/iara-next.log
+          exit 1
+      - run: pnpm seo:audit
+      - uses: treosh/lighthouse-ci-action@v12
+        with:
+          configPath: ./lighthouserc.json
+          uploadArtifacts: true

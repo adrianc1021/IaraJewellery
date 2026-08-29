@@ -105,6 +105,12 @@ html[lang="en"] p:not(.eyebrow) { font-family: var(--english-copy); }
 .experience-band p:not(.eyebrow) { margin: 0; color: rgba(255,255,255,.75); font: 15px/1.65 var(--serif); }
 .experience-band .text-link { flex: 0 0 auto; color: white; }
 .faq-groups { padding-bottom: 95px; }
+.faq-answer-first { margin-bottom: 58px; padding: 30px 0; display: grid; grid-template-columns: .7fr 1.3fr; gap: 48px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.faq-answer-first h2 { margin: 7px 0 0; font: 28px/1.25 var(--display); }
+.faq-answer-first > div { display: grid; grid-template-columns: 1fr 1fr; gap: 0 28px; }
+.faq-answer-first article { padding: 13px 0; border-bottom: 1px solid var(--line); }
+.faq-answer-first strong { font-size: 10px; }
+.faq-answer-first p { margin: 5px 0 0; color: var(--muted); font: 13px/1.65 var(--serif); }
 .faq-group { margin-bottom: 62px; }
 .faq-group h2 { margin-bottom: 18px; font: 28px var(--display); }
 .faq-group details { border-top: 1px solid var(--line); }
@@ -125,6 +131,7 @@ html[lang="en"] p:not(.eyebrow) { font-family: var(--english-copy); }
 .journal-feature .eyebrow { color: rgba(255,255,255,.68); }
 .journal-feature h2 { margin: 11px 0 18px; font: 48px/1.1 var(--display); }
 .journal-feature article > p:not(.eyebrow) { color: rgba(255,255,255,.76); font: 16px/1.75 var(--serif); }
+.journal-feature .journal-byline { margin-top: 16px; font: 9px/1.5 var(--sans); letter-spacing: 0; color: rgba(255,255,255,.54); }
 .journal-feature .text-link { margin-top: 28px; color: white; align-self: flex-start; }
 .journal-proof { margin-top: 30px; display: flex; gap: 22px; }
 .journal-proof span { display: flex; flex-direction: column; gap: 5px; color: rgba(255,255,255,.65); font-size: 9px; }
@@ -1278,6 +1285,8 @@ body.ops-mode { background: #f2f5f8; }
   .journal-feature > div { min-height: 105vw; }
   .journal-feature article { padding: 58px 24px 68px; }
   .journal-feature h2 { font-size: 38px; }
+  .faq-answer-first { grid-template-columns: 1fr; gap: 22px; }
+  .faq-answer-first > div { grid-template-columns: 1fr; }
   .faq-groups { padding-bottom: 62px; }
   .faq-group { margin-bottom: 45px; }
   .faq-group h2 { font-size: 25px; }

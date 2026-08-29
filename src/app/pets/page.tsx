@@ -1,9 +1,12 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Heart, ShieldCheck, Sparkles } from "lucide-react";
 import { db } from "@/lib/db";
 import { getLocale } from "@/lib/i18n";
 import { ProductCard } from "@/components/product-card";
+
+export const metadata: Metadata = { title: "寵物印記訂製珠寶", description: "探索 Iara 以毛孩真實肉球或鼻紋轉化而成、由主人佩戴的香港訂製珠寶與紀念作品。", alternates: { canonical: "/pets" }, openGraph: { title: "寵物印記訂製珠寶 | Iara Jewellery", description: "把毛孩獨一無二的真實印記，轉化成主人每天可以佩戴的珠寶。", url: "/pets", type: "website" } };
 
 export const dynamic = "force-dynamic";
 

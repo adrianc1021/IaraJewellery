@@ -1,2 +1,17 @@
 import type { MetadataRoute } from "next";
-export default function robots(): MetadataRoute.Robots { const base=process.env.NEXT_PUBLIC_APP_URL||"http://localhost:3000";return{rules:{userAgent:"*",allow:"/",disallow:["/account","/checkout","/ops","/api"]},sitemap:`${base}/sitemap.xml`}; }
+import { siteUrl } from "@/lib/seo";
+
+const privatePaths = ["/account", "/cart", "/checkout", "/login", "/register", "/forgot-password", "/two-factor", "/order-confirmation", "/ops", "/api"];
+const aiCrawlers = ["OAI-SearchBot", "ChatGPT-User", "GPTBot", "ClaudeBot", "Claude-SearchBot", "Claude-User", "PerplexityBot", "Perplexity-User", "Google-Extended"];
+const publicPaths = ["/", "/llms.txt", "/sitemap.xml", "/api/media/products/"];
+
+export default function robots(): MetadataRoute.Robots {
+  return {
+    rules: [
+      { userAgent: "*", allow: publicPaths, disallow: privatePaths },
+      ...aiCrawlers.map((userAgent) => ({ userAgent, allow: publicPaths, disallow: privatePaths }))
+    ],
+    sitemap: `${siteUrl}/sitemap.xml`,
+    host: siteUrl
+  };
+}

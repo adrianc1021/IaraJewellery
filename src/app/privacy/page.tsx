@@ -1,4 +1,7 @@
+import type { Metadata } from "next";
 import { getLocale } from "@/lib/i18n";
+
+export const metadata: Metadata = { title: "私隱政策", description: "Iara Jewellery 個人資料、訂單、會員、預約及直接促銷資料處理說明。", alternates: { canonical: "/privacy" }, robots: { index: true, follow: true } };
 
 export default async function PrivacyPage() {
   const en = await getLocale() === "en";

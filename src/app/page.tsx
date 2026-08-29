@@ -1,4 +1,5 @@
 import type { CSSProperties } from "react";
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Gem, MapPin, ShieldCheck } from "lucide-react";
@@ -10,6 +11,8 @@ import { getSiteLayout } from "@/lib/site-layout";
 import { getLocale } from "@/lib/i18n";
 import { formatMoney } from "@/lib/format";
 import { localizeProductValue } from "@/lib/product-i18n";
+
+export const metadata: Metadata = { alternates: { canonical: "/" }, openGraph: { url: "/" } };
 
 export const dynamic = "force-dynamic";
 

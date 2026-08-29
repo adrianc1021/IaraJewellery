@@ -7,14 +7,17 @@ import { ProductCard } from "@/components/product-card";
 import { localizeProductValue } from "@/lib/product-i18n";
 import { MobileShopFilters, ShopFilterSidebar } from "@/components/shop-filters";
 
-export async function generateMetadata(): Promise<Metadata> {
+type SearchParams = Promise<Record<string, string | string[] | undefined>>;
+
+export async function generateMetadata({ searchParams }: { searchParams: SearchParams }): Promise<Metadata> {
   const en = await getLocale() === "en";
+  const query = await searchParams;
+  const filtered = Object.keys(query).length > 0;
   return en
-    ? { title: "All Jewellery", description: "Explore the complete Iara Jewellery collection." }
-    : { title: "所有珠寶", description: "探索 Iara Jewellery 全部珠寶作品。" };
+    ? { title: "All Jewellery", description: "Explore rings, necklaces, earrings, bracelets and made-to-order pieces from Iara Jewellery in Hong Kong.", alternates: { canonical: "/shop" }, robots: filtered ? { index: false, follow: true } : undefined, openGraph: { title: "All Jewellery | Iara Jewellery", description: "Explore the complete Iara Jewellery collection.", url: "/shop", type: "website" } }
+    : { title: "所有珠寶", description: "探索 Iara Jewellery 香港珠寶作品，包括戒指、項鏈、耳環、手鏈及訂製作品。", alternates: { canonical: "/shop" }, robots: filtered ? { index: false, follow: true } : undefined, openGraph: { title: "所有珠寶 | Iara Jewellery", description: "探索 Iara Jewellery 全部珠寶作品。", url: "/shop", type: "website" } };
 }
 export const dynamic = "force-dynamic";
-type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 const array = (value: string | string[] | undefined) => value ? (Array.isArray(value) ? value : [value]) : [];
 
 export default async function ShopPage({ searchParams }: { searchParams: SearchParams }) {
