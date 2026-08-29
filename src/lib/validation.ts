@@ -160,3 +160,14 @@ export const memberProfileSchema = z.object({
   locale: z.enum(["zh-HK", "en"]),
   marketingConsent: z.boolean()
 });
+
+export const adminCreateSchema = z.object({
+  name: z.string().trim().min(2).max(80),
+  email: z.email(),
+  password: z.string().min(12).max(128),
+  role: z.enum(["ANALYST", "MARKETING", "WAREHOUSE", "CUSTOMER_SERVICE", "MERCHANDISER", "ADMIN"])
+}).superRefine((value, ctx) => {
+  if (!/[A-Z]/.test(value.password) || !/[a-z]/.test(value.password) || !/[0-9]/.test(value.password)) {
+    ctx.addIssue({ code: "custom", path: ["password"], message: "密碼必須包含大寫、小寫英文字母及數字。" });
+  }
+});

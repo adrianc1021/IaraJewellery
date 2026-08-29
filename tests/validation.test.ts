@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { catalogGroupSchema, checkoutSchema, inventorySchema, paymentMethodsSchema, popupAnnouncementSchema, productCreateSchema, siteLayoutSchema } from "@/lib/validation";
+import { adminCreateSchema, catalogGroupSchema, checkoutSchema, inventorySchema, paymentMethodsSchema, popupAnnouncementSchema, productCreateSchema, siteLayoutSchema } from "@/lib/validation";
 describe("checkout validation",()=>{it("requires a delivery address",()=>{expect(()=>checkoutSchema.parse({email:"a@example.com",customerName:"Ada",phone:"91234567",deliveryMethod:"DELIVERY"})).toThrow();});it("allows store pickup without an address",()=>{expect(checkoutSchema.parse({email:"a@example.com",customerName:"Ada",phone:"91234567",deliveryMethod:"PICKUP"}).deliveryMethod).toBe("PICKUP");});});
 describe("inventory validation",()=>{it("rejects negative stock",()=>{expect(()=>inventorySchema.parse({stockOnHand:-1,reason:"count"})).toThrow();});});
 describe("site layout validation",()=>{
@@ -23,4 +23,10 @@ describe("catalogue validation",()=>{
 });
 describe("payment settings validation",()=>{
   it("accepts enabled payment controls",()=>expect(paymentMethodsSchema.parse({methods:[{code:"FPS",enabled:true}]}).methods[0].enabled).toBe(true));
+});
+describe("admin creation validation",()=>{
+  const valid={name:"Iara Admin",email:"admin@example.com",password:"SecureAdmin123",role:"ADMIN"};
+  it("accepts a valid staff account",()=>expect(adminCreateSchema.parse(valid).role).toBe("ADMIN"));
+  it("rejects weak passwords",()=>expect(()=>adminCreateSchema.parse({...valid,password:"password-only"})).toThrow());
+  it("does not allow super admin elevation",()=>expect(()=>adminCreateSchema.parse({...valid,role:"SUPER_ADMIN"})).toThrow());
 });
