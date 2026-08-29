@@ -345,7 +345,8 @@ html[lang="en"] p:not(.eyebrow) { font-family: var(--english-copy); }
 .trace-process-step h4 { margin: 0 0 13px; font: 19px var(--sans); font-weight: 500; }
 .trace-process-step p { max-width: 220px; margin: 0; color: var(--trace-muted); font: 13px/1.75 var(--sans); }
 .trace-process-step > i { position: absolute; top: -1px; right: -7px; width: 13px; height: 1px; background: rgba(24,33,38,.35); }
-.trace-process-step:hover > span, .trace-process-step:hover > i { color: var(--trace-gold); background: var(--trace-gold); }
+.trace-process-step:hover > span { color: var(--trace-gold); }
+.trace-process-step:hover > i { background: var(--trace-gold); }
 .trace-process-cta { margin-top: 34px; color: var(--trace-ink); font-size: 12px; }
 .trace-atelier-close { padding: 80px 8vw; background: var(--trace-soft); text-align: center; }
 .trace-atelier-close .eyebrow { margin-bottom: 19px; }
