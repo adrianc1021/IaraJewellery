@@ -37,11 +37,15 @@ export default async function ShopPage({ searchParams }: { searchParams: SearchP
   const term = typeof query.q === "string" ? query.q.trim() : "";
   const priceMax = typeof query.priceMax === "string" ? Number(query.priceMax) : 0;
   const audience = query.audience === "PET" ? "PET" : "PEOPLE";
-  const products = await db.product.findMany({ where: { status: "ACTIVE", audience, ...(categories.length ? { category: { in: categories } } : {}), ...(collections.length ? { collection: { in: collections } } : {}), ...(materials.length ? { material: { in: materials } } : {}), ...(term ? { OR: [{ nameZh: { contains: term } }, { nameEn: { contains: term } }, { collection: { contains: term } }, { category: { contains: term } }, { material: { contains: term } }, { gemstone: { contains: term } }] } : {}) }, include: { variants: { orderBy: { priceMinor: "asc" } } }, orderBy: { createdAt: "desc" } });
+  const products = await db.product.findMany({ where: { status: "ACTIVE", audience, ...(categories.length ? { category: { in: categories } } : {}), ...(collections.length ? { collection: { in: collections } } : {}), ...(materials.length ? { material: { in: materials } } : {}), ...(term ? { OR: [{ nameZh: { contains: term } }, { nameEn: { contains: term } }, { collection: { contains: term } }, { category: { contains: term } }, { material: { contains: term } }, { gemstone: { contains: term } }] } : {}) }, include: { variants: { orderBy: { priceMinor: "asc" } } }, orderBy: { createdAt: "desc" }, ...(isNew || isBridal ? { take: 24 } : {}) });
   if (query.sort === "price-asc") products.sort((a, b) => (a.variants[0]?.priceMinor || 0) - (b.variants[0]?.priceMinor || 0));
   if (query.sort === "price-desc") products.sort((a, b) => (b.variants[0]?.priceMinor || 0) - (a.variants[0]?.priceMinor || 0));
+  if (isNew) return <NewArrivalsExperience products={products} locale={locale} />;
+  if (isBridal) return <BridalExperience products={products} locale={locale} />;
+  const catalogGroups = await db.catalogGroup.findMany({ where: { active: true }, orderBy: { sortOrder: "asc" } });
+  if (isCollections) return <CollectionsExperience groups={catalogGroups.filter((group) => group.kind === "COLLECTION")} products={products} locale={locale} />;
   const visibleProducts = products.filter((product) => (!gemstones.length || gemstones.includes(product.gemstone)) && (!priceMax || (product.variants[0]?.priceMinor || 0) <= priceMax * 100));
-  const [filterData, catalogGroups] = await Promise.all([db.product.findMany({ where: { status: "ACTIVE", audience }, select: { category: true, collection: true, material: true, gemstone: true } }), db.catalogGroup.findMany({ where: { active: true }, orderBy: { sortOrder: "asc" } })]);
+  const filterData = await db.product.findMany({ where: { status: "ACTIVE", audience }, select: { category: true, collection: true, material: true, gemstone: true } });
   const unique = (key: "category" | "collection" | "material" | "gemstone") => [...new Set(filterData.map((item) => item[key]))].sort();
   const categoryOptions = catalogGroups.filter((group) => group.kind === "CATEGORY" && filterData.some((item) => item.category === group.nameZh));
   const collectionOptions = catalogGroups.filter((group) => group.kind === "COLLECTION" && filterData.some((item) => item.collection === group.nameZh));
@@ -65,9 +69,6 @@ export default async function ShopPage({ searchParams }: { searchParams: SearchP
     const search = params.toString();
     return `/shop${search ? `?${search}` : ""}`;
   };
-  if (isNew) return <NewArrivalsExperience products={products} locale={locale} />;
-  if (isCollections) return <CollectionsExperience groups={collectionOptions} products={products} locale={locale} />;
-  if (isBridal) return <BridalExperience products={products} locale={locale} />;
   return <main id="main" className="page-shell">
     <div className="breadcrumb container"><Link href="/">{en ? "Home" : "首頁"}</Link><span>/</span><span>{en ? "Jewellery" : "所有珠寶"}</span></div>
     <header className="page-heading shop-heading container">
