@@ -19,6 +19,9 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   compress: true,
+  // Keep canonical and descriptive metadata in the initial document head for
+  // search crawlers, AI answer engines and audit tools that do not execute JS.
+  htmlLimitedBots: /.*/,
   images: {
     formats: ["image/avif", "image/webp"],
     minimumCacheTTL: 86400,

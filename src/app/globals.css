@@ -405,6 +405,7 @@ html[lang="en"] p:not(.eyebrow) { font-family: var(--english-copy); }
 .empty-state h2 { margin: 14px 0 5px; font-size: 28px; }
 .empty-state p { color: var(--muted); }
 .loading-state { min-height: 300px; display: grid; place-items: center; color: var(--muted); }
+body > main.loading-state { min-height: 100svh; }
 .spinner { width: 24px; height: 24px; border: 2px solid var(--line); border-top-color: var(--brand); border-radius: 50%; animation: spin .7s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 .toast { position: fixed; z-index: 200; left: 50%; bottom: 24px; padding: 11px 18px; transform: translate(-50%, 20px); background: var(--ink); color: white; opacity: 0; visibility: hidden; transition: .2s; font-size: 11px; }

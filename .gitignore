@@ -3,6 +3,7 @@ node_modules/
 .next/
 out/
 coverage/
+.lighthouseci/
 *.tsbuildinfo
 *.log
 .DS_Store
