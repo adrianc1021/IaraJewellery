@@ -136,7 +136,7 @@ export function MobileShopFilters(props: SharedProps & { sort: string; sortField
       </div>
     </div>
 
-    <div className={`shop-filter-drawer ${open ? "open" : ""}`} aria-hidden={!open}>
+    <div className={`shop-filter-drawer ${open ? "open" : ""}`} aria-hidden={!open} inert={!open}>
       <button className="shop-filter-backdrop" type="button" aria-label={props.labels.close} onClick={() => setOpen(false)} />
       <section id="shop-filter-drawer" role="dialog" aria-modal="true" aria-labelledby="shop-filter-title">
         <header>

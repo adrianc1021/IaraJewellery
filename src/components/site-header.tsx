@@ -18,7 +18,10 @@ export function SiteHeader({ locale }: { locale: Locale }) {
   const { data: session } = useSession();
   const staff = session && session.user.role !== "CUSTOMER";
   const en = locale === "en";
-  useEffect(() => { fetch("/api/cart").then((response) => response.ok ? response.json() : null).then((data) => data && setCartCount(data.itemCount)).catch(() => undefined); }, []);
+  useEffect(() => {
+    const refreshCart = () => { fetch("/api/cart").then((response) => response.ok ? response.json() : null).then((data) => data && setCartCount(data.itemCount)).catch(() => undefined); };
+    refreshCart(); window.addEventListener("iara:cart-updated", refreshCart); return () => window.removeEventListener("iara:cart-updated", refreshCart);
+  }, []);
   useEffect(() => { document.body.classList.toggle("no-scroll", open || searchOpen); return () => document.body.classList.remove("no-scroll"); }, [open, searchOpen]);
   useEffect(() => { const update = () => setScrolled(window.scrollY > 18); update(); window.addEventListener("scroll", update, { passive: true }); return () => window.removeEventListener("scroll", update); }, []);
   const links = en ? [["New", "/shop?sort=newest"], ["Jewellery", "/shop"], ["Collections", "/shop?view=collections"], ["Bridal", "/shop?collection=ARIA+BRIDAL"], ["Pets", "/pets"], ["Book a viewing", "/appointment"]] : [["新品", "/shop?sort=newest"], ["珠寶", "/shop"], ["系列", "/shop?view=collections"], ["婚嫁", "/shop?collection=ARIA+BRIDAL"], ["寵物飾品", "/pets"], ["預約鑑賞", "/appointment"]];

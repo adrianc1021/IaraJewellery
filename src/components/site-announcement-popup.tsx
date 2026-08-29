@@ -47,7 +47,7 @@ export function SiteAnnouncementPopup({ locale = "zh-HK" }: { locale?: Locale })
   }
 
   if (!announcement) return null;
-  return <div className={`site-popup ${visible ? "visible" : ""}`} aria-hidden={!visible}>
+  return <div className={`site-popup ${visible ? "visible" : ""}`} aria-hidden={!visible} inert={!visible}>
     <button className="site-popup-backdrop" aria-label={en ? "Close notice" : "關閉通告"} onClick={dismiss} tabIndex={visible ? 0 : -1} />
     <section className={`site-popup-dialog ${announcement.imageUrl ? "with-image" : ""}`} role="dialog" aria-modal="true" aria-labelledby="site-popup-title">
       {announcement.imageUrl && <div className="site-popup-image" style={{ backgroundImage: `url(${announcement.imageUrl})` }} role="img" aria-label={en ? "Iara notice image" : "Iara 通告圖片"} />}
