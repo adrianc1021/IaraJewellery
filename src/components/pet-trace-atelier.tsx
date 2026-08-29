@@ -19,8 +19,8 @@ const storyImages = {
     detail: "/images/pet-trace/paw-detail.jpg"
   },
   nose: {
-    relation: "/images/pet-trace/nose-story.jpg",
-    detail: "/images/pet-trace/nose-detail.jpg"
+    relation: "/images/pet-trace/nose-wearer.jpg",
+    detail: "/images/pet-trace/nose-story.jpg"
   }
 };
 
@@ -38,7 +38,7 @@ function StoryCard({ type, locale, product }: { type: "paw" | "nose"; locale: Lo
   const images = paw ? storyImages.paw : storyImages.nose;
   const productName = paw ? (en ? "Marea Paw Impression Pendant" : "Marea 的肉球印記吊墜") : (en ? "Luna Nose Impression Disc" : "Luna 的鼻紋印記圓牌");
   const productMaterial = product?.material;
-  const relationAlt = paw ? (en ? "A wearer with their companion beside a bespoke paw impression pendant" : "主人佩戴肉球印記訂製吊墜，毛孩自然靠在身旁") : (en ? "A bespoke nose impression pendant held in a wearer's hand" : "主人手中展示由鼻紋轉化而成的訂製圓牌珠寶");
+  const relationAlt = paw ? (en ? "A wearer with their companion beside a bespoke paw impression pendant" : "主人佩戴肉球印記訂製吊墜，毛孩自然靠在身旁") : (en ? "A wearer with their companion beside a bespoke nose impression pendant" : "主人佩戴鼻紋印記吊墜，與毛孩自然相伴");
   const detailAlt = paw ? (en ? "Close detail of the paw impression jewellery surface" : "肉球印記訂製珠寶的紋理細節") : (en ? "Close detail of an irregular nose impression on a metal pendant" : "鼻紋印記金屬圓牌及吊鏈的微距細節");
 
   return <article className={`trace-story-card ${paw ? "trace-story-card-large" : "trace-story-card-small"}`} onMouseEnter={() => setShowDetail(true)} onMouseLeave={() => setShowDetail(false)}>
