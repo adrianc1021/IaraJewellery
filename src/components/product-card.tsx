@@ -23,9 +23,12 @@ export function ProductCard({ product, locale = "zh-HK" }: ProductCardProps) {
   const en = locale === "en";
   const name = en && product.nameEn ? product.nameEn : product.nameZh;
   async function wishlist() {
-    const response = await fetch("/api/wishlist", { method: wished ? "DELETE" : "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ productId: product.id }) });
-    if (response.status === 401) { location.href = `/login?next=/product/${product.slug}`; return; }
-    if (response.ok) setWished(!wished);
+    try {
+      const response = await fetch("/api/wishlist", { method: wished ? "DELETE" : "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ productId: product.id }) });
+      if (response.status === 401) { location.href = `/login?next=/product/${product.slug}`; return; }
+      if (response.ok) setWished(!wished); else setMessage(en ? "Unable to update wishlist" : "暫時未能更新收藏");
+    } catch { setMessage(en ? "Unable to update wishlist" : "暫時未能更新收藏"); }
+    window.setTimeout(() => setMessage(""), 1800);
   }
   async function quickAdd() {
     if (adding) return;

@@ -20,11 +20,13 @@ export function LayoutSettingsForm({ initial }: { initial: SiteLayoutValues }) {
     event.preventDefault();
     setBusy(true);
     setMessage("");
-    const response = await fetch("/api/ops/layout", { method: "PATCH", headers: { "content-type": "application/json" }, body: JSON.stringify(values) });
-    const data = await response.json();
-    setBusy(false);
-    if (!response.ok) { setMessage(data.error || "暫時未能儲存版面設定。"); return; }
-    setMessage("版面設定已發佈。");
+    try {
+      const response = await fetch("/api/ops/layout", { method: "PATCH", headers: { "content-type": "application/json" }, body: JSON.stringify(values) });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) { setMessage(data.error || "暫時未能儲存版面設定。"); return; }
+      setMessage("版面設定已發佈。");
+    } catch { setMessage("網絡連線失敗，請稍後再試。"); }
+    finally { setBusy(false); }
     setTimeout(() => location.reload(), 700);
   }
 
