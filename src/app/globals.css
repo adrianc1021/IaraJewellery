@@ -469,10 +469,11 @@ body > main.loading-state { min-height: 100svh; }
 .collection-worlds header { margin-bottom: 42px; }
 .collection-worlds h2 { margin-top: 10px; font: 38px/1.1 var(--display); }
 .collection-world-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 70px 18px; }
-.collection-world-grid article.featured { grid-row: span 2; }
-.collection-world-grid article:nth-child(even) { margin-top: 90px; }
+.collection-world-grid article.featured { grid-row: auto; }
+.collection-world-grid article:nth-child(even) { margin-top: 44px; }
 .collection-world-grid a { display: block; }
 .collection-world-image { display: block; min-height: 430px; position: relative; overflow: hidden; background: var(--paper); }
+.collection-world-grid article.featured .collection-world-image { min-height: 500px; }
 .collection-world-grid article:not(.featured) .collection-world-image { min-height: 340px; }
 .collection-world-image img { object-fit: cover; transition: transform .7s ease; }
 .collection-world-grid a:hover img { transform: scale(1.025); }
@@ -1164,6 +1165,7 @@ body.ops-mode { background: #f2f5f8; }
   .collection-world-grid article.featured { grid-row: auto; }
   .collection-world-grid article:nth-child(even) { margin-top: 0; }
   .collection-world-image, .collection-world-grid article:not(.featured) .collection-world-image { min-height: 420px; }
+  .collection-world-grid article.featured .collection-world-image { min-height: 420px; }
   .bridal-guide { padding: 75px 20px; }
   .bridal-guide-heading { margin-bottom: 38px; }
   .bridal-guide-grid { grid-template-columns: 1fr; }
