@@ -26,7 +26,11 @@ export const checkoutSchema = z.object({
   if (value.deliveryMethod === "DELIVERY" && !value.shippingAddress?.trim()) ctx.addIssue({ code: "custom", path: ["shippingAddress"], message: "請填寫配送地址。" });
 });
 
-export const orderStatusSchema = z.object({ orderStatus: z.enum(["PROCESSING", "READY_FOR_PICKUP", "SHIPPED", "DELIVERED", "CANCELLED"]), note: z.string().max(500).optional() });
+export const orderStatusSchema = z.object({
+  orderStatus: z.enum(["PROCESSING", "READY_FOR_PICKUP", "SHIPPED", "DELIVERED", "CANCELLED"]).optional(),
+  paymentStatus: z.enum(["PENDING", "AWAITING_PAYMENT", "PAID", "PAYMENT_FAILED", "FAILED", "REFUNDED"]).optional(),
+  note: z.string().max(500).optional()
+}).refine((value) => value.orderStatus || value.paymentStatus, "至少需要更新一項訂單狀態。");
 export const inventorySchema = z.object({ stockOnHand: z.number().int().min(0).max(100000), reason: z.string().min(3).max(300) });
 export const appointmentStatusSchema = z.object({ status: z.enum(["NEW", "CONFIRMED", "COMPLETED", "NO_SHOW", "CANCELLED"]), assignedTo: z.string().max(80).optional(), internalNote: z.string().max(500).optional() });
 
@@ -37,7 +41,16 @@ export const siteLayoutSchema = z.object({
   newArrivalsColumns: z.number().int().min(2).max(5),
   productImageRatio: z.enum(["1 / 1", "3 / 4", "4 / 5"]),
   editorialHeight: z.number().int().min(460).max(820),
-  curationTileHeight: z.number().int().min(300).max(620)
+  curationTileHeight: z.number().int().min(300).max(620),
+  categoryColumns: z.number().int().min(2).max(4).optional(),
+  heroContentPosition: z.enum(["left", "center"]).optional(),
+  showNewArrivals: z.boolean().optional(),
+  showCategories: z.boolean().optional(),
+  showSignature: z.boolean().optional(),
+  showCuration: z.boolean().optional(),
+  showPet: z.boolean().optional(),
+  showCraft: z.boolean().optional(),
+  showServices: z.boolean().optional()
 });
 
 const optionalUrl = z.union([z.literal(""), z.url().refine((value) => value.startsWith("https://"), "只接受 HTTPS 網址。")]).optional();

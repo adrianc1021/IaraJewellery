@@ -13,6 +13,15 @@ export async function getSiteLayout(): Promise<SiteLayoutValues> {
     newArrivalsColumns: settings.newArrivalsColumns,
     productImageRatio: settings.productImageRatio,
     editorialHeight: settings.editorialHeight,
-    curationTileHeight: settings.curationTileHeight
+    curationTileHeight: settings.curationTileHeight,
+    categoryColumns: settings.categoryColumns ?? DEFAULT_SITE_LAYOUT.categoryColumns,
+    heroContentPosition: (settings.heroContentPosition ?? DEFAULT_SITE_LAYOUT.heroContentPosition) as SiteLayoutValues["heroContentPosition"],
+    showNewArrivals: settings.showNewArrivals ?? true,
+    showCategories: settings.showCategories ?? true,
+    showSignature: settings.showSignature ?? true,
+    showCuration: settings.showCuration ?? true,
+    showPet: settings.showPet ?? true,
+    showCraft: settings.showCraft ?? true,
+    showServices: settings.showServices ?? true
   };
 }

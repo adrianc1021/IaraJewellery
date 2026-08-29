@@ -55,10 +55,12 @@ export default async function HomePage() {
     "--home-new-columns": layout.newArrivalsColumns,
     "--home-product-ratio": layout.productImageRatio,
     "--home-editorial-height": `${layout.editorialHeight}px`,
-    "--home-curation-height": `${layout.curationTileHeight}px`
+    "--home-curation-height": `${layout.curationTileHeight}px`,
+    "--home-category-columns": layout.categoryColumns,
+    "--home-hero-content-margin": layout.heroContentPosition === "center" ? "auto" : "8vw"
   };
 
-  return <main id="main" className="page-shell homepage-layout" style={style}>
+  return <main id="main" className="page-shell homepage-layout" style={style} data-show-new-arrivals={layout.showNewArrivals} data-show-categories={layout.showCategories} data-show-signature={layout.showSignature} data-show-curation={layout.showCuration} data-show-pet={layout.showPet} data-show-craft={layout.showCraft} data-show-services={layout.showServices}>
     <section className="hero"><Image src="https://images.unsplash.com/photo-1611085583191-a3b181a88401?auto=format&fit=crop&w=2200&q=90" alt={en ? "Woman wearing an Iara pendant" : "佩戴 Iara 吊墜的女性"} fill priority sizes="100vw" /><div className="hero-overlay" /><div className="hero-content"><p className="eyebrow">THE TIDE OF LIGHT · 2026</p><h1>{en ? "Where light lingers" : "光，在此停留"}</h1><p>{en ? "Fluid forms hold every light that belongs to you." : "以海的流動姿態，凝住每一道屬於你的光。"}</p><div className="hero-actions"><Link className="button button-light" href="/shop?collection=LUMEA">{en ? "Shop the collection" : "選購全新系列"}<ArrowRight size={15} /></Link><Link className="hero-secondary-link" href="/appointment">{en ? "Book a private viewing" : "預約私人鑑賞"}</Link></div></div></section>
     <nav className="home-retail-nav" aria-label={en ? "Start shopping" : "快速選購"}>{discoveryLinks.map((item) => <Link href={item.href} key={item.href}><span><strong>{en ? item.labelEn : item.labelZh}</strong><small>{en ? item.detailEn : item.detailZh}</small></span><ArrowRight size={16} /></Link>)}</nav>
     <section className="section home-product-showcase" id="new-arrivals"><div className="section-heading reveal-item"><div><p className="eyebrow">NEW ARRIVALS</p><h2>{en ? "Latest jewellery" : "最新上架"}</h2><p>{en ? "Explore new pieces, signature designs and jewellery available to order online." : "一次瀏覽全新作品、標誌設計及可於網上選購的珠寶。"}</p></div><Link className="button button-primary" href="/shop?sort=newest">{en ? "Shop all jewellery" : "選購所有珠寶"} <ArrowRight size={14} /></Link></div><HomeProductRail products={products.slice(0, 8)} locale={locale} /></section>

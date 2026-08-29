@@ -15,6 +15,7 @@ export function LayoutSettingsForm({ initial }: { initial: SiteLayoutValues }) {
   const [message, setMessage] = useState("");
   const [busy, setBusy] = useState(false);
   const updateNumber = (key: NumericKey, value: number) => setValues((current) => ({ ...current, [key]: value }));
+  const updateBoolean = (key: keyof Pick<SiteLayoutValues, "showNewArrivals" | "showCategories" | "showSignature" | "showCuration" | "showPet" | "showCraft" | "showServices">, value: boolean) => setValues((current) => ({ ...current, [key]: value }));
 
   async function save(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -42,11 +43,14 @@ export function LayoutSettingsForm({ initial }: { initial: SiteLayoutValues }) {
       <RangeControl label="板塊上下留白" value={values.sectionSpacing} min={56} max={140} step={4} onChange={(value) => updateNumber("sectionSpacing", value)} />
       <RangeControl label="工藝故事高度" value={values.editorialHeight} min={460} max={820} step={20} onChange={(value) => updateNumber("editorialHeight", value)} />
       <RangeControl label="策展格子高度" value={values.curationTileHeight} min={300} max={620} step={20} onChange={(value) => updateNumber("curationTileHeight", value)} />
+      <RangeControl label="分類欄數" value={values.categoryColumns} min={2} max={4} step={1} unit=" 欄" onChange={(value) => updateNumber("categoryColumns", value)} />
     </div>
     <div className="layout-choice-grid">
       <fieldset><legend>本季新作：每行格數</legend><div className="layout-segments">{[2, 3, 4, 5].map((columns) => <button key={columns} type="button" aria-pressed={values.newArrivalsColumns === columns} onClick={() => updateNumber("newArrivalsColumns", columns)}>{columns}</button>)}</div></fieldset>
       <fieldset><legend>商品圖片比例</legend><div className="layout-segments">{[["1 / 1", "正方"], ["3 / 4", "修長"], ["4 / 5", "經典"]].map(([ratio, label]) => <button key={ratio} type="button" aria-pressed={values.productImageRatio === ratio} onClick={() => setValues((current) => ({ ...current, productImageRatio: ratio }))}>{label}</button>)}</div></fieldset>
+      <fieldset><legend>Hero 內容位置</legend><div className="layout-segments">{[["left", "左側"], ["center", "置中"]].map(([position, label]) => <button key={position} type="button" aria-pressed={values.heroContentPosition === position} onClick={() => setValues((current) => ({ ...current, heroContentPosition: position as SiteLayoutValues["heroContentPosition"] }))}>{label}</button>)}</div></fieldset>
     </div>
+    <fieldset className="layout-visibility"><legend>首頁章節顯示</legend><div className="layout-toggle-grid">{[["showNewArrivals", "最新上架"], ["showCategories", "珠寶分類"], ["showSignature", "Signature Piece"], ["showCuration", "依時刻選擇"], ["showPet", "Pet Atelier"], ["showCraft", "工藝故事"], ["showServices", "服務體驗"]].map(([key, label]) => <label key={key}><span>{label}</span><input type="checkbox" checked={Boolean(values[key as keyof SiteLayoutValues])} onChange={(event) => updateBoolean(key as keyof Pick<SiteLayoutValues, "showNewArrivals" | "showCategories" | "showSignature" | "showCuration" | "showPet" | "showCraft" | "showServices">, event.target.checked)} /></label>)}</div></fieldset>
     <div className="layout-preview" aria-label="本季新作格子預覽"><div style={{ gridTemplateColumns: `repeat(${values.newArrivalsColumns}, 1fr)` }}>{Array.from({ length: values.newArrivalsColumns }).map((_, index) => <span key={index} style={{ aspectRatio: values.productImageRatio }} />)}</div></div>
     <div className="layout-actions"><button type="button" className="button button-secondary" onClick={reset}><RotateCcw size={15} />回復預設</button><a className="button button-secondary" href="/" target="_blank" rel="noreferrer"><Eye size={15} />預覽首頁</a><button className="button button-primary" disabled={busy}><Save size={15} />{busy ? "正在發佈…" : "儲存並發佈"}</button>{message && <span className={message.includes("未能") ? "form-error" : "form-success"} role="status">{message}</span>}</div>
   </form>;

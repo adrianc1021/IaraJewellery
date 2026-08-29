@@ -468,6 +468,15 @@ model SiteLayoutSetting {
   productImageRatio      String   @default("4 / 5")
   editorialHeight        Int      @default(660)
   curationTileHeight     Int      @default(460)
+  categoryColumns        Int      @default(4)
+  heroContentPosition    String   @default("left")
+  showNewArrivals        Boolean  @default(true)
+  showCategories         Boolean  @default(true)
+  showSignature          Boolean  @default(true)
+  showCuration           Boolean  @default(true)
+  showPet                Boolean  @default(true)
+  showCraft              Boolean  @default(true)
+  showServices            Boolean  @default(true)
   updatedBy              String?
   updatedAt              DateTime @updatedAt
 }

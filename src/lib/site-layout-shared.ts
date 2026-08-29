@@ -5,7 +5,16 @@ export const DEFAULT_SITE_LAYOUT = {
   newArrivalsColumns: 4,
   productImageRatio: "4 / 5",
   editorialHeight: 660,
-  curationTileHeight: 460
+  curationTileHeight: 460,
+  categoryColumns: 4,
+  heroContentPosition: "left",
+  showNewArrivals: true,
+  showCategories: true,
+  showSignature: true,
+  showCuration: true,
+  showPet: true,
+  showCraft: true,
+  showServices: true
 } as const;
 
 export type SiteLayoutValues = {
@@ -16,4 +25,13 @@ export type SiteLayoutValues = {
   productImageRatio: string;
   editorialHeight: number;
   curationTileHeight: number;
+  categoryColumns: number;
+  heroContentPosition: "left" | "center";
+  showNewArrivals: boolean;
+  showCategories: boolean;
+  showSignature: boolean;
+  showCuration: boolean;
+  showPet: boolean;
+  showCraft: boolean;
+  showServices: boolean;
 };
