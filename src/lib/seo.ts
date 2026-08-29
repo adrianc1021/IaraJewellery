@@ -1,4 +1,18 @@
-export const siteUrl = (process.env.NEXT_PUBLIC_APP_URL || "https://iarahk.com").replace(/\/$/, "");
+const officialSiteUrl = "https://iarahk.com";
+
+export function normalizeSiteUrl(value?: string) {
+  try {
+    const url = new URL(value || officialSiteUrl);
+    if (["irarhk.com", "www.irarhk.com", "www.iarahk.com"].includes(url.hostname.toLowerCase())) {
+      return officialSiteUrl;
+    }
+    return url.origin;
+  } catch {
+    return officialSiteUrl;
+  }
+}
+
+export const siteUrl = normalizeSiteUrl(process.env.NEXT_PUBLIC_APP_URL);
 
 export const seoConfig = {
   name: "Iara Jewellery",
