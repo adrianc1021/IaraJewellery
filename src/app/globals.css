@@ -481,6 +481,13 @@ body > main.loading-state { min-height: 100svh; }
 .collection-world-copy strong { font: 28px var(--display); font-weight: 400; }
 .collection-world-copy em { display: inline-flex; align-items: center; gap: 5px; color: var(--brand); font-size: 9px; font-style: normal; }
 .bridal-experience { background: #f7f3ed; }
+.bridal-experience .experience-hero { min-height: min(690px, calc(100svh - var(--header))); }
+.bridal-experience .experience-hero > img { object-position: center 52%; }
+.bridal-experience .experience-hero-copy { width: min(470px, 86vw); margin: 0 0 92px 8vw; }
+.bridal-experience .experience-hero-copy h1 { margin: 16px 0 20px; font-size: clamp(52px, 5.7vw, 78px); letter-spacing: .015em; }
+.bridal-experience .experience-hero-copy > p:not(.eyebrow) { max-width: 420px; font-size: 16px; line-height: 1.75; }
+.bridal-experience .experience-hero-copy .button-light { min-height: 0; margin-top: 28px; padding: 12px 0 10px; border: 0; border-bottom: 1px solid rgba(255,255,255,.82); background: transparent; color: white; font-size: 11px; }
+.bridal-experience .experience-hero-copy .button-light:hover { background: transparent; color: white; opacity: .72; }
 .experience-hero-bridal .experience-hero-shade { background: linear-gradient(90deg, rgba(47,40,34,.48), rgba(47,40,34,.03) 75%); }
 .bridal-guide { padding-block: 115px; }
 .bridal-guide-heading { max-width: 600px; margin-bottom: 55px; }
@@ -1137,6 +1144,7 @@ body.ops-mode { background: #f2f5f8; }
   .shop-results .product-grid { grid-template-columns: repeat(2, 1fr); }
   .experience-hero { min-height: 620px; }
   .experience-hero-copy { margin: 0 20px 58px; }
+  .bridal-experience .experience-hero-copy { margin: 0 20px 58px; }
   .experience-hero-copy h1 { font-size: 56px; }
   .experience-hero-copy > p:not(.eyebrow) { font-size: 16px; }
   .experience-intro { padding: 78px 22px 68px; }
