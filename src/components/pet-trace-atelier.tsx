@@ -15,12 +15,12 @@ type PetProduct = {
 
 const storyImages = {
   paw: {
-    relation: "https://images.unsplash.com/photo-1522276498395-f4f68f7f8454?auto=format&fit=crop&w=1400&q=88",
-    detail: "/images/craft/polish-inspection.jpg"
+    relation: "/images/pet-trace/paw-story.jpg",
+    detail: "/images/pet-trace/paw-detail.jpg"
   },
   nose: {
-    relation: "/images/craft/hand-setting.jpg",
-    detail: "/images/craft/stone-selection.jpg"
+    relation: "/images/pet-trace/nose-story.jpg",
+    detail: "/images/pet-trace/nose-detail.jpg"
   }
 };
 
