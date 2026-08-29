@@ -6,13 +6,20 @@ import { getLocale } from "@/lib/i18n";
 import { ProductCard } from "@/components/product-card";
 import { localizeProductValue } from "@/lib/product-i18n";
 import { MobileShopFilters, ShopFilterSidebar } from "@/components/shop-filters";
+import { BridalExperience, CollectionsExperience, NewArrivalsExperience } from "@/components/shop-experiences";
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 
 export async function generateMetadata({ searchParams }: { searchParams: SearchParams }): Promise<Metadata> {
   const en = await getLocale() === "en";
   const query = await searchParams;
+  const isNew = query.sort === "newest" && !query.view && !query.q && !query.category && !query.collection && !query.material && !query.gemstone && !query.priceMax && !query.audience;
+  const isCollections = query.view === "collections";
+  const isBridal = (Array.isArray(query.collection) ? query.collection : [query.collection]).includes("ARIA BRIDAL");
   const filtered = Object.keys(query).length > 0;
+  if (isNew) return en ? { title: "New Arrivals | Iara Jewellery", description: "Discover the latest Iara Jewellery pieces, newly released from our Hong Kong atelier.", alternates: { canonical: "/shop?sort=newest" }, openGraph: { title: "New Arrivals | Iara Jewellery", description: "Discover the latest Iara Jewellery pieces.", url: "/shop?sort=newest", type: "website" } } : { title: "最新作品 | Iara Jewellery", description: "探索 Iara Jewellery 最新登場的珠寶作品。", alternates: { canonical: "/shop?sort=newest" }, openGraph: { title: "最新作品 | Iara Jewellery", description: "探索 Iara Jewellery 最新登場的珠寶作品。", url: "/shop?sort=newest", type: "website" } };
+  if (isCollections) return en ? { title: "Collections | Iara Jewellery", description: "Explore the distinct jewellery worlds and design languages of Iara Jewellery.", alternates: { canonical: "/shop?view=collections" }, openGraph: { title: "Collections | Iara Jewellery", description: "Explore the distinct jewellery worlds of Iara Jewellery.", url: "/shop?view=collections", type: "website" } } : { title: "IARA 系列 | Iara Jewellery", description: "走進 Iara Jewellery 各個珠寶系列的設計故事與作品。", alternates: { canonical: "/shop?view=collections" }, openGraph: { title: "IARA 系列 | Iara Jewellery", description: "走進 Iara Jewellery 各個珠寶系列的設計故事。", url: "/shop?view=collections", type: "website" } };
+  if (isBridal) return en ? { title: "Bridal Jewellery | Iara Jewellery", description: "Explore Iara bridal jewellery and book a private viewing for engagement and wedding rings.", alternates: { canonical: "/shop?collection=ARIA%20BRIDAL" }, openGraph: { title: "Bridal Jewellery | Iara Jewellery", description: "A considered way to choose your bridal jewellery.", url: "/shop?collection=ARIA%20BRIDAL", type: "website" } } : { title: "婚嫁珠寶 | Iara Jewellery", description: "探索 Iara 婚嫁珠寶、求婚戒指、結婚戒指及私人鑑賞服務。", alternates: { canonical: "/shop?collection=ARIA%20BRIDAL" }, openGraph: { title: "婚嫁珠寶 | Iara Jewellery", description: "從承諾的一刻，到相伴的每一天。", url: "/shop?collection=ARIA%20BRIDAL", type: "website" } };
   return en
     ? { title: "All Jewellery", description: "Explore rings, necklaces, earrings, bracelets and made-to-order pieces from Iara Jewellery in Hong Kong.", alternates: { canonical: "/shop" }, robots: filtered ? { index: false, follow: true } : undefined, openGraph: { title: "All Jewellery | Iara Jewellery", description: "Explore the complete Iara Jewellery collection.", url: "/shop", type: "website" } }
     : { title: "所有珠寶", description: "探索 Iara Jewellery 香港珠寶作品，包括戒指、項鏈、耳環、手鏈及訂製作品。", alternates: { canonical: "/shop" }, robots: filtered ? { index: false, follow: true } : undefined, openGraph: { title: "所有珠寶 | Iara Jewellery", description: "探索 Iara Jewellery 全部珠寶作品。", url: "/shop", type: "website" } };
@@ -23,6 +30,9 @@ const array = (value: string | string[] | undefined) => value ? (Array.isArray(v
 export default async function ShopPage({ searchParams }: { searchParams: SearchParams }) {
   const [query, locale] = await Promise.all([searchParams, getLocale()]);
   const en = locale === "en";
+  const isNew = query.sort === "newest" && !query.view && !query.q && !query.category && !query.collection && !query.material && !query.gemstone && !query.priceMax && !query.audience;
+  const isCollections = query.view === "collections";
+  const isBridal = (Array.isArray(query.collection) ? query.collection : [query.collection]).includes("ARIA BRIDAL");
   const categories = array(query.category), collections = array(query.collection), materials = array(query.material), gemstones = array(query.gemstone);
   const term = typeof query.q === "string" ? query.q.trim() : "";
   const priceMax = typeof query.priceMax === "string" ? Number(query.priceMax) : 0;
@@ -55,6 +65,9 @@ export default async function ShopPage({ searchParams }: { searchParams: SearchP
     const search = params.toString();
     return `/shop${search ? `?${search}` : ""}`;
   };
+  if (isNew) return <NewArrivalsExperience products={products} locale={locale} />;
+  if (isCollections) return <CollectionsExperience groups={collectionOptions} products={products} locale={locale} />;
+  if (isBridal) return <BridalExperience products={products} locale={locale} />;
   return <main id="main" className="page-shell">
     <div className="breadcrumb container"><Link href="/">{en ? "Home" : "首頁"}</Link><span>/</span><span>{en ? "Jewellery" : "所有珠寶"}</span></div>
     <header className="page-heading shop-heading container">

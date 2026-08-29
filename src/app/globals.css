@@ -440,6 +440,62 @@ body > main.loading-state { min-height: 100svh; }
 .shop-filter-options input { flex: 0 0 auto; width: 13px; height: 13px; margin: 0; accent-color: var(--brand); }
 .filter-sidebar > .button { width: 100%; min-height: 40px; margin-top: 18px; padding: 9px 13px; font-size: 9px; }
 .shop-results .product-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.shop-experience { background: var(--white); }
+.experience-hero { min-height: min(720px, calc(100svh - var(--header))); position: relative; display: flex; align-items: flex-end; overflow: hidden; color: white; }
+.experience-hero > img { object-fit: cover; }
+.experience-hero-shade { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(20,31,42,.62), rgba(20,31,42,.08) 72%); }
+.experience-hero-copy { position: relative; z-index: 1; width: min(590px, 88vw); margin: 0 0 86px 8vw; }
+.experience-hero-copy .eyebrow { color: rgba(255,255,255,.78); }
+.experience-hero-copy h1 { margin: 13px 0 17px; font: clamp(54px, 7vw, 96px)/.98 var(--display); }
+.experience-hero-copy > p:not(.eyebrow) { max-width: 470px; font: 19px/1.7 var(--serif); }
+.text-link-light { color: white; border-color: rgba(255,255,255,.8); }
+.experience-intro { max-width: 680px; margin: 0 auto; padding: 120px 24px 105px; text-align: center; }
+.experience-intro h2, .collections-heading h1, .bridal-guide h2, .bridal-products h2 { margin: 13px 0 17px; font: 48px/1.08 var(--display); }
+.experience-intro > p:last-child, .collections-heading > p:last-child { margin: 0 auto; color: var(--muted); font: 17px/1.8 var(--serif); }
+.new-arrivals-editorial { padding-bottom: 125px; }
+.new-arrivals-feature { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(260px, .65fr); align-items: end; gap: clamp(34px, 6vw, 100px); margin-bottom: 70px; }
+.new-arrivals-feature-image { min-height: 580px; position: relative; background: var(--paper); }
+.new-arrivals-feature-image img { object-fit: cover; }
+.new-arrivals-feature h2 { margin: 12px 0; font: 42px/1.08 var(--display); }
+.new-arrivals-feature p:not(.eyebrow) { margin-bottom: 20px; color: var(--muted); font: 16px/1.7 var(--serif); }
+.new-arrivals-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 42px 18px; }
+.collections-heading { max-width: 780px; padding: 110px 24px 90px; text-align: center; }
+.collections-story { display: grid; grid-template-columns: 1.1fr .9fr; align-items: center; gap: clamp(42px, 9vw, 150px); padding-bottom: 125px; }
+.collections-story-image { min-height: 600px; position: relative; }
+.collections-story-image img { object-fit: cover; }
+.collections-story-copy h2 { margin: 12px 0 18px; font: 48px/1.08 var(--display); }
+.collections-story-copy p:last-child { max-width: 410px; color: var(--muted); font: 17px/1.8 var(--serif); }
+.collection-worlds { padding-bottom: 130px; }
+.collection-worlds header { margin-bottom: 42px; }
+.collection-worlds h2 { margin-top: 10px; font: 38px/1.1 var(--display); }
+.collection-world-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 70px 18px; }
+.collection-world-grid article.featured { grid-row: span 2; }
+.collection-world-grid article:nth-child(even) { margin-top: 90px; }
+.collection-world-grid a { display: block; }
+.collection-world-image { display: block; min-height: 430px; position: relative; overflow: hidden; background: var(--paper); }
+.collection-world-grid article:not(.featured) .collection-world-image { min-height: 340px; }
+.collection-world-image img { object-fit: cover; transition: transform .7s ease; }
+.collection-world-grid a:hover img { transform: scale(1.025); }
+.collection-world-copy { display: flex; flex-direction: column; gap: 7px; padding-top: 16px; }
+.collection-world-copy small { color: var(--muted); font-size: 8px; letter-spacing: .14em; }
+.collection-world-copy strong { font: 28px var(--display); font-weight: 400; }
+.collection-world-copy em { display: inline-flex; align-items: center; gap: 5px; color: var(--brand); font-size: 9px; font-style: normal; }
+.bridal-experience { background: #f7f3ed; }
+.experience-hero-bridal .experience-hero-shade { background: linear-gradient(90deg, rgba(47,40,34,.48), rgba(47,40,34,.03) 75%); }
+.bridal-guide { padding-block: 115px; }
+.bridal-guide-heading { max-width: 600px; margin-bottom: 55px; }
+.bridal-guide-heading > p:last-child { max-width: 520px; color: var(--muted); font: 16px/1.8 var(--serif); }
+.bridal-guide-grid { display: grid; grid-template-columns: repeat(3, 1fr); border-block: 1px solid rgba(24,33,38,.18); }
+.bridal-guide-grid article { min-height: 230px; padding: 29px 28px; border-right: 1px solid rgba(24,33,38,.18); }
+.bridal-guide-grid article:last-child { border-right: 0; }
+.bridal-guide-grid svg { color: var(--brand); }
+.bridal-guide-grid h3 { margin: 23px 0 10px; font: 22px var(--display); }
+.bridal-guide-grid p { margin: 0; color: var(--muted); font: 14px/1.7 var(--serif); }
+.bridal-products { padding-bottom: 120px; }
+.bridal-products > header { margin-bottom: 38px; display: flex; align-items: end; justify-content: space-between; gap: 20px; }
+.bridal-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.bridal-close { padding: 120px 24px; text-align: center; background: #e8e0d4; }
+.bridal-close h2 { margin: 13px 0 25px; font: 44px var(--display); }
 .active-filter-row { min-height: 35px; margin-bottom: 18px; display: flex; gap: 7px; flex-wrap: wrap; }
 .filter-chip { min-height: 27px; padding: 4px 8px 4px 10px; border: 1px solid var(--line); display: inline-flex; align-items: center; gap: 7px; background: white; font-size: 8px; transition: border-color .2s ease, color .2s ease; }
 .filter-chip:hover { border-color: var(--brand); color: var(--brand); }
@@ -1079,6 +1135,37 @@ body.ops-mode { background: #f2f5f8; }
 @media (max-width: 1000px) {
   .shop-layout { grid-template-columns: 170px 1fr; gap: 25px; }
   .shop-results .product-grid { grid-template-columns: repeat(2, 1fr); }
+  .experience-hero { min-height: 620px; }
+  .experience-hero-copy { margin: 0 20px 58px; }
+  .experience-hero-copy h1 { font-size: 56px; }
+  .experience-hero-copy > p:not(.eyebrow) { font-size: 16px; }
+  .experience-intro { padding: 78px 22px 68px; }
+  .experience-intro h2, .collections-heading h1, .bridal-guide h2, .bridal-products h2 { font-size: 36px; }
+  .new-arrivals-editorial { padding-inline: 20px; padding-bottom: 80px; }
+  .new-arrivals-feature { grid-template-columns: 1fr; gap: 25px; margin-bottom: 48px; }
+  .new-arrivals-feature-image { min-height: 470px; }
+  .new-arrivals-feature h2 { font-size: 34px; }
+  .new-arrivals-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px 8px; }
+  .collections-heading { padding: 68px 22px 58px; text-align: left; }
+  .collections-story { grid-template-columns: 1fr; gap: 35px; padding-inline: 20px; padding-bottom: 80px; }
+  .collections-story-image { min-height: 460px; }
+  .collections-story-copy h2 { font-size: 36px; }
+  .collection-worlds { padding-inline: 20px; padding-bottom: 80px; }
+  .collection-worlds h2 { font-size: 31px; }
+  .collection-world-grid { grid-template-columns: 1fr; gap: 48px; }
+  .collection-world-grid article.featured { grid-row: auto; }
+  .collection-world-grid article:nth-child(even) { margin-top: 0; }
+  .collection-world-image, .collection-world-grid article:not(.featured) .collection-world-image { min-height: 420px; }
+  .bridal-guide { padding: 75px 20px; }
+  .bridal-guide-heading { margin-bottom: 38px; }
+  .bridal-guide-grid { grid-template-columns: 1fr; }
+  .bridal-guide-grid article { min-height: 0; padding: 25px 0; border-right: 0; border-bottom: 1px solid rgba(24,33,38,.18); }
+  .bridal-guide-grid article:last-child { border-bottom: 0; }
+  .bridal-products { padding: 0 20px 80px; }
+  .bridal-products > header { align-items: start; flex-direction: column; margin-bottom: 27px; }
+  .bridal-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .bridal-close { padding: 80px 20px; }
+  .bridal-close h2 { font-size: 35px; }
   .product-detail { grid-template-columns: 1fr 1fr; gap: 35px; }
   .account-layout { grid-template-columns: 170px 1fr; gap: 30px; }
   .kpi-grid { grid-template-columns: repeat(2, 1fr); }

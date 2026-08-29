@@ -1,0 +1,40 @@
+import Image from "next/image";
+import Link from "next/link";
+import { ArrowRight, Gem, Ruler, Sparkles } from "lucide-react";
+import { ProductCard } from "@/components/product-card";
+import type { Locale } from "@/lib/i18n";
+
+type ShopProduct = React.ComponentProps<typeof ProductCard>["product"];
+type CatalogGroup = { id: string; nameZh: string; nameEn: string; imageUrl: string | null; slug: string };
+
+const campaignImage = "https://images.unsplash.com/photo-1611652022419-a9419f74343d?auto=format&fit=crop&w=1800&q=88";
+const bridalImage = "https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=1800&q=88";
+const collectionImages = [
+  "https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?auto=format&fit=crop&w=1200&q=88",
+  "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=1200&q=88",
+  "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=1200&q=88"
+];
+
+function ProductGrid({ products, locale, className = "" }: { products: ShopProduct[]; locale: Locale; className?: string }) {
+  return <div className={`product-grid ${className}`}>{products.map((product) => <ProductCard key={product.id} product={product} locale={locale} />)}</div>;
+}
+
+export function NewArrivalsExperience({ products, locale }: { products: ShopProduct[]; locale: Locale }) {
+  const en = locale === "en";
+  return <main id="main" className="shop-experience shop-new-experience">
+    <section className="experience-hero experience-hero-campaign"><Image src={campaignImage} alt={en ? "Iara new jewellery campaign" : "Iara 最新珠寶系列形象照"} fill priority sizes="100vw" /><div className="experience-hero-shade" /><div className="experience-hero-copy"><p className="eyebrow">NEW ARRIVALS · 2026</p><h1>{en ? "New pieces, newly arrived" : "最新作品"}</h1><p>{en ? "A new season of light, line and everyday jewellery." : "新一季光影、線條與日常佩戴方式。探索 IARA 最新登場的珠寶作品。"}</p><Link className="text-link text-link-light" href="#new-arrivals-grid">{en ? "Explore the new edit" : "探索最新作品"}<ArrowRight size={14} /></Link></div></section>
+    <section className="experience-intro"><p className="eyebrow">THE NEW EDIT</p><h2>{en ? "Designed to be noticed." : "為值得留意的日常而作。"}</h2><p>{en ? "Meet the latest Iara pieces, released in a considered edit and made to order from our Hong Kong atelier." : "以編輯式選題呈現最新作品，從香港工房細緻製作，讓每件珠寶在日常中留下剛好的光。"}</p></section>
+    <section className="new-arrivals-editorial container" id="new-arrivals-grid">{products[0] && <div className="new-arrivals-feature"><div className="new-arrivals-feature-image"><Image src={String(JSON.parse(products[0].imagesJson)[0] || campaignImage)} alt={en ? (products[0].nameEn || products[0].nameZh) : products[0].nameZh} fill sizes="(max-width: 680px) 100vw, 58vw" /></div><div><p className="eyebrow">{en ? "JUST IN" : "本月新作"}</p><h2>{en ? (products[0].nameEn || products[0].nameZh) : products[0].nameZh}</h2><p>{en ? "A considered new expression of Iara's fluid forms." : "以流動輪廓重新演繹 Iara 的日常光影。"}</p><Link className="text-link" href={`/product/${products[0].slug}`}>{en ? "View the piece" : "查看作品"}<ArrowRight size={14} /></Link></div></div>}<ProductGrid products={products.slice(1)} locale={locale} className="new-arrivals-grid" /></section>
+  </main>;
+}
+
+export function CollectionsExperience({ groups, products, locale }: { groups: CatalogGroup[]; products: ShopProduct[]; locale: Locale }) {
+  const en = locale === "en";
+  return <main id="main" className="shop-experience collections-experience"><section className="collections-heading container"><p className="eyebrow">THE IARA COLLECTIONS</p><h1>{en ? "The collections" : "IARA 系列"}</h1><p>{en ? "Each collection begins with a distinct shape of light, a feeling and a way of expressing yourself." : "每個系列，源自一種光的形態、一段情感，以及一種屬於佩戴者的表達方式。"}</p></section><section className="collections-story container"><div className="collections-story-image"><Image src={collectionImages[0]} alt={en ? "Iara collection jewellery" : "Iara 系列珠寶細節"} fill sizes="(max-width: 680px) 100vw, 55vw" /></div><div className="collections-story-copy"><p className="eyebrow">A LANGUAGE OF LIGHT</p><h2>{en ? "Jewellery with its own point of view." : "每一道光，都有自己的語言。"}</h2><p>{en ? "Explore the worlds behind Iara's signature forms, from fluid lines to quiet textures." : "從流動線條到安靜紋理，走進 Iara 標誌輪廓背後的設計世界。"}</p></div></section><section className="collection-worlds container"><header><p className="eyebrow">EXPLORE THE WORLDS</p><h2>{en ? "Find the collection that feels like you." : "尋找最能代表你的系列。"}</h2></header><div className="collection-world-grid">{groups.map((group, index) => { const image = group.imageUrl || collectionImages[index % collectionImages.length]; const groupProducts = products.filter((product) => product.collection === group.nameZh); return <article key={group.id} className={index === 0 ? "featured" : ""}><Link href={`/shop?collection=${encodeURIComponent(group.nameZh)}`}><span className="collection-world-image"><Image src={image} alt={en ? `${group.nameEn} collection` : `${group.nameZh}系列`} fill sizes="(max-width: 680px) 100vw, 40vw" /></span><span className="collection-world-copy"><small>{group.nameEn.toUpperCase()}</small><strong>{en ? group.nameEn : group.nameZh}</strong><em>{en ? `${groupProducts.length} pieces · Explore` : `${groupProducts.length} 件作品 · 探索系列`} <ArrowRight size={13} /></em></span></Link></article>; })}</div></section></main>;
+}
+
+export function BridalExperience({ products, locale }: { products: ShopProduct[]; locale: Locale }) {
+  const en = locale === "en";
+  const guides = en ? [{ icon: Gem, title: "Choose an engagement ring", copy: "Understand setting, stone proportion and the details that make it personal." }, { icon: Ruler, title: "Find the right size", copy: "Get considered guidance before you order or book a private fitting." }, { icon: Sparkles, title: "Make it yours", copy: "Explore engraving, paired bands and bespoke bridal appointments." }] : [{ icon: Gem, title: "選擇求婚戒指", copy: "了解戒托、寶石比例及讓作品變得專屬的細節。" }, { icon: Ruler, title: "量度合適尺寸", copy: "下單前先獲得尺寸建議，或預約私人試戴。" }, { icon: Sparkles, title: "加入你的故事", copy: "探索刻字、婚戒配搭及訂製婚嫁服務。" }];
+  return <main id="main" className="shop-experience bridal-experience"><section className="experience-hero experience-hero-bridal"><Image src={bridalImage} alt={en ? "Iara bridal jewellery" : "Iara 婚嫁珠寶"} fill priority sizes="100vw" /><div className="experience-hero-shade" /><div className="experience-hero-copy"><p className="eyebrow">IARA BRIDAL</p><h1>{en ? "Made for the promise." : "為愛而作"}</h1><p>{en ? "From the moment of promise to every day that follows." : "從承諾的一刻，到相伴的每一天。探索求婚戒指、結婚戒指及專屬訂製服務。"}</p><Link className="button button-light" href="/appointment">{en ? "Book a private viewing" : "預約私人鑑賞"}<ArrowRight size={14} /></Link></div></section><section className="bridal-guide container"><div className="bridal-guide-heading"><p className="eyebrow">YOUR BRIDAL JOURNEY</p><h2>{en ? "A considered way to choose." : "一步一步，找到屬於你們的婚戒。"}</h2><p>{en ? "Whether you are beginning with a proposal or choosing two rings together, our team is here to guide the details." : "無論是準備求婚，還是一起選擇一對婚戒，IARA 團隊會由款式、尺寸到訂製細節提供協助。"}</p></div><div className="bridal-guide-grid">{guides.map(({ icon: Icon, title, copy }) => <article key={title}><Icon size={21} /><h3>{title}</h3><p>{copy}</p></article>)}</div></section><section className="bridal-products container"><header><div><p className="eyebrow">ARIA BRIDAL</p><h2>{en ? "The bridal edit" : "婚嫁作品"}</h2></div><Link className="text-link" href="/appointment">{en ? "Arrange a consultation" : "預約婚嫁顧問"}<ArrowRight size={14} /></Link></header><ProductGrid products={products} locale={locale} className="bridal-grid" /></section><section className="bridal-close"><p className="eyebrow">A PRIVATE BEGINNING</p><h2>{en ? "Your ring should feel like yours." : "一對婚戒，從你們的故事開始。"}</h2><Link className="button button-secondary" href="/appointment">{en ? "Book your appointment" : "預約鑑賞"}<ArrowRight size={14} /></Link></section></main>;
+}
