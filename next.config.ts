@@ -23,7 +23,11 @@ const nextConfig: NextConfig = {
   // search crawlers, AI answer engines and audit tools that do not execute JS.
   htmlLimitedBots: /.*/,
   images: {
-    formats: ["image/avif", "image/webp"],
+    // Product and editorial images already come from CDN URLs with
+    // auto-format/size parameters. Avoid server-side transcoding bursts on
+    // Render's 512 MB instance when the retail homepage loads many images.
+    unoptimized: true,
+    formats: ["image/webp"],
     minimumCacheTTL: 86400,
     remotePatterns: [{ protocol: "https", hostname: "images.unsplash.com" }, { protocol: "https", hostname: "cdn.sanity.io" }]
   },
