@@ -711,8 +711,18 @@ body.filter-drawer-open { overflow: hidden; }
 
 .catalog-manager { display: grid; gap: 20px; }
 .catalog-manager > .form-success, .catalog-manager > .form-error { margin: 0; }
+.catalog-validation-summary { padding: 15px 17px; }
+.catalog-validation-summary > strong { display: block; margin-bottom: 9px; font-size: 11px; }
+.catalog-validation-summary ul { margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 5px 18px; list-style: none; }
+.catalog-validation-summary button { width: 100%; padding: 5px 0; display: flex; align-items: baseline; gap: 8px; border: 0; background: transparent; color: inherit; cursor: pointer; text-align: left; font: inherit; }
+.catalog-validation-summary button:hover { text-decoration: underline; text-underline-offset: 3px; }
+.catalog-validation-summary button span { min-width: 84px; font-weight: 700; }
 .catalog-product-form { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
 .catalog-product-form .full { grid-column: 1 / -1; }
+.catalog-product-form .field label small { margin-left: 5px; color: #8b3d3d; font-size: 7px; font-weight: 500; }
+.catalog-product-form [aria-invalid="true"] { border-color: var(--danger); background: #fffafa; box-shadow: 0 0 0 1px rgba(139,61,61,.18); }
+.field-error-text { display: block; margin-top: 5px; color: #8b3d3d; font-size: 8px; line-height: 1.5; }
+.catalog-product-form > .field-error-text { grid-column: 1 / -1; margin-top: -6px; }
 .product-image-uploader { margin-top: 4px; padding: 20px; border: 1px solid var(--line); background: #fbfcfd; }
 .product-image-uploader-head { margin-bottom: 14px; display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; }
 .product-image-uploader-head h3 { margin: 0; font: 17px var(--sans); font-weight: 650; }
@@ -1310,6 +1320,7 @@ body.ops-mode { background: #f2f5f8; }
 @media (max-width: 680px) {
   :root { --header: 64px; }
   .container { width: calc(100% - 36px); }
+  .catalog-validation-summary ul { grid-template-columns: 1fr; }
   .announcement { min-height: 30px; justify-content: space-between; font-size: 8px; }
   .header-tools .wishlist-link, .header-tools .account-link, .header-tools .ops-link { display: none; }
   .header-tools { gap: 0; }

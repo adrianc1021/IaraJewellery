@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { Prisma } from "@prisma/client";
 import { ZodError } from "zod";
 import { getTrustedOrigins } from "@/lib/origins";
 
@@ -32,7 +33,13 @@ export class HttpError extends Error {
 
 export function apiError(error: unknown) {
   if (error instanceof HttpError) return NextResponse.json({ error: error.message }, { status: error.status });
-  if (error instanceof ZodError) return NextResponse.json({ error: "資料格式不正確。", fields: error.flatten().fieldErrors }, { status: 400 });
+  if (error instanceof ZodError) return NextResponse.json({ error: "部分資料需要修正。", fields: error.flatten().fieldErrors }, { status: 400 });
+  if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") {
+    const targets = Array.isArray(error.meta?.target) ? error.meta.target.map(String) : [String(error.meta?.target || "")];
+    const field = targets.some((target) => target.toLowerCase().includes("sku")) ? "sku" : targets.some((target) => target.toLowerCase().includes("slug")) ? "slug" : "";
+    const fields = field ? { [field]: [field === "sku" ? "此 SKU 已被其他商品使用。" : "此網址代號已被其他商品使用。"] } : undefined;
+    return NextResponse.json({ error: field ? "商品識別資料重複。" : "已有相同資料，請檢查後再試。", fields }, { status: 409 });
+  }
   console.error(error);
   return NextResponse.json({ error: "系統暫時未能處理請求。" }, { status: 500 });
 }

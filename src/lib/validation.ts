@@ -94,16 +94,16 @@ const productImageReference = z.string().trim().refine((value) => {
 }, "圖片網址無效。" );
 
 export const productCreateSchema = z.object({
-  slug: z.string().trim().min(3).max(100).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
-  nameZh: z.string().trim().min(2).max(120),
-  nameEn: z.string().trim().min(2).max(120),
-  descriptionZh: z.string().trim().min(2).max(1200),
-  descriptionEn: z.string().trim().min(2).max(1200),
-  category: z.string().trim().min(1).max(80),
-  collection: z.string().trim().min(1).max(80),
+  slug: z.string().trim().min(3, "最少需要 3 個字元。").max(100, "不可超過 100 個字元。").regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "只可使用小寫英文字母、數字及連字號。"),
+  nameZh: z.string().trim().min(2, "請輸入完整的中文商品名稱。").max(120, "不可超過 120 個字元。"),
+  nameEn: z.string().trim().min(2, "請輸入完整的英文商品名稱。").max(120, "不可超過 120 個字元。"),
+  descriptionZh: z.string().trim().min(2, "請填寫中文商品描述。").max(1200, "不可超過 1,200 個字元。"),
+  descriptionEn: z.string().trim().min(2, "請填寫英文商品描述。").max(1200, "不可超過 1,200 個字元。"),
+  category: z.string().trim().min(1, "請選擇商品分類。").max(80),
+  collection: z.string().trim().min(1, "請選擇品牌系列。").max(80),
   audience: z.enum(["PEOPLE", "PET"]),
-  material: z.string().trim().min(1).max(100),
-  gemstone: z.string().trim().min(1).max(100),
+  material: z.string().trim().min(1, "請填寫商品材質。").max(100, "不可超過 100 個字元。"),
+  gemstone: z.string().trim().min(1, "請填寫寶石資料；如不適用，可填寫「無」。").max(100, "不可超過 100 個字元。"),
   diamondWeight: z.string().trim().max(80).optional(),
   diamondColorClarity: z.string().trim().max(120).optional(),
   pendantDimensions: z.string().trim().max(80).optional(),
@@ -115,16 +115,16 @@ export const productCreateSchema = z.object({
   isNaturalDiamond: z.boolean().default(false),
   engravingAvailable: z.boolean().default(false),
   chainLengthAdjustable: z.boolean().default(false),
-  warrantyYears: z.number().int().min(0).max(99).default(1),
+  warrantyYears: z.number().int("請輸入整數年期。").min(0, "保養年期不可少於 0。").max(99, "保養年期不可超過 99 年。").default(1),
   careRepair: z.string().trim().max(500).optional(),
   badge: z.string().trim().max(40).optional(),
   imageUrl: productImageReference.optional(),
-  imageUrls: z.array(productImageReference).min(1).max(6).optional(),
+  imageUrls: z.array(productImageReference).min(1, "請上載至少一張商品圖片。").max(6, "最多只可上載 6 張商品圖片。").optional(),
   featured: z.boolean().default(false),
-  sku: z.string().trim().min(3).max(80),
-  optionName: z.string().trim().min(1).max(80),
-  priceMinor: z.number().int().min(100).max(100_000_000),
-  stockOnHand: z.number().int().min(0).max(100000)
+  sku: z.string().trim().min(3, "SKU 最少需要 3 個字元。").max(80, "SKU 不可超過 80 個字元。"),
+  optionName: z.string().trim().min(1, "請填寫尺寸或款式；如只有一款，可填寫「單一尺寸」。").max(80),
+  priceMinor: z.number().int("價格格式不正確。").min(100, "價格必須為 HK$1 或以上。").max(100_000_000, "價格超出可接受範圍。"),
+  stockOnHand: z.number().int("現貨數量必須是整數。").min(0, "現貨數量不可為負數。").max(100000, "現貨數量超出可接受範圍。")
 }).superRefine((value, ctx) => {
   if (!value.imageUrl && !value.imageUrls?.length) ctx.addIssue({ code: "custom", path: ["imageUrls"], message: "請上載至少一張商品圖片。" });
 });
