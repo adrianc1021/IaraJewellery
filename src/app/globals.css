@@ -190,7 +190,7 @@ html[lang="en"] p:not(.eyebrow) { font-family: var(--english-copy); }
 .home-product-rail { width: 100%; overflow: hidden; }
 .home-product-track { width: max-content; display: flex; animation: home-product-marquee 58s linear infinite; will-change: transform; }
 .home-product-group { display: flex; gap: 16px; padding-right: 16px; }
-.home-product-group .product-card { flex: 0 0 clamp(260px, 22.5vw, 340px); width: clamp(260px, 22.5vw, 340px); }
+.home-product-group .product-card { flex: 0 0 clamp(220px, 18vw, 280px); width: clamp(220px, 18vw, 280px); }
 @keyframes home-product-marquee { to { transform: translateX(-50%); } }
 .pet-product-showcase { padding-top: 106px; padding-bottom: 118px; background: var(--paper); }
 .home-pet-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
@@ -451,7 +451,7 @@ body > main.loading-state { min-height: 100svh; }
 .shop-filter-options label { min-height: 30px; display: flex; align-items: center; gap: 9px; color: var(--muted); cursor: pointer; font-size: 9px; }
 .shop-filter-options input { flex: 0 0 auto; width: 13px; height: 13px; margin: 0; accent-color: var(--brand); }
 .filter-sidebar > .button { width: 100%; min-height: 40px; margin-top: 18px; padding: 9px 13px; font-size: 9px; }
-.shop-results .product-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.shop-results .product-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .shop-experience { background: var(--white); }
 .experience-hero { min-height: min(720px, calc(100svh - var(--header))); position: relative; display: flex; align-items: flex-end; overflow: hidden; color: white; }
 .experience-hero > img { object-fit: cover; }
@@ -472,7 +472,7 @@ html[lang="zh-HK"] .shop-new-experience .experience-hero-copy h1 { font: 400 cla
 .new-arrivals-feature-image img { object-fit: cover; }
 .new-arrivals-feature h2 { margin: 12px 0; font: 42px/1.08 var(--display); }
 .new-arrivals-feature p:not(.eyebrow) { margin-bottom: 20px; color: var(--muted); font: 16px/1.7 var(--serif); }
-.new-arrivals-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 42px 18px; }
+.new-arrivals-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 42px 18px; }
 .collections-heading { max-width: 780px; padding: 110px 24px 90px; text-align: center; }
 .collections-story { display: grid; grid-template-columns: 1.1fr .9fr; align-items: center; gap: clamp(42px, 9vw, 150px); padding-bottom: 125px; }
 .collections-story-image { min-height: 600px; position: relative; }
@@ -1175,6 +1175,7 @@ body.ops-mode { background: #f2f5f8; }
   .header-tools { gap: 6px; }
   .account-link { flex-basis: 40px; width: 40px; min-width: 40px; padding: 0; border-inline: 0; }
   .account-link span { display: none; }
+  .shop-results .product-grid, .new-arrivals-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 
 @media (max-width: 1000px) {
