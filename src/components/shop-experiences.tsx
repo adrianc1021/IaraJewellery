@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Gem, Ruler, Sparkles } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { ProductCard } from "@/components/product-card";
 import type { Locale } from "@/lib/i18n";
 
@@ -8,7 +8,12 @@ type ShopProduct = React.ComponentProps<typeof ProductCard>["product"];
 type CatalogGroup = { id: string; nameZh: string; nameEn: string; imageUrl: string | null; slug: string };
 
 const campaignImage = "https://images.unsplash.com/photo-1611652022419-a9419f74343d?auto=format&fit=crop&w=1800&q=88";
-const bridalImage = "https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=1800&q=88";
+const bridalImage = "https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=2200&q=90";
+const bridalPathwayImages = [
+  "https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=1200&q=88",
+  "https://images.unsplash.com/photo-1606800052052-a08af7148866?auto=format&fit=crop&w=1200&q=88",
+  "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=88"
+];
 const collectionImages = [
   "https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?auto=format&fit=crop&w=1200&q=88",
   "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=1200&q=88",
@@ -35,6 +40,21 @@ export function CollectionsExperience({ groups, products, locale }: { groups: Ca
 
 export function BridalExperience({ products, locale }: { products: ShopProduct[]; locale: Locale }) {
   const en = locale === "en";
-  const guides = en ? [{ icon: Gem, title: "Choose an engagement ring", copy: "Understand setting, stone proportion and the details that make it personal." }, { icon: Ruler, title: "Find the right size", copy: "Get considered guidance before you order or book a private fitting." }, { icon: Sparkles, title: "Make it yours", copy: "Explore engraving, paired bands and bespoke bridal appointments." }] : [{ icon: Gem, title: "選擇求婚戒指", copy: "了解戒托、寶石比例及讓作品變得專屬的細節。" }, { icon: Ruler, title: "量度合適尺寸", copy: "下單前先獲得尺寸建議，或預約私人試戴。" }, { icon: Sparkles, title: "加入你的故事", copy: "探索刻字、婚戒配搭及訂製婚嫁服務。" }];
-  return <main id="main" className="shop-experience bridal-experience"><section className="experience-hero experience-hero-bridal"><Image src={bridalImage} alt={en ? "Iara bridal jewellery" : "Iara 婚嫁珠寶"} fill priority sizes="100vw" /><div className="experience-hero-shade" /><div className="experience-hero-copy"><p className="eyebrow">IARA BRIDAL</p><h1>{en ? "Made for the promise." : "為愛而作"}</h1><p>{en ? "From the moment of promise to every day that follows." : "從承諾的一刻，到相伴的每一天。探索求婚戒指、結婚戒指及專屬訂製服務。"}</p><Link className="button button-light" href="/appointment">{en ? "Book a private viewing" : "預約私人鑑賞"}<ArrowRight size={14} /></Link></div></section><section className="bridal-guide container"><div className="bridal-guide-heading"><p className="eyebrow">YOUR BRIDAL JOURNEY</p><h2>{en ? "A considered way to choose." : "一步一步，找到屬於你們的婚戒。"}</h2><p>{en ? "Whether you are beginning with a proposal or choosing two rings together, our team is here to guide the details." : "無論是準備求婚，還是一起選擇一對婚戒，IARA 團隊會由款式、尺寸到訂製細節提供協助。"}</p></div><div className="bridal-guide-grid">{guides.map(({ icon: Icon, title, copy }) => <article key={title}><Icon size={21} /><h3>{title}</h3><p>{copy}</p></article>)}</div></section><section className="bridal-products container"><header><div><p className="eyebrow">ARIA BRIDAL</p><h2>{en ? "The bridal edit" : "婚嫁作品"}</h2></div><Link className="text-link" href="/appointment">{en ? "Arrange a consultation" : "預約婚嫁顧問"}<ArrowRight size={14} /></Link></header><ProductGrid products={products} locale={locale} className="bridal-grid" /></section><section className="bridal-close"><p className="eyebrow">A PRIVATE BEGINNING</p><h2>{en ? "Your ring should feel like yours." : "一對婚戒，從你們的故事開始。"}</h2><Link className="button button-secondary" href="/appointment">{en ? "Book your appointment" : "預約鑑賞"}<ArrowRight size={14} /></Link></section></main>;
+  const pathways = en ? [
+    { eyebrow: "ENGAGEMENT RINGS", title: "A ring for the question", copy: "Explore diamond proportions, settings and details made for a singular promise.", cta: "Explore engagement rings", href: "#bridal-products" },
+    { eyebrow: "WEDDING BANDS", title: "Made to be worn together", copy: "Discover considered bands designed for a lifetime of everyday wear.", cta: "Discover wedding bands", href: "#bridal-products" },
+    { eyebrow: "BRIDAL JEWELLERY", title: "Light for the celebration", copy: "Choose jewellery for the ceremony, the celebration and every occasion after.", cta: "Explore the bridal edit", href: "#bridal-products" }
+  ] : [
+    { eyebrow: "ENGAGEMENT RINGS", title: "求婚戒指", copy: "從鑽石比例、戒托到專屬細節，為承諾選擇一枚真正合適的戒指。", cta: "探索求婚戒指", href: "#bridal-products" },
+    { eyebrow: "WEDDING BANDS", title: "結婚戒指", copy: "探索適合相伴佩戴的輪廓、材質與婚戒配搭。", cta: "探索結婚戒指", href: "#bridal-products" },
+    { eyebrow: "BRIDAL JEWELLERY", title: "婚嫁珠寶", copy: "為儀式、慶典及婚後每個重要時刻，選擇恰到好處的光。", cta: "探索婚嫁珠寶", href: "#bridal-products" }
+  ];
+  return <main id="main" className="shop-experience bridal-experience">
+    <section className="experience-hero experience-hero-bridal"><Image src={bridalImage} alt={en ? "Diamond engagement ring from the Iara bridal collection" : "IARA 婚嫁系列鑽石求婚戒指"} fill priority sizes="100vw" /><div className="experience-hero-shade" /><div className="experience-hero-copy"><p className="eyebrow">IARA BRIDAL</p><h1>{en ? "Made for the promise" : "為愛而作"}</h1><p>{en ? "From the moment of promise to every day that follows." : "從承諾的一刻，到相伴的每一天。"}</p><Link className="text-link text-link-light" href="/appointment">{en ? "Book a private viewing" : "預約私人鑑賞"}<ArrowRight size={14} /></Link></div></section>
+    <section className="bridal-intro"><p className="eyebrow">ENGAGEMENT &amp; BRIDAL</p><h2>{en ? "A celebration of your story" : "為每一段獨一無二的故事"}</h2><p>{en ? "Discover engagement rings, wedding bands and bridal jewellery shaped with care for a lifetime together." : "探索求婚戒指、結婚戒指及婚嫁珠寶。由選石、尺寸到專屬細節，IARA 陪你細緻完成每一個決定。"}</p></section>
+    <section className="bridal-pathways container"><header><p className="eyebrow">DISCOVER IARA BRIDAL</p><h2>{en ? "Choose how your story begins" : "按心意探索婚嫁珠寶"}</h2></header><div className="bridal-pathway-grid">{pathways.map((item, index) => <article key={item.eyebrow}><Link href={item.href}><span className="bridal-pathway-image"><Image src={bridalPathwayImages[index]} alt={en ? item.title : `${item.title}形象`} fill sizes="(max-width: 680px) 100vw, 33vw" /></span><span className="bridal-pathway-copy"><small>{item.eyebrow}</small><strong>{item.title}</strong><p>{item.copy}</p><em>{item.cta}<ArrowRight size={13} /></em></span></Link></article>)}</div></section>
+    <section className="bridal-products container" id="bridal-products"><header><div><p className="eyebrow">ARIA BRIDAL</p><h2>{en ? "The bridal collection" : "ARIA 婚嫁系列"}</h2><p>{en ? "Explore pieces selected for proposals, ceremonies and a lifetime beyond." : "由求婚、婚禮儀式到相伴日常，探索為重要時刻而作的珠寶。"}</p></div><Link className="text-link" href="/appointment">{en ? "Arrange a consultation" : "預約婚嫁顧問"}<ArrowRight size={14} /></Link></header><ProductGrid products={products} locale={locale} className="bridal-grid" /></section>
+    <section className="bridal-services container"><article><div className="bridal-service-image"><Image src={bridalPathwayImages[2]} alt={en ? "Bridal styling details prepared for a private viewing" : "為私人鑑賞準備的婚嫁造型細節"} fill sizes="(max-width: 680px) 100vw, 50vw" /></div><div><p className="eyebrow">PRIVATE APPOINTMENT</p><h2>{en ? "Choose with time and privacy" : "在專屬空間，從容選擇"}</h2><p>{en ? "Compare proportions, settings and paired bands with one-to-one guidance from our team." : "由戒指比例、鑽石、尺寸到婚戒配搭，珠寶顧問會按你們的需要提供一對一建議。"}</p><Link className="text-link" href="/appointment">{en ? "Book an appointment" : "預約私人鑑賞"}<ArrowRight size={14} /></Link></div></article><article><div className="bridal-service-image"><Image src="/images/craft/hand-setting.jpg" alt={en ? "An Iara artisan setting a gemstone" : "IARA 工匠細緻鑲嵌寶石"} fill sizes="(max-width: 680px) 100vw, 50vw" /></div><div><p className="eyebrow">BRIDAL GUIDE</p><h2>{en ? "Understand every detail" : "了解每一個重要細節"}</h2><p>{en ? "Learn about ring size, settings, engraving and the care that follows your purchase." : "了解戒指尺寸、鑲嵌方式、刻字及售後保養，讓每個選擇更清楚安心。"}</p><Link className="text-link" href="/faq">{en ? "Read the bridal guide" : "閱讀婚嫁選購指南"}<ArrowRight size={14} /></Link></div></article></section>
+    <section className="bridal-close"><p className="eyebrow">A PRIVATE BEGINNING</p><h2>{en ? "Your ring should feel like yours" : "一對婚戒，從你們的故事開始"}</h2><p>{en ? "Meet with an Iara jewellery advisor for a private bridal consultation." : "與 IARA 珠寶顧問見面，細談屬於你們的款式、尺寸與專屬細節。"}</p><Link className="button button-secondary" href="/appointment">{en ? "Book your appointment" : "預約鑑賞"}<ArrowRight size={14} /></Link></section>
+  </main>;
 }
